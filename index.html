@@ -1,0 +1,1453 @@
+<!DOCTYPE html>
+<html lang="id" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MineChart.studio v5.0 — Pustaka Visualisasi Data 13 Departemen Pertambangan</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'system-ui', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Core Clean Mining Chart Stylesheet (100% Self-Contained & Copy-Ready) -->
+    <style id="core-mc-styles">
+        :root {
+            --c1: #f59e0b;
+            --c2: #06b6d4;
+            --c3: #3b82f6;
+            --c4: #10b981;
+            --c1-rgb: 245, 158, 11;
+
+            --c-pos: #10b981;
+            --c-neg: #f43f5e;
+            --c-warn: #f59e0b;
+
+            /* Default Dark Slate Theme */
+            --mc-bg: #0b1120;
+            --mc-card: #0f172a;
+            --mc-surface: #1e293b;
+            --mc-text: #f8fafc;
+            --mc-muted: #94a3b8;
+            --mc-border: rgba(148, 163, 184, 0.16);
+            --mc-grid: rgba(148, 163, 184, 0.12);
+            --mc-track: rgba(30, 41, 59, 0.75);
+        }
+
+        .theme-light {
+            --mc-bg: #f8fafc;
+            --mc-card: #ffffff;
+            --mc-surface: #f1f5f9;
+            --mc-text: #0f172a;
+            --mc-muted: #64748b;
+            --mc-border: #e2e8f0;
+            --mc-grid: #f1f5f9;
+            --mc-track: #f1f5f9;
+        }
+
+        /* Clean, High-Clarity Chart Card */
+        .mc-chart-card {
+            background: var(--mc-card);
+            color: var(--mc-text);
+            border: 1px solid var(--mc-border);
+            border-radius: 14px;
+            padding: 22px 24px;
+            width: 100%;
+            font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+            font-variant-numeric: tabular-nums;
+            box-sizing: border-box;
+        }
+
+        .mc-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 16px;
+            margin-bottom: 18px;
+        }
+
+        .mc-type-pill {
+            display: inline-block;
+            font-size: 10.5px;
+            font-weight: 700;
+            font-family: 'JetBrains Mono', monospace;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--c1);
+            margin-bottom: 4px;
+        }
+
+        .mc-title {
+            margin: 0;
+            font-size: 15.5px;
+            font-weight: 700;
+            color: var(--mc-text);
+            line-height: 1.35;
+        }
+
+        .mc-kpi-summary {
+            text-align: right;
+            flex-shrink: 0;
+        }
+
+        .mc-kpi-val {
+            font-size: 16px;
+            font-weight: 800;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--mc-text);
+            display: block;
+        }
+
+        .mc-kpi-lbl {
+            font-size: 10.5px;
+            color: var(--mc-muted);
+        }
+
+        /* Clean Plot Canvas */
+        .mc-canvas {
+            position: relative;
+            min-height: 210px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 6px 0;
+        }
+
+        /* Minimal Legend */
+        .mc-legend {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-top: 16px;
+            padding-top: 12px;
+            border-top: 1px solid var(--mc-border);
+            font-size: 11.5px;
+            color: var(--mc-muted);
+        }
+
+        .mc-legend-group {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .mc-legend-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .mc-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 2px;
+            display: inline-block;
+        }
+
+        /* Simple Tooltip */
+        [data-tip] {
+            position: relative;
+            cursor: pointer;
+        }
+        [data-tip]::after {
+            content: attr(data-tip);
+            position: absolute;
+            bottom: calc(100% + 6px);
+            left: 50%;
+            transform: translateX(-50%);
+            background: #020617;
+            color: #f8fafc;
+            border: 1px solid rgba(148, 163, 184, 0.25);
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 10.5px;
+            font-family: 'JetBrains Mono', monospace;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.15s ease;
+            z-index: 30;
+        }
+        [data-tip]:hover::after {
+            opacity: 1;
+        }
+
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(148, 163, 184, 0.25); border-radius: 3px; }
+    </style>
+</head>
+<body class="bg-[#080d19] text-slate-100 font-sans antialiased min-h-screen flex flex-col">
+
+    <!-- ===================================================================== -->
+    <!-- CLEAN MINIMAL TOPBAR                                                  -->
+    <!-- ===================================================================== -->
+    <header class="sticky top-0 z-30 bg-[#080d19]/90 backdrop-blur-md border-b border-slate-800/80">
+        <div class="max-w-[1600px] mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
+            <!-- Brand -->
+            <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-xl bg-amber-500 flex items-center justify-center text-slate-950 font-extrabold shadow-sm">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                    </svg>
+                </div>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <span class="font-bold text-base tracking-tight text-white">MineChart<span class="text-amber-400">.studio</span></span>
+                        <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-300">13 Departemen • 118 Grafik</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Search & Chart Type Filter -->
+            <div class="flex-1 max-w-xl flex items-center gap-2">
+                <div class="relative flex-1">
+                    <svg class="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                    </svg>
+                    <input
+                        id="search-input"
+                        type="text"
+                        oninput="setSearch(this.value)"
+                        placeholder="Cari metrik atau grafik (contoh: MTTR, cycle time, fuel, waterfall, weibull...)"
+                        class="w-full pl-9 pr-4 py-1.5 bg-slate-900 border border-slate-800 rounded-lg text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-none focus:border-amber-500"
+                    >
+                </div>
+                <select id="type-filter" onchange="setTypeFilter(this.value)" class="bg-slate-900 border border-slate-800 rounded-lg px-3 py-1.5 text-xs sm:text-sm text-slate-200 focus:outline-none focus:border-amber-500 cursor-pointer">
+                    <option value="all">Semua Jenis Chart (21 Tipe)</option>
+                </select>
+            </div>
+
+            <!-- Clean Accent & Theme Controls -->
+            <div class="flex items-center gap-3">
+                <div class="hidden md:flex items-center gap-1.5 bg-slate-900 border border-slate-800 rounded-lg px-2.5 py-1.5" title="Pilih Skema Warna">
+                    <button onclick="setPalette('amber')" class="w-4 h-4 rounded-full bg-amber-500 ring-2 ring-offset-2 ring-offset-slate-900 ring-white/60 cursor-pointer"></button>
+                    <button onclick="setPalette('cyan')" class="w-4 h-4 rounded-full bg-cyan-500 hover:scale-110 transition cursor-pointer"></button>
+                    <button onclick="setPalette('emerald')" class="w-4 h-4 rounded-full bg-emerald-500 hover:scale-110 transition cursor-pointer"></button>
+                    <button onclick="setPalette('indigo')" class="w-4 h-4 rounded-full bg-indigo-500 hover:scale-110 transition cursor-pointer"></button>
+                    <button onclick="setPalette('rose')" class="w-4 h-4 rounded-full bg-rose-500 hover:scale-110 transition cursor-pointer"></button>
+                </div>
+
+                <button onclick="toggleTheme()" id="theme-btn" class="px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-800 text-xs font-medium text-slate-200 transition cursor-pointer">
+                    🌙 Mode Gelap
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- ===================================================================== -->
+    <!-- MAIN WORKSPACE: LEFT DEPARTMENT SIDEBAR + CLEAN 2-COLUMN CHART GRID   -->
+    <!-- ===================================================================== -->
+    <div class="flex-1 max-w-[1600px] w-full mx-auto flex flex-col lg:flex-row">
+
+        <!-- Left Navigation Sidebar (13 Mining Departments) -->
+        <aside class="w-full lg:w-72 shrink-0 border-b lg:border-b-0 lg:border-r border-slate-800/80 bg-[#080d19] lg:sticky lg:top-16 lg:h-[calc(100vh-4rem)] overflow-y-auto p-4">
+            <div class="text-[11px] font-mono uppercase tracking-wider text-slate-400 font-semibold mb-2.5 px-2">
+                Departemen Pertambangan
+            </div>
+            <nav id="dept-nav" class="flex lg:flex-col gap-1 overflow-x-auto lg:overflow-x-visible pb-2 lg:pb-0"></nav>
+        </aside>
+
+        <!-- Right Content Area -->
+        <main class="flex-1 p-4 sm:p-6 lg:p-8 min-w-0">
+            <!-- Active Department Banner -->
+            <div id="dept-header" class="mb-6 pb-5 border-b border-slate-800/80 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                    <div class="flex items-center gap-2">
+                        <span id="active-dept-badge" class="text-xs font-mono uppercase tracking-wider px-2.5 py-0.5 rounded-md bg-amber-500/15 text-amber-300 border border-amber-500/30 font-semibold">
+                            1. Dept Plant / Maintenance
+                        </span>
+                        <span id="active-chart-count" class="text-xs font-mono text-slate-400">10 Visualisasi</span>
+                    </div>
+                    <h1 id="active-dept-title" class="text-xl sm:text-2xl font-bold text-white mt-1.5">
+                        Visualisasi Data Plant & Pemeliharaan Alat Berat
+                    </h1>
+                    <p id="active-dept-desc" class="text-xs sm:text-sm text-slate-400 mt-0.5">
+                        Fokus pada keandalan unit (PA, MTBF, Weibull), kestabilan durasi perbaikan (MTTR), kepatuhan Preventive Maintenance, dan biaya komponen.
+                    </p>
+                </div>
+                <div class="flex items-center gap-2 shrink-0">
+                    <button onclick="exportDeptBundle()" class="px-3.5 py-2 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs transition cursor-pointer shadow-sm">
+                        Unduh HTML Departemen Ini
+                    </button>
+                </div>
+            </div>
+
+            <!-- Spacious 2-Column Chart Grid -->
+            <div id="charts-grid" class="grid grid-cols-1 xl:grid-cols-2 gap-6"></div>
+
+            <!-- Empty State -->
+            <div id="empty-state" class="hidden py-16 text-center bg-slate-900/40 border border-slate-800 rounded-2xl">
+                <p class="text-base font-bold text-white">Tidak ditemukan grafik yang sesuai filter</p>
+                <p class="text-xs text-slate-400 mt-1">Coba pilih "Semua Departemen" atau kosongkan kata kunci pencarian.</p>
+                <button onclick="resetFilters()" class="mt-4 px-4 py-2 rounded-lg bg-amber-500 text-slate-950 text-xs font-bold cursor-pointer">
+                    Reset Filter
+                </button>
+            </div>
+        </main>
+    </div>
+
+    <!-- ===================================================================== -->
+    <!-- CLEAN CODE INSPECTOR MODAL (HTML & CSS)                               -->
+    <!-- ===================================================================== -->
+    <div id="code-modal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6">
+        <div class="bg-slate-900 border border-slate-700 rounded-2xl w-full max-w-5xl max-h-[90vh] flex flex-col overflow-hidden shadow-2xl">
+            <div class="px-5 py-3.5 bg-slate-950 border-b border-slate-800 flex items-center justify-between gap-4">
+                <div>
+                    <span id="modal-dept" class="text-[11px] font-mono text-amber-400 uppercase">Departemen</span>
+                    <h3 id="modal-title" class="text-sm sm:text-base font-bold text-white">Source Code Grafik</h3>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button onclick="copyFromModal('html')" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-emerald-300 text-xs font-semibold cursor-pointer">Salin HTML</button>
+                    <button onclick="copyFromModal('css')" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-cyan-300 text-xs font-semibold cursor-pointer">Salin CSS</button>
+                    <button onclick="copyFromModal('all')" class="px-3.5 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-bold cursor-pointer">Salin HTML + CSS</button>
+                    <button onclick="closeModal()" class="p-1.5 rounded-lg bg-slate-800 hover:bg-rose-500/20 text-slate-400 hover:text-rose-400 cursor-pointer">✕</button>
+                </div>
+            </div>
+            <div class="flex-1 grid grid-cols-1 lg:grid-cols-2 overflow-hidden">
+                <div class="flex flex-col border-b lg:border-b-0 lg:border-r border-slate-800">
+                    <div class="px-4 py-2 bg-slate-900 border-b border-slate-800 text-xs font-mono text-emerald-400">
+                        HTML (Struktur Komponen & SVG)
+                    </div>
+                    <textarea id="modal-html" readonly spellcheck="false" class="flex-1 p-4 bg-slate-950 text-emerald-300 font-mono text-xs focus:outline-none resize-none leading-relaxed"></textarea>
+                </div>
+                <div class="flex flex-col">
+                    <div class="px-4 py-2 bg-slate-900 border-b border-slate-800 text-xs font-mono text-cyan-400">
+                        CSS (Variabel & Layout Mandiri)
+                    </div>
+                    <textarea id="modal-css" readonly spellcheck="false" class="flex-1 p-4 bg-slate-950 text-cyan-300 font-mono text-xs focus:outline-none resize-none leading-relaxed"></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Clean Toast Notification -->
+    <div id="toast" class="fixed bottom-5 right-5 z-50 transform translate-y-16 opacity-0 pointer-events-none transition-all duration-200 bg-slate-900 border border-emerald-500/40 text-white px-4 py-3 rounded-xl shadow-xl flex items-center gap-2.5">
+        <span class="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-xs font-bold">✓</span>
+        <span id="toast-msg" class="text-xs font-medium text-slate-200">Kode berhasil disalin ke clipboard</span>
+    </div>
+
+    <!-- ===================================================================== -->
+    <!-- APPLICATION DATA & CLEAN PURPOSE-BUILT RENDERERS                      -->
+    <!-- ===================================================================== -->
+    <script>
+        const PALETTES = {
+            amber:   { c1: '#f59e0b', c2: '#06b6d4', c3: '#3b82f6', c4: '#10b981', rgb: '245, 158, 11' },
+            cyan:    { c1: '#06b6d4', c2: '#f59e0b', c3: '#6366f1', c4: '#10b981', rgb: '6, 182, 212' },
+            emerald: { c1: '#10b981', c2: '#0ea5e9', c3: '#f59e0b', c4: '#8b5cf6', rgb: '16, 185, 129' },
+            indigo:  { c1: '#6366f1', c2: '#06b6d4', c3: '#f59e0b', c4: '#ec4899', rgb: '99, 102, 241' },
+            rose:    { c1: '#f43f5e', c2: '#f59e0b', c3: '#06b6d4', c4: '#10b981', rgb: '244, 63, 94' }
+        };
+
+        // 13 DEPARTMENTS SPECIFICATION (EXACT MATCH WITH USER PROMPT)
+        const DEPARTMENTS = [
+            {
+                id: 'plant',
+                num: 1,
+                name: 'Dept Plant / Maintenance',
+                short: '1. Plant / Maintenance',
+                desc: 'Kepatuhan Preventive Maintenance (PM), kestabilan MTTR & Breakdown Hours, analisis backlog Work Order, serta umur komponen Weibull.',
+                charts: [
+                    { type: 'Combo Chart', title: 'PM Plan vs Actual + PM Compliance', kpi: '94.2% Compliance', insight: 'Realisasi PM mencapai 148 dari 157 jadwal unit; deviasi hanya terjadi pada shift hujan di Pit B.', cfg: { labels: ['Mgg 1','Mgg 2','Mgg 3','Mgg 4','Mgg 5'], plan: [38,40,42,38,40], actual: [36,39,40,35,39], rate: [95,97,95,92,98], unit: 'Unit' } },
+                    { type: 'Control Chart', title: 'Kestabilan MTTR & Breakdown Hours', kpi: 'Mean 3.4 Jam', insight: 'Durasi perbaikan terkendali di bawah UCL (5.5 jam), kecuali 1 anomali pecah hose utama PC2000 pada Hari ke-4.', cfg: { mean: '3.4 Jam', ucl: '5.5 Jam', lcl: '1.2 Jam', pts: [3.1, 3.5, 2.9, 5.9, 3.2, 3.0, 3.3], labels: ['H1','H2','H3','H4*','H5','H6','H7'] } },
+                    { type: 'Histogram', title: 'Distribusi Durasi Breakdown & Waktu Perbaikan', kpi: 'Modus 2–4 Jam', insight: '74% kejadian breakdown selesai diperbaiki dalam rentang waktu kurang dari 4 jam di bay workshop.', cfg: { bins: ['<1j','1-2j','2-4j','4-6j','6-8j','>8j'], counts: [18, 46, 88, 42, 19, 8] } },
+                    { type: 'Box Plot', title: 'Variasi MTTR Antarunit Alat Berat', kpi: 'Median 3.2 Jam', insight: 'Armada Excavator PC2000 memiliki rentang variasi perbaikan terlebar dibanding HD785 dan Dozer D375.', cfg: { groups: ['PC2000','HD785-7','D375A','GD825A'], med: [4.1, 2.8, 3.3, 2.2], q1: [2.8, 2.0, 2.4, 1.6], q3: [5.6, 3.7, 4.3, 3.0], unit: 'Jam' } },
+                    { type: 'Small Multiples', title: 'Tren PA, MTTR, dan Breakdown Hours per Unit', kpi: 'PA Fleet 91.8%', insight: 'Perbandingan langsung menunjukkan EX-01 dan DT-104 konsisten stabil, sedangkan DZ-08 mengalami kenaikan jam rusak.', cfg: { items: [{n:'EX-201 (PA%)',v:'93.4%',pts:'10,30 35,24 60,20 85,14'},{n:'DT-104 (PA%)',v:'91.2%',pts:'10,28 35,26 60,22 85,18'},{n:'DZ-08 (BD Jam)',v:'14.5j',pts:'10,32 35,28 60,16 85,8'},{n:'GR-03 (MTTR)',v:'2.4j',pts:'10,16 35,20 60,25 85,28'}] } },
+                    { type: 'Quadrant Chart', title: 'Frekuensi Breakdown vs Total Downtime', kpi: '2 Unit Kritis', insight: 'Unit di Kuadran Kanan-Atas (DT-112 & EX-204) sering rusak dan memakan downtime lama—prioritas utama overhaul.', cfg: { xLbl: 'Frekuensi Breakdown (Kali/Bulan)', yLbl: 'Total Downtime (Jam)', q1: 'Kronis (Prioritas PCR)', q2: 'MajorBD (Jarang tapi Lama)', q3: 'Armada Sehat', q4: 'Minor Stoppages', pts: [{n:'DT-112',x:78,y:82,c:'neg'},{n:'EX-204',x:72,y:70,c:'neg'},{n:'DZ-04',x:26,y:75,c:'warn'},{n:'DT-101',x:24,y:25,c:'pos'},{n:'GR-02',x:80,y:28,c:'warn'}] } },
+                    { type: 'Cohort Chart', title: 'Perkembangan Backlog Work Order (WO) per Periode', kpi: '89% Closed M+3', insight: 'Backlog WO yang terbit di bulan Januari telah terselesaikan 94% pada minggu ke-4 setelah kedatangan part.', cfg: { rows: ['Jan W1','Jan W2','Jan W3','Jan W4'], cols: ['Mgg 0','Mgg +1','Mgg +2','Mgg +3'], data: [[100,62,28,6],[100,58,24,9],[100,64,31,12],[100,54,22,11]], mode: 'decay' } },
+                    { type: 'Decomposition Tree', title: 'Dekomposisi Downtime: Fleet → Unit → Sistem → Komponen', kpi: '420 Jam Total BD', insight: '60% downtime bersumber dari Fleet Hauling HD785, didominasi oleh kebocoran Hydraulic Hose & Main Pump.', cfg: { root: {n:'Total Downtime',v:'420 Jam'}, l1: [{n:'Fleet HD785',v:'252j (60%)'},{n:'Fleet PC2000',v:'168j (40%)'}], l2: [{n:'Unit DT-112',v:'96j'},{n:'Sistem Hidrolik',v:'68j'},{n:'Hose & Seal Kit',v:'48j'}] } },
+                    { type: 'Reliability Curve', title: 'Kurva Keandalan Weibull — Umur Pakai Komponen', kpi: 'B10 Life: 8.200 HM', insight: 'Probabilitas hidup transmisi bertahan 90% hingga 8.200 HM; jadwal PCR optimal ditetapkan pada 11.500 HM.', cfg: { b10: '8.200 HM', b50: '12.400 HM', comp: 'Transmission & Final Drive' } },
+                    { type: 'Waterfall Chart', title: 'Rekonsiliasi Perubahan Biaya Maintenance Antarperiode', kpi: 'Aktual $412K', insight: 'Kenaikan harga suku cadang (+$38K) berhasil ditekan oleh efisiensi preventive maintenance (-$24K).', cfg: { steps: [{l:'Bulan Lalu',v:'$398K',b:0,h:68,c:'base'},{l:'Part OEM',v:'+$38K',b:68,h:16,c:'neg'},{l:'Jasa Luar',v:'+$14K',b:84,h:8,c:'neg'},{l:'Efisiensi PM',v:'-$24K',b:68,h:24,c:'pos'},{l:'Klaim Garansi',v:'-$14K',b:58,h:10,c:'pos'},{l:'Bulan Ini',v:'$412K',b:0,h:68,c:'total'}] } }
+                ]
+            },
+            {
+                id: 'logistik',
+                num: 2,
+                name: 'Dept Logistik',
+                short: '2. Logistik',
+                desc: 'Ketepatan pengiriman barang ke site tambang, distribusi & variasi lead time rute/vendor, alur ekspedisi, serta proyeksi kedatangan.',
+                charts: [
+                    { type: 'Combo Chart', title: 'Target Pengiriman vs Aktual + Ketepatan Pengiriman (OTD)', kpi: 'OTD 93.5%', insight: 'Volume pengiriman kargo suku cadang dan logistik mencapai 93.5% tepat waktu meskipun kendala pasang surut sungai.', cfg: { labels: ['Mgg 1','Mgg 2','Mgg 3','Mgg 4','Mgg 5'], plan: [120,135,140,125,130], actual: [114,128,132,115,126], rate: [95,95,94,92,97], unit: 'Trip' } },
+                    { type: 'Histogram', title: 'Distribusi Waktu Pengiriman (Transit Days)', kpi: 'Rata-rata 4.2 Hari', insight: 'Mayoritas pengiriman rute Balikpapan–Site tiba dalam waktu 3 hingga 5 hari kalender.', cfg: { bins: ['1-2 Hr','3-4 Hr','5-6 Hr','7-8 Hr','9-10 Hr','>10 Hr'], counts: [15, 72, 86, 34, 14, 6] } },
+                    { type: 'Box Plot', title: 'Variasi Lead Time Antarvendor & Rute Ekspedisi', kpi: 'Median 4.5 Hari', insight: 'Rute Tongkang Sungai memiliki sebaran waktu tempuh paling lebar dibanding Kargo Darat Lintas Kalimantan.', cfg: { groups: ['Darat Eks','Reguler','Tongkang','Udara VIP'], med: [3.2, 5.0, 8.5, 1.5], q1: [2.5, 4.0, 6.2, 1.0], q3: [4.1, 6.4, 11.2, 2.0], unit: 'Hari' } },
+                    { type: 'Control Chart', title: 'Kestabilan Lead Time Pengiriman Logistik', kpi: 'Mean 4.6 Hari', insight: 'Waktu pengiriman stabil dalam batas kendali, dengan satu lonjakan 8.2 hari akibat perbaikan jembatan provinsi.', cfg: { mean: '4.6 Hr', ucl: '7.5 Hr', lcl: '1.8 Hr', pts: [4.2, 4.5, 4.8, 8.2, 4.4, 4.1, 4.3], labels: ['P1','P2','P3','P4*','P5','P6','P7'] } },
+                    { type: 'Small Multiples', title: 'Tren Pengiriman per Rute & Ekspedisi', kpi: '4 Rute Utama', insight: 'Rute Darat Utama dan Port Jetty mengalami peningkatan frekuensi pengiriman secara konsisten.', cfg: { items: [{n:'Rute Darat A',v:'142 Trip',pts:'10,32 35,26 60,18 85,10'},{n:'Rute Sungai B',v:'64 Trip',pts:'10,24 35,22 60,25 85,20'},{n:'Udara Urgent',v:'18 Lot',pts:'10,15 35,22 60,28 85,30'},{n:'Lokal Site',v:'210 Trip',pts:'10,30 35,24 60,16 85,12'}] } },
+                    { type: 'Quadrant Chart', title: 'Lead Time vs Tingkat Keterlambatan Ekspedisi', kpi: '1 Vendor Kritis', insight: 'Ekspedisi Mitra-C berada di kuadran Lead Time Lama & Sering Terlambat—perlu realokasi kuota kargo.', cfg: { xLbl: 'Rata-rata Lead Time (Hari)', yLbl: '% Keterlambatan', q1: 'Evaluasi / Ganti Rute', q2: 'Cepat tapi Tidak Stabil', q3: 'Mitra Ekspedisi Terbaik', q4: 'Jauh tapi Tepat Jadwal', pts: [{n:'Mitra-C',x:76,y:78,c:'neg'},{n:'TransKal',x:28,y:22,c:'pos'},{n:'BargeLog',x:74,y:26,c:'warn'},{n:'KilatEx',x:30,y:68,c:'warn'}] } },
+                    { type: 'Sankey Diagram', title: 'Aliran Barang: Supplier → Hub Konsolidasi → Gudang Site', kpi: '1.450 Ton Kargo', insight: '65% barang dari supplier nasional dikonsolidasikan melalui Hub Samarinda sebelum dikirim ke Gudang Utama Site.', cfg: { src: 'Supplier OEM (1.450T)', mid1: 'Hub Konsolidasi (65%)', mid2: 'Direct Site (35%)', dst1: 'Main WH Site', dst2: 'Workshop Bay', dst3: 'Fuel/Lube Depot' } },
+                    { type: 'Funnel Chart', title: 'Konversi Proses: Permintaan → Pengiriman → Penerimaan', kpi: '96.4% Diterima', insight: 'Dari 420 dokumen permintaan pengiriman (DO), 405 telah diterima lengkap (GRN) di gudang tambang.', cfg: { stages: [{n:'1. Permintaan Kirim (DO)',v:'420 Lot',p:100},{n:'2. Muat & Manifest (Shipped)',v:'414 Lot',p:98},{n:'3. Tiba di Pos Site',v:'409 Lot',p:97},{n:'4. Berita Acara Terima (GRN)',v:'405 Lot',p:96}] } },
+                    { type: 'Cohort Chart', title: 'Status Penyelesaian Pengiriman Berdasarkan Periode Awal', kpi: '98% Tuntas H+7', insight: 'Kargo yang diberangkatkan pada pekan pertama hingga keempat rata-rata tuntas 98% dalam 7 hari.', cfg: { rows: ['Batch W1','Batch W2','Batch W3','Batch W4'], cols: ['Hari 1','Hari 3','Hari 5','Hari 7'], data: [[25,68,92,99],[22,64,90,98],[28,72,94,99],[24,66,89,97]], mode: 'growth' } },
+                    { type: 'Forecast Chart', title: 'Proyeksi Kebutuhan Kargo & Waktu Kedatangan', kpi: 'Proyeksi 580 Ton', insight: 'Kebutuhan angkut diproyeksikan naik 18% bulan depan menjelang jadwal Major Overhaul armada.', cfg: { hist: [410,435,420,465], proj: [495,540,580], unit: 'Ton' } },
+                    { type: 'Waterfall Chart', title: 'Analisis Penyebab Keterlambatan & Perubahan Biaya Logistik', kpi: 'Aktual $148K', insight: 'Biaya tambahan antrean pelabuhan (+$12K) dan cuaca (+$8K) menjadi faktor utama deviasi anggaran logistik.', cfg: { steps: [{l:'Budget',v:'$132K',b:0,h:65,c:'base'},{l:'Antre Port',v:'+$12K',b:65,h:14,c:'neg'},{l:'Cuaca/Jalan',v:'+$8K',b:79,h:10,c:'neg'},{l:'Backhaul',v:'-$4K',b:74,h:15,c:'pos'},{l:'Aktual',v:'$148K',b:0,h:74,c:'total'}] } }
+                ]
+            },
+            {
+                id: 'production',
+                num: 3,
+                name: 'Dept Production',
+                short: '3. Production',
+                desc: 'Pencapaian produksi OB & Batubara vs Plan, waterfall kehilangan jam produksi, cycle time, proporsi waktu kerja, dan aliran tonase pit-ke-crusher.',
+                charts: [
+                    { type: 'Combo Chart', title: 'Produksi Plan vs Actual + Achievement (%)', kpi: 'Achv 96.8%', insight: 'Produksi batubara bulanan mencapai 484K MT dari target 500K MT (96.8%), dengan tren membaik di minggu ke-4.', cfg: { labels: ['Mgg 1','Mgg 2','Mgg 3','Mgg 4','Mgg 5'], plan: [100,100,100,100,100], actual: [92,95,98,99,100], rate: [92,95,98,99,100], unit: 'K MT' } },
+                    { type: 'Waterfall Chart', title: 'Analisis Kehilangan Produksi (Production Loss Bridge)', kpi: '-36K MT Loss', insight: 'Hujan & slippery road (-18K MT) serta antrean di loading point (-9K MT) menjadi kontributor terbesar kehilangan tonase.', cfg: { steps: [{l:'Plan RKAP',v:'520K',b:0,h:88,c:'base'},{l:'Hujan/Licin',v:'-18K',b:72,h:16,c:'neg'},{l:'Breakdown',v:'-9K',b:63,h:9,c:'neg'},{l:'Antrean/Delay',v:'-9K',b:54,h:9,c:'neg'},{l:'Aktual',v:'484K',b:0,h:74,c:'total'}] } },
+                    { type: 'Histogram', title: 'Distribusi Cycle Time & Produktivitas Hauling', kpi: 'Mean 24.5 Menit', insight: 'Sebagian besar siklus angkut HD785 berada pada rentang optimal 22–26 menit per ritase.', cfg: { bins: ['16-19m','20-22m','23-25m','26-28m','29-31m','>32m'], counts: [14, 52, 94, 48, 22, 9] } },
+                    { type: 'Box Plot', title: 'Variasi Cycle Time Antarshift & Rute Pit', kpi: 'Shift 2 +2.4 Menit', insight: 'Shift Malam (Shift 2) pada Rute Pit Selatan memiliki median cycle time lebih lambat akibat visibilitas tanjakan.', cfg: { groups: ['S1 Pit-A','S2 Pit-A','S1 Pit-B','S2 Pit-B'], med: [22.5, 24.2, 25.0, 27.4], q1: [20.5, 22.0, 23.0, 25.0], q3: [24.5, 26.8, 27.2, 30.5], unit: 'Mnt' } },
+                    { type: '100% Stacked Bar', title: 'Proporsi Productive Time, Standby, dan Delay', kpi: '72% Productive', insight: 'Rata-rata waktu efektif operasi mencapai 72%, dengan porsi Standby cuaca 18% dan Delay operasional 10%.', cfg: { groups: ['Fleet EX-01','Fleet EX-02','Fleet EX-03','Fleet EX-04'], p1: [76,72,68,74], p2: [15,18,20,16], p3: [9,10,12,10], l1: 'Productive', l2: 'Standby', l3: 'Delay' } },
+                    { type: 'Small Multiples', title: 'Tren Produksi per Fleet & Shift Operasional', kpi: '4 Fleet Utama', insight: 'Fleet Pit Utara (EX-01 & EX-02) menunjukkan kenaikan produktivitas BCM/jam pasca perbaikan front loading.', cfg: { items: [{n:'Fleet EX-01',v:'640 BCM/j',pts:'10,32 35,25 60,18 85,12'},{n:'Fleet EX-02',v:'615 BCM/j',pts:'10,28 35,24 60,20 85,15'},{n:'Shift Siang',v:'252K MT',pts:'10,26 35,22 60,18 85,14'},{n:'Shift Malam',v:'232K MT',pts:'10,30 35,28 60,24 85,20'}] } },
+                    { type: 'Control Chart', title: 'Pemantauan Pola Cycle Time & Produktivitas Harian', kpi: 'CL 24.5 Menit', insight: 'Perubahan pola cycle time terdeteksi melewati batas atas pada hari ke-5 saat penyempitan jalan angkut KM 12.', cfg: { mean: '24.5m', ucl: '29.0m', lcl: '20.0m', pts: [23.8, 24.4, 24.1, 25.0, 30.2, 24.8, 24.2], labels: ['Sn','Sl','Rb','Km','Jm*','Sb','Mg'] } },
+                    { type: 'Sankey Diagram', title: 'Aliran Tonase dari Pit ke Dumping Point & Crusher', kpi: '484K MT Terangkut', insight: '70% batubara dari Pit Utara & Selatan langsung masuk ke Hopper Crusher, sementara 30% disimpan di ROM Stockpile.', cfg: { src: 'Pit Coal Getting (484K)', mid1: 'Pit Utara (60%)', mid2: 'Pit Selatan (40%)', dst1: 'Crusher Plant (340K)', dst2: 'ROM Stockpile (110K)', dst3: 'Direct Barging (34K)' } },
+                    { type: 'Forecast Chart', title: 'Proyeksi Pencapaian Produksi Akhir Periode', kpi: 'Outlook 101.2%', insight: 'Dengan laju harian saat ini (16.8K MT/hari), target produksi bulanan diproyeksikan terlampaui +1.2% di akhir bulan.', cfg: { hist: [115,235,360,484], proj: [520,565,610], unit: 'K MT' } },
+                    { type: 'Slope Chart', title: 'Perbandingan Produksi Antarperiode per Pit Block', kpi: 'Pit Utara +14%', insight: 'Produksi Pit Utara meningkat signifikan dari 245K ke 280K MT, mengkompensasi penurunan di Pit Barat.', cfg: { items: [{n:'Pit Utara A',v1:'245K',v2:'280K',y1:75,y2:28,c:'pos'},{n:'Pit Selatan B',v1:'180K',v2:'195K',y1:90,y2:68,c:'pos'},{n:'Pit Barat C',v1:'130K',v2:'109K',y1:55,y2:98,c:'neg'}] } },
+                    { type: 'Quadrant Chart', title: 'Cycle Time vs Produktivitas untuk Identifikasi Perbaikan', kpi: 'Fleet EX-03 Evaluasi', insight: 'Fleet EX-03 berada di area Cycle Time Tinggi & Produktivitas Rendah akibat antrean spotting di front sempit.', cfg: { xLbl: 'Rata-rata Cycle Time (Menit)', yLbl: 'Produktivitas (BCM/Jam)', q1: 'Jarak Jauh Muatan Optimal', q2: 'Kinerja Terbaik (Cepat & Produktif)', q3: 'Jarak Dekat Muatan Kurang', q4: 'Bottleneck (Lambat & Output Rendah)', pts: [{n:'Fleet EX-01',x:28,y:82,c:'pos'},{n:'Fleet EX-02',x:34,y:76,c:'pos'},{n:'Fleet EX-03',x:78,y:28,c:'neg'},{n:'Fleet EX-04',x:68,y:72,c:'warn'}] } },
+                    { type: 'Decomposition Tree', title: 'Penelusuran Pencapaian Produksi: Pit → Fleet → Shift → Loss', kpi: 'Deviasi -36K MT', insight: 'Deviasi produksi terkonsentrasi di Pit Selatan (Shift 2) yang kehilangan 4.2 jam kerja efektif akibat slippery.', cfg: { root: {n:'Gap Produksi',v:'-36K MT'}, l1: [{n:'Pit Selatan B',v:'-24K (67%)'},{n:'Pit Utara A',v:'-12K (33%)'}], l2: [{n:'Fleet EX-03',v:'-16K'},{n:'Shift Malam',v:'-11K'},{n:'Slippery & Antre',v:'-8K'}] } }
+                ]
+            },
+            {
+                id: 'engineering',
+                num: 4,
+                name: 'Dept Engineering / Mine Plan',
+                short: '4. Engineering / Mine Plan',
+                desc: 'Kepatuhan desain tambang (Mine Plan Compliance), deviasi kupasan Overburden, aliran material antararea, dan peta geospasial Pit-Disposal.',
+                charts: [
+                    { type: 'Combo Chart', title: 'Mine Plan vs Actual + Achievement (%)', kpi: 'Plan Compliance 95%', insight: 'Kesesuaian penggalian terhadap batas desain sekuens tambang mencapai 95.4% tanpa penggalian di luar boundary.', cfg: { labels: ['Blok A1','Blok A2','Blok B1','Blok B2','Blok C1'], plan: [650,720,580,610,540], actual: [630,705,540,590,515], rate: [97,98,93,97,95], unit: 'K BCM' } },
+                    { type: 'Waterfall Chart', title: 'Analisis Deviasi Volume Overburden Terhadap Rencana', kpi: 'Aktual 2.98M BCM', insight: 'Deviasi volume kupasan OB sebesar -120K BCM dipengaruhi oleh penyesuaian geologi lereng (slope stability) dan cuaca.', cfg: { steps: [{l:'Mine Plan',v:'3.10M',b:0,h:85,c:'base'},{l:'Redesign Lereng',v:'-55K',b:73,h:12,c:'neg'},{l:'Dewatering/Hujan',v:'-85K',b:58,h:15,c:'neg'},{l:'OptimasiBlasting',v:'+$20K',b:58,h:10,c:'pos'},{l:'Aktual OB',v:'2.98M',b:0,h:76,c:'total'}] } },
+                    { type: 'Slope Chart', title: 'Perubahan Pencapaian Mine Plan Antarperiode (Q1 vs Q2)', kpi: 'SR Turun ke 6.2', insight: 'Kepatuhan elevasi lantai tambang (floor compliance) meningkat dari 88% ke 95% pada Kuartal II.', cfg: { items: [{n:'Floor Compliance',v1:'88%',v2:'95%',y1:78,y2:28,c:'pos'},{n:'Slope Compliance',v1:'91%',v2:'96%',y1:65,y2:22,c:'pos'},{n:'Haul Grade <8%',v1:'84%',v2:'92%',y1:92,y2:45,c:'pos'}] } },
+                    { type: 'Small Multiples', title: 'Tren Produksi & Stripping Ratio per Pit', kpi: 'SR Rata-rata 1:6.3', insight: 'Pit Utara mempertahankan rasio kupasan rendah (5.8), sedangkan Pit Selatan berada pada fase pre-stripping (7.1).', cfg: { items: [{n:'Pit Utara (SR)',v:'1 : 5.8',pts:'10,20 35,22 60,24 85,26'},{n:'Pit Selatan (SR)',v:'1 : 7.1',pts:'10,30 35,22 60,16 85,14'},{n:'Pit Barat (OB)',v:'820K BCM',pts:'10,32 35,26 60,20 85,12'},{n:'Disposal Fill',v:'94% Cap',pts:'10,28 35,24 60,18 85,10'}] } },
+                    { type: 'Control Chart', title: 'Pemantauan Kestabilan Indikator Operasional (Stripping Ratio)', kpi: 'Target SR 6.4', insight: 'Rasio kupasan tanah penutup harian terjaga di sekitar garis tengah 6.4 BCM/MT sepanjang bulan berjalan.', cfg: { mean: '6.40', ucl: '7.20', lcl: '5.60', pts: [6.3, 6.5, 6.2, 6.6, 6.4, 6.5, 6.3], labels: ['M1','M2','M3','M4','M5','M6','M7'] } },
+                    { type: 'Sankey Diagram', title: 'Aliran Material Antararea (Cut & Fill Pit ke Disposal)', kpi: '2.98M BCM OB', insight: '62% material OB dari Pit Utara digunakan untuk In-Pit Backfilling, sisanya dikirim ke Out-Pit Waste Dump Barat.', cfg: { src: 'Total Kupasan OB (2.98M)', mid1: 'Blasting Rock (70%)', mid2: 'Free Digging (30%)', dst1: 'In-Pit Dump (1.85M)', dst2: 'Waste Dump B (830K)', dst3: 'Road Material (300K)' } },
+                    { type: 'Forecast Chart', title: 'Proyeksi Pencapaian Sekuens Rencana Tambang Tahunan', kpi: 'YTD 97.4% RKAP', insight: 'Dengan percepatan dewatering di Sump Utama, target bukaan tambang Kuartal IV diproyeksikan tercapai 100%.', cfg: { hist: [2.8, 5.7, 8.6, 11.6], proj: [14.8, 18.1, 21.5], unit: 'M BCM' } },
+                    { type: 'GIS Map', title: 'Peta Geospasial Pit, Disposal, Jalan Hauling & Area Kerja', kpi: '5 Blok Aktif', insight: 'Visualisasi spasial menunjukkan jarak angkut rata-rata dari Pit Utara ke Disposal Timur adalah 3.2 KM dengan grade <7%.', cfg: { mode: 'mineplan' } }
+                ]
+            },
+            {
+                id: 'dispatcher',
+                num: 5,
+                name: 'Dept Dispatcher / Fleet',
+                short: '5. Dispatcher / Fleet',
+                desc: 'Kendali ritase real-time FMS, waktu hilang akibat antrean (queuing) & ganti shift, deteksi anomali cycle time, serta posisi GPS unit.',
+                charts: [
+                    { type: 'Combo Chart', title: 'Target vs Aktual Ritase + Rata-rata Cycle Time', kpi: '1.280 Ritase/Shift', insight: 'Ketika rata-rata cycle time berhasil ditekan ke 23 menit pada Shift 1, total ritase melampaui target harian.', cfg: { labels: ['Shift 1','Shift 2','Shift 3','Shift 4','Shift 5'], plan: [1250,1250,1250,1250,1250], actual: [1290,1180,1275,1210,1310], rate: [98,91,97,93,99], unit: 'Rit' } },
+                    { type: 'Waterfall Chart', title: 'Analisis Waktu Hilang: Antrean, Delay, Breakdown & Shift Change', kpi: '18.2 Jam Efektif', insight: 'Pergantian shift & P5M (-1.4 jam) serta antrean di loading point (-1.8 jam) adalah peluang penghematan waktu terbesar.', cfg: { steps: [{l:'Jam Kalender',v:'24.0j',b:0,h:90,c:'base'},{l:'Hujan/Stby',v:'-2.6j',b:76,h:14,c:'neg'},{l:'Antre/Spot',v:'-1.8j',b:64,h:12,c:'neg'},{l:'Ganti Shift',v:'-1.4j',b:54,h:10,c:'neg'},{l:'Jam Operasi',v:'18.2j',b:0,h:68,c:'total'}] } },
+                    { type: 'Histogram', title: 'Distribusi Waktu Antrean (Queue Time) di Loading Point', kpi: 'Rata-rata 1.8 Menit', insight: '82% kedatangan Dump Truck menunggu kurang dari 2 menit (Match Factor ideal 0.96).', cfg: { bins: ['<1 mnt','1-2 mnt','2-3 mnt','3-4 mnt','4-5 mnt','>5 mnt'], counts: [68, 92, 38, 18, 9, 4] } },
+                    { type: 'Box Plot', title: 'Variasi Cycle Time Antarunit & Jalur Hauling', kpi: 'Rute KM-14 Stabil', insight: 'Jalur Hauling Barat memiliki sebaran waktu tempuh paling konsisten setelah pelebaran tikungan.', cfg: { groups: ['Jalur Utara','Jalur Barat','Jalur Timur','Ramp Sump'], med: [22.0, 21.2, 26.5, 29.0], q1: [20.0, 19.8, 24.0, 26.5], q3: [24.2, 22.8, 29.5, 32.5], unit: 'Mnt' } },
+                    { type: 'Control Chart', title: 'Deteksi Penyimpangan Cycle Time Real-Time FMS', kpi: '1 Spike Terdeteksi', insight: 'Sistem dispatch mendeteksi lonjakan cycle time ke 31.5 menit pada pukul 14:00 akibat grader meratakan jalan.', cfg: { mean: '23.5m', ucl: '28.5m', lcl: '18.5m', pts: [22.8, 23.4, 23.1, 31.5, 24.0, 23.2, 22.9], labels: ['08:00','10:00','12:00','14:00*','16:00','18:00','20:00'] } },
+                    { type: '100% Stacked Bar', title: 'Proporsi Waktu Operasi, Standby, dan Delay Armada', kpi: 'UA 79.4%', insight: 'Armada HD785 mencapai utilisasi efektif tertinggi dibanding unit pendukung.', cfg: { groups: ['HD785 Fleet','PC2000 Fleet','Dozer Fleet','Grader Fleet'], p1: [78,81,68,72], p2: [14,11,22,20], p3: [8,8,10,8], l1: 'Operasi', l2: 'Standby', l3: 'Delay' } },
+                    { type: 'Small Multiples', title: 'Tren Produktivitas Setiap Unit Utama (Ton/Jam)', kpi: 'Rata-rata 215 T/Jam', insight: 'Pemantauan individu memperlihatkan DT-101 hingga DT-104 beroperasi stabil di atas garis target.', cfg: { items: [{n:'DT-101',v:'224 T/j',pts:'10,28 35,24 60,18 85,12'},{n:'DT-102',v:'218 T/j',pts:'10,26 35,22 60,20 85,16'},{n:'DT-103',v:'212 T/j',pts:'10,30 35,25 60,22 85,18'},{n:'DT-104',v:'229 T/j',pts:'10,26 35,20 60,14 85,10'}] } },
+                    { type: 'Quadrant Chart', title: 'Cycle Time vs Produktivitas Unit Hauling', kpi: 'Optimasi Routing', insight: 'Unit dengan cycle time tinggi dan tonase rendah langsung dialihkan otomatis oleh Dynamic Dispatch ke Excavator terdekat.', cfg: { xLbl: 'Cycle Time (Menit)', yLbl: 'Tonase per Jam', q1: 'Muatan Penuh Rute Jauh', q2: 'Unit Performa Puncak', q3: 'Underload Rute Dekat', q4: 'Perlu Rerouting Dispatch', pts: [{n:'DT-101',x:26,y:84,c:'pos'},{n:'DT-104',x:32,y:78,c:'pos'},{n:'DT-118',x:76,y:25,c:'neg'},{n:'DT-115',x:72,y:68,c:'warn'}] } },
+                    { type: 'GIS Map', title: 'Peta Lokasi GPS Unit Aktif & Kepadatan Jalur Operasional', kpi: '68 Unit Online', insight: 'Peta telemetri live menampilkan distribusi posisi unit aktif serta titik antrean di persimpangan ROM.', cfg: { mode: 'dispatch' } }
+                ]
+            },
+            {
+                id: 'fuel',
+                num: 6,
+                name: 'Dept Fuel',
+                short: '6. Fuel Management',
+                desc: 'Pengendalian Fuel Ratio (L/BCM & L/MT), konsumsi biosolar per HM alat berat, deteksi overburn/kebocoran, dan proyeksi kuota tangki.',
+                charts: [
+                    { type: 'Combo Chart', title: 'Konsumsi Aktual vs Standar + Fuel Ratio (L/BCM)', kpi: '0.81 L/BCM', insight: 'Fuel ratio berhasil dijaga pada 0.81 Liter/BCM (di bawah pagu RKAP 0.85 L/BCM) berkat disiplin Eco-Mode.', cfg: { labels: ['Mgg 1','Mgg 2','Mgg 3','Mgg 4','Mgg 5'], plan: [420,430,440,425,435], actual: [405,418,432,410,415], rate: [96,97,98,96,95], unit: 'KL' } },
+                    { type: 'Waterfall Chart', title: 'Analisis Deviasi Konsumsi Fuel Berdasarkan Faktor Terukur', kpi: 'Hemat -18 KL', insight: 'Kenaikan elevasi angkut (+22 KL) berhasil dikompensasi oleh pengurangan waktu idle (-26 KL) dan perbaikan grade jalan (-14 KL).', cfg: { steps: [{l:'Standar RKAP',v:'1.750KL',b:0,h:78,c:'base'},{l:'Elevasi Pit',v:'+22KL',b:78,h:12,c:'neg'},{l:'Stop Idle',v:'-26KL',b:64,h:26,c:'pos'},{l:'Grade Jalan',v:'-14KL',b:54,h:10,c:'pos'},{l:'Aktual Fuel',v:'1.732KL',b:0,h:72,c:'total'}] } },
+                    { type: 'Histogram', title: 'Distribusi Konsumsi Fuel per Hour Meter (L/HM) — HD785', kpi: 'Mean 64.5 L/HM', insight: 'Mayoritas Dump Truck HD785 mengonsumsi bahan bakar pada kisaran normal 60–68 Liter per jam operasi.', cfg: { bins: ['52-56L','57-61L','62-66L','67-71L','72-76L','>76L'], counts: [16, 48, 92, 44, 15, 5] } },
+                    { type: 'Box Plot', title: 'Variasi Konsumsi Bahan Bakar Antarunit (L/HM)', kpi: 'PC2000: 128 L/HM', insight: 'Sebaran konsumsi solar unit PC2000 di Pit B lebih tinggi karena material overburden keras (blasting rock).', cfg: { groups: ['PC2000','HD785','D375A','GD825A'], med: [128, 64, 58, 34], q1: [118, 59, 52, 30], q3: [138, 70, 64, 39], unit: 'L/j' } },
+                    { type: 'Control Chart', title: 'Perubahan Pola Konsumsi Fuel Harian (Deteksi Anomali)', kpi: '1 Anomali Sensor', insight: 'Lonjakan konsumsi di atas UCL pada Hari ke-4 memicu audit lapangan dan ditemukan kalibrasi flowmeter Fuel Truck FT-03 bergeser.', cfg: { mean: '0.81 L', ucl: '0.90 L', lcl: '0.72 L', pts: [0.80, 0.82, 0.79, 0.94, 0.81, 0.80, 0.79], labels: ['H1','H2','H3','H4*','H5','H6','H7'] } },
+                    { type: 'Quadrant Chart', title: 'Konsumsi Fuel per HM vs Produktivitas Unit', kpi: '2 Unit Boros', insight: 'Unit di kuadran Kanan-Bawah (Konsumsi Tinggi namun Produktivitas Rendah) dijadwalkan tune-up injector.', cfg: { xLbl: 'Fuel Burn Rate (Liter/HM)', yLbl: 'Produktivitas (BCM/HM)', q1: 'Heavy Load Produktif', q2: 'Efisiensi Terbaik (Eco)', q3: 'Low Load / Standby', q4: 'Boros BBM (Cek Injector)', pts: [{n:'DT-109',x:80,y:24,c:'neg'},{n:'EX-202',x:74,y:82,c:'warn'},{n:'DT-104',x:28,y:80,c:'pos'},{n:'DT-111',x:32,y:74,c:'pos'}] } },
+                    { type: 'Small Multiples', title: 'Tren Konsumsi Spesifik Setiap Unit Utama', kpi: '4 Armada Pantauan', insight: 'Tiga dari empat unit menunjukkan tren penurunan konsumsi spesifik pasca penggantian filter udara & solar.', cfg: { items: [{n:'EX-201',v:'124 L/j',pts:'10,16 35,20 60,26 85,30'},{n:'EX-202',v:'129 L/j',pts:'10,18 35,22 60,24 85,28'},{n:'DT-101',v:'62.4 L/j',pts:'10,14 35,20 60,25 85,32'},{n:'DZ-301',v:'56.8 L/j',pts:'10,20 35,22 60,25 85,28'}] } },
+                    { type: 'Forecast Chart', title: 'Proyeksi Kebutuhan Biosolar B35 Bulanan', kpi: '1.820 KL Bulan Depan', insight: 'Berdasarkan target peningkatan OB bulan depan, pasokan tangki utama perlu ditambah 90 KL.', cfg: { hist: [1620,1680,1710,1732], proj: [1765,1795,1820], unit: 'KL' } },
+                    { type: 'Decomposition Tree', title: 'Dekomposisi Konsumsi Fuel: Lokasi → Fleet → Unit → Periode', kpi: '1.732 KL Total', insight: 'Pit Utara menyerap 58% total solar, dengan proporsi terbesar pada armada Hauling HD785 Shift Siang.', cfg: { root: {n:'Total Biosolar',v:'1.732 KL'}, l1: [{n:'Pit Utara A',v:'1.005 KL (58%)'},{n:'Pit Selatan B',v:'727 KL (42%)'}], l2: [{n:'Fleet HD785',v:'620 KL'},{n:'Unit DT-109',v:'48 KL'},{n:'Shift Siang',v:'26 KL'}] } }
+                ]
+            },
+            {
+                id: 'tyre',
+                num: 7,
+                name: 'Dept Tyre',
+                short: '7. Tyre Management',
+                desc: 'Umur pakai ban alat berat (Lifetime HM), Cost per Hour ($/HM), penyebab kerusakan dini (cut/separation), dan kurva reliabilitas ban.',
+                charts: [
+                    { type: 'Combo Chart', title: 'Target Umur Tyre vs Aktual (HM) + Biaya per Jam ($/HM)', kpi: '4.620 HM (96%)', insight: 'Umur rata-rata ban radial 27.00R49 mencapai 4.620 HM dengan penurunan biaya ke $3.15 per jam operasi.', cfg: { labels: ['Brand-A','Brand-B','Brand-C','Pos Front','Pos Rear'], plan: [4800,4800,4500,4800,4800], actual: [4720,4580,4190,4690,4550], rate: [98,95,93,98,95], unit: 'HM' } },
+                    { type: 'Waterfall Chart', title: 'Analisis Perubahan Biaya Tyre: Pembelian, Pemakaian & Scrap', kpi: 'Aktual $184K', insight: 'Program rotasi ban tepat waktu (-$16K) dan perbaikan minor vulcanizing (-$9K) berhasil menekan biaya penggantian.', cfg: { steps: [{l:'Budget Tyre',v:'$195K',b:0,h:76,c:'base'},{l:'Rock Cut',v:'+$14K',b:76,h:12,c:'neg'},{l:'Rotasi Posisi',v:'-$16K',b:64,h:24,c:'pos'},{l:'Repair Patch',v:'-$9K',b:54,h:10,c:'pos'},{l:'Aktual Cost',v:'$184K',b:0,h:68,c:'total'}] } },
+                    { type: 'Histogram', title: 'Distribusi Umur Pelepasan Ban (Scrap Lifetime HM)', kpi: 'Modus 4.500–5.000 HM', insight: '68% ban mencapai umur ekonomis di atas 4.000 HM sebelum dilepas karena batas keausan tapak (worn out).', cfg: { bins: ['<2K HM','2-3K HM','3-4K HM','4-5K HM','5-6K HM','>6K HM'], counts: [6, 14, 38, 84, 42, 12] } },
+                    { type: 'Box Plot', title: 'Variasi Umur Tyre Antarunit & Posisi Roda', kpi: 'Front Tyre Lebih Stabil', insight: 'Ban posisi belakang (Rear Drive) memiliki variasi umur lebih lebar karena beban traksi di tanjakan basah.', cfg: { groups: ['Pos 1-2 Front','Pos 3-4 Rear','Pos 5-6 Rear','Fleet Pit-B'], med: [4850, 4420, 4380, 4150], q1: [4500, 3900, 3850, 3600], q3: [5200, 4800, 4750, 4600], unit: 'HM' } },
+                    { type: 'Control Chart', title: 'Pemantauan Tekanan N2 & Suhu TKPH Harian', kpi: 'Mean 105 PSI', insight: 'Tekanan nitrogen ban terjaga stabil di dalam batas spesifikasi pabrik untuk mencegah heat separation.', cfg: { mean: '105 PSI', ucl: '115 PSI', lcl: '95 PSI', pts: [104, 106, 105, 107, 104, 105, 106], labels: ['Sn','Sl','Rb','Km','Jm','Sb','Mg'] } },
+                    { type: 'Quadrant Chart', title: 'Umur Tyre (HM) vs Biaya per Jam ($/HM)', kpi: 'Brand-A Optimal', insight: 'Ban Brand-A berada di kuadran Umur Panjang & Biaya/Jam Rendah, menjadi referensi kontrak tahun depan.', cfg: { xLbl: 'Rata-rata Umur Pakai (HM)', yLbl: 'Cost per Hour ($/HM)', q1: 'Harga Beli Terlalu Mahal', q2: 'Boros & Cepat Rusak', q3: 'Murah tapi Umur Pendek', q4: 'Best Value (Awet & Ekonomis)', pts: [{n:'Brand-A OEM',x:82,y:24,c:'pos'},{n:'Brand-B',x:72,y:32,c:'pos'},{n:'Brand-C',x:30,y:76,c:'neg'},{n:'Brand-D',x:68,y:70,c:'warn'}] } },
+                    { type: 'Small Multiples', title: 'Tren Umur Tyre per Fleet Hauling', kpi: '4 Fleet HD785', insight: 'Seluruh fleet menunjukkan tren peningkatan umur ban setelah penyiraman batu tajam di front loading.', cfg: { items: [{n:'Fleet Utara-1',v:'4.780 HM',pts:'10,30 35,24 60,18 85,12'},{n:'Fleet Utara-2',v:'4.650 HM',pts:'10,28 35,22 60,18 85,14'},{n:'Fleet Selatan',v:'4.410 HM',pts:'10,32 35,28 60,22 85,18'},{n:'Fleet Coal',v:'5.120 HM',pts:'10,26 35,20 60,14 85,10'}] } },
+                    { type: 'Reliability Curve', title: 'Kurva Keandalan Umur Ban Berdasarkan Jam Operasi (HM)', kpi: 'B10: 3.400 HM', insight: '90% populasi ban bertahan melewati 3.400 HM tanpa kegagalan dini (impact break/rock cut).', cfg: { b10: '3.400 HM', b50: '4.680 HM', comp: 'Radial Off-The-Road Tyre 27.00R49' } }
+                ]
+            },
+            {
+                id: 'scm',
+                num: 8,
+                name: 'Dept SCM / Procurement',
+                short: '8. SCM / Procurement',
+                desc: 'Kecepatan siklus PR ke PO hingga GRN, stabilitas lead time pengadaan, evaluasi performa supplier, serta analisis akar masalah keterlambatan part.',
+                charts: [
+                    { type: 'Combo Chart', title: 'Target vs Aktual Lead Time Pengadaan + Ketepatan Pemenuhan', kpi: 'SLA PR-PO 94%', insight: 'Rata-rata pemrosesan Purchase Order berhasil ditekan menjadi 6.2 hari kerja dengan tingkat pemenuhan 94%.', cfg: { labels: ['Jan','Feb','Mar','Apr','Mei'], plan: [7,7,7,7,7], actual: [6.8,6.5,6.4,6.1,5.9], rate: [91,92,94,95,96], unit: 'Hari' } },
+                    { type: 'Waterfall Chart', title: 'Analisis Perubahan Biaya Pengadaan & Negosiasi Kontrak', kpi: 'Saving -$42K', insight: 'Konsolidasi volume kontrak tahunan (Blanket Order) menghasilkan penghematan harga beli sebesar -$42K.', cfg: { steps: [{l:'Estimasi PR',v:'$620K',b:0,h:80,c:'base'},{l:'Kenaikan Kurs',v:'+$18K',b:80,h:10,c:'neg'},{l:'Diskon Kontrak',v:'-$42K',b:62,h:28,c:'pos'},{l:'Lokal Sourcing',v:'-$16K',b:52,h:10,c:'pos'},{l:'Nilai PO Final',v:'$580K',b:0,h:68,c:'total'}] } },
+                    { type: 'Funnel Chart', title: 'Konversi Pengadaan: PR → PO → Penerimaan Barang (GRN)', kpi: '93.8% Fulfilled', insight: 'Dari 340 PR yang disetujui, 98% telah terbit PO dan 93.8% barang telah tiba di gudang site.', cfg: { stages: [{n:'1. Purchase Requisition (PR Approved)',v:'340 Dok',p:100},{n:'2. RFQ & Evaluasi Vendor',v:'336 Dok',p:99},{n:'3. Purchase Order (PO Released)',v:'332 Dok',p:98},{n:'4. Barang Diterima (GRN Complete)',v:'319 Dok',p:94}] } },
+                    { type: 'Box Plot', title: 'Variasi Lead Time Pengadaan Antarvendor Utama', kpi: 'Vendor Lokal Cepat', insight: 'Vendor distributor resmi dalam negeri memiliki variasi lead time jauh lebih sempit dibanding impor.', cfg: { groups: ['OEM Ind','Tier-1 Lokal',' fabrikasi','Impor Singapura'], med: [6.0, 4.5, 8.0, 16.5], q1: [5.0, 3.5, 6.5, 13.0], q3: [7.5, 6.0, 10.0, 21.0], unit: 'Hari' } },
+                    { type: 'Control Chart', title: 'Kestabilan Lead Time Siklus PR-ke-PO', kpi: 'Mean 4.2 Hari', insight: 'Waktu proses persetujuan internal PR menjadi PO berada dalam kendali statistik di bawah 7 hari.', cfg: { mean: '4.2 Hr', ucl: '6.8 Hr', lcl: '1.5 Hr', pts: [4.4, 4.1, 4.3, 3.9, 4.5, 4.0, 3.8], labels: ['M1','M2','M3','M4','M5','M6','M7'] } },
+                    { type: 'Quadrant Chart', title: 'Lead Time vs Tingkat Keterlambatan Supplier', kpi: 'Evaluasi 1 Supplier', insight: 'Supplier di Kuadran Kanan-Atas memiliki waktu tunggu lama sekaligus sering meleset dari tanggal janji PO.', cfg: { xLbl: 'Rata-rata Lead Time (Hari)', yLbl: '% Keterlambatan PO', q1: 'Penalti / Cari Subtitusi', q2: 'Janji Cepat tapi Meleset', q3: 'Preferred Vendor (Cepat & Tepat)', q4: 'Indent OEM (Lama tapi Pasti)', pts: [{n:'Vendor-X',x:78,y:76,c:'neg'},{n:'Trakindo/UT',x:70,y:18,c:'pos'},{n:'MitraPart',x:26,y:20,c:'pos'},{n:'GlobalSupply',x:32,y:68,c:'warn'}] } },
+                    { type: 'Cohort Chart', title: 'Penyelesaian Umur PR & PO Berdasarkan Periode Pembuatan', kpi: '96% Closed M+2', insight: 'Dokumen PO yang diterbitkan tiap bulan rata-rata terselesaikan 96% sebelum melewati 60 hari.', cfg: { rows: ['PO Jan','PO Feb','PO Mar','PO Apr'], cols: ['<15 Hr','<30 Hr','<45 Hr','<60 Hr'], data: [[48,82,94,98],[52,85,95,99],[46,80,92,96],[54,86,96,99]], mode: 'growth' } },
+                    { type: 'Forecast Chart', title: 'Proyeksi Nilai Kebutuhan Pengadaan Suku Cadang', kpi: 'Q3 Outlook $610K', insight: 'Anggaran pengadaan diproyeksikan meningkat moderat seiring jadwal servis 5.000 HM armada baru.', cfg: { hist: [520,545,560,580], proj: [590,602,610], unit: '$K' } },
+                    { type: 'Decomposition Tree', title: 'Analisis Keterlambatan & Stockout Berdasarkan Vendor & Material', kpi: '13 PO Terlambat', insight: 'Mayoritas keterlambatan berasal dari item komponen elektrikal impor yang tertahan proses bea cukai.', cfg: { root: {n:'Total PO Delay',v:'13 PO'}, l1: [{n:'Part Impor',v:'9 PO (69%)'},{n:'Part Lokal',v:'4 PO (31%)'}], l2: [{n:'Vendor Global',v:'6 PO'},{n:'Sensor & Modul ECM',v:'5 PO'},{n:'Bea Cukai / Kapal',v:'4 PO'}] } }
+                ]
+            },
+            {
+                id: 'warehouse',
+                num: 9,
+                name: 'Dept Warehouse / Inventory',
+                short: '9. Warehouse / Inventory',
+                desc: 'Pemantauan saldo stok vs Reorder Point (ROP), rekonsiliasi mutasi barang, nilai persediaan ABC-XYZ, dan pencegahan risiko stockout.',
+                charts: [
+                    { type: 'Combo Chart', title: 'Saldo Stok + Pemakaian Bulanan + Indikator Reorder Point', kpi: 'Service Level 96.4%', insight: 'Saldo stok gudang terjaga aman di atas garis Reorder Point (ROP), mencegah terjadinya breakdown waiting part.', cfg: { labels: ['Jan','Feb','Mar','Apr','Mei'], plan: [850,820,840,810,830], actual: [620,640,610,590,605], rate: [96,95,97,96,97], unit: 'Item' } },
+                    { type: 'Waterfall Chart', title: 'Rekonsiliasi Mutasi Persediaan: Awal + Masuk − Keluar ± Adj', kpi: 'Stok Akhir $1.42M', insight: 'Penerimaan GRN (+$480K) dan pengeluaran GI ke workshop (-$450K) seimbang, dengan akurasi stok opname 99.8%.', cfg: { steps: [{l:'Stok Awal',v:'$1.39M',b:0,h:72,c:'base'},{l:'Terima (GRN)',v:'+$480K',b:72,h:20,c:'pos'},{l:'Keluar (GI)',v:'-$450K',b:74,h:18,c:'neg'},{l:'Adjustment',v:'-$2K',b:73,h:3,c:'warn'},{l:'Stok Akhir',v:'$1.42M',b:0,h:74,c:'total'}] } },
+                    { type: 'Treemap', title: 'Komposisi Nilai Stok Berdasarkan Kategori & Stock Code', kpi: 'Kelas A: 68% Nilai', insight: 'Komponen Engine Overhaul, Undercarriage, dan Ban OTR menyumbang porsi nilai aset persediaan terbesar.', cfg: { items: [{n:'Engine & Powertrain [SC-101]',v:'$520K (37%)',c:'var(--c1)'},{n:'Hydraulic & Pump [SC-204]',v:'$360K (25%)',c:'var(--c2)'},{n:'Tyre & Rim [SC-309]',v:'$310K (22%)',c:'var(--c3)'},{n:'GET, Filter & Lube [SC-412]',v:'$230K (16%)',c:'var(--c4)'}] } },
+                    { type: 'Stock Projection Chart', title: 'Proyeksi Deplesi Stok & Peringatan Risiko Stockout (ROP)', kpi: 'ROP: 120 Pcs', insight: 'Simulasi kurva gergaji (saw-tooth) menunjukkan stok Filter Oli HD785 akan menyentuh ROP pada Hari ke-14 sehingga PO otomatis diterbitkan.', cfg: { rop: '120 Pcs', safety: '60 Pcs', item: 'Oil Filter Element [SC-41209]' } },
+                    { type: 'Histogram', title: 'Distribusi Frekuensi Pemakaian Spare Part Fast-Moving', kpi: 'ITO 4.8x / Tahun', insight: 'Sebagian besar item fast-moving dikeluarkan dari gudang antara 15 hingga 35 kali per bulan.', cfg: { bins: ['1-10x','11-20x','21-30x','31-40x','41-50x','>50x'], counts: [24, 68, 95, 54, 28, 12] } },
+                    { type: 'Box Plot', title: 'Variasi Konsumsi Antarjenis Material Gudang', kpi: 'Filter Paling Stabil', insight: 'Pemakaian Filter & Pelumas sangat terprediksi mengikuti jadwal PM, sedangkan komponen Undercarriage bervariasi.', cfg: { groups: ['Filter PM','GET Teeth','Hose Hyd','Electrical'], med: [45, 38, 28, 16], q1: [40, 28, 18, 10], q3: [50, 48, 42, 26], unit: 'Pcs' } },
+                    { type: 'Quadrant Chart', title: 'Nilai Pemakaian vs Criticality / Risiko Stockout (VED-ABC)', kpi: '14 Item Vital-A', insight: 'Item di Kuadran Kanan-Atas (Vital & Nilai Tinggi) wajib dijaga dengan skema Vendor Held Stock (Consignment).', cfg: { xLbl: 'Nilai Pemakaian Tahunan ($)', yLbl: 'Tingkat Kritikalitas Alat (VED)', q1: 'Vital & High Cost (Consignment)', q2: 'Vital & Low Cost (Safety Stock Tinggi)', q3: 'Non-Kritis & Murah', q4: 'Mahal tapi Jarang Pakai (Order by Request)', pts: [{n:'Main Pump PC2000',x:82,y:86,c:'neg'},{n:'Seal Kit PM',x:28,y:82,c:'warn'},{n:'Tyre 27.00R49',x:86,y:76,c:'warn'},{n:'Baut Kabin',x:22,y:20,c:'pos'}] } },
+                    { type: 'Cohort Chart', title: 'Pergerakan Umur Stok (Inventory Aging) per Batch Penerimaan', kpi: 'Dead Stock < 2%', insight: '96% barang yang diterima pada Kuartal I telah terpakai habis dalam 90 hari, meminimalkan risiko dead stock.', cfg: { rows: ['GRN Jan','GRN Feb','GRN Mar','GRN Apr'], cols: ['30 Hr','60 Hr','90 Hr','120 Hr'], data: [[100,52,18,3],[100,48,15,2],[100,55,21,4],[100,46,16,2]], mode: 'decay' } },
+                    { type: 'Decomposition Tree', title: 'Penelusuran Nilai Persediaan hingga Level Stock Code', kpi: '$1.42M Total Aset', insight: 'Penelusuran hierarki menunjukkan Gudang Utama memegang 82% nilai stok, didominasi oleh komponen Kelas A.', cfg: { root: {n:'Total Inventory',v:'$1.42M'}, l1: [{n:'Central WH',v:'$1.16M (82%)'},{n:'Sub-WH Pit',v:'$260K (18%)'}], l2: [{n:'Kelas A (Fast)',v:'$820K'},{n:'Engine Parts',v:'$520K'},{n:'SC-10192 Injector',v:'$145K'}] } }
+                ]
+            },
+            {
+                id: 'hrga',
+                num: 10,
+                name: 'Dept HRGA',
+                short: '10. HRGA & Manpower',
+                desc: 'Pemenuhan jumlah operator & mekanik (Manpower Plan), rekonsiliasi headcount, corong rekrutmen, retensi, absensi, dan masa berlaku SIMPER/Sertifikat.',
+                charts: [
+                    { type: 'Combo Chart', title: 'Manpower Plan vs Actual + Pemenuhan Tenaga Kerja (%)', kpi: '98.2% Terpenuhi', insight: 'Jumlah operator alat berat dan mekanik mencapai 1.120 personel dari kebutuhan 1.140 personel (98.2%).', cfg: { labels: ['Produksi','Plant','Logistik','Engineering','HSE/GA'], plan: [620,240,110,80,90], actual: [610,234,108,79,89], rate: [98,97,98,99,99], unit: 'Org' } },
+                    { type: 'Waterfall Chart', title: 'Rekonsiliasi Headcount: Karyawan Awal + Masuk − Keluar = Akhir', kpi: '1.120 Karyawan', insight: 'Rekrutmen operator baru (+34 orang) menutup angka resign alami (-12 orang) dan pensiun (-4 orang).', cfg: { steps: [{l:'Awal Tahun',v:'1.102',b:0,h:74,c:'base'},{l:'Hire Baru',v:'+34',b:74,h:16,c:'pos'},{l:'Mutasi Masuk',v:'+6',b:90,h:6,c:'pos'},{l:'Resign/Habis',v:'-18',b:82,h:14,c:'neg'},{l:'Akhir Periode',v:'1.120',b:0,h:82,c:'total'}] } },
+                    { type: 'Funnel Chart', title: 'Tahapan Rekrutmen Operator: Kandidat → Seleksi → Diterima', kpi: '11.3% Lolos Akhir', insight: 'Dari 300 pelamar operator HD785, 34 kandidat terbaik lulus tes praktik lapangan dan MCU.', cfg: { stages: [{n:'1. Lamaran Masuk & Screening CV',v:'300 Kandidat',p:100},{n:'2. Tes Tertulis & Psikotes K3',v:'145 Kandidat',p:48},{n:'3. Uji Praktik Alat Berat & Wawancara',v:'58 Kandidat',p:19},{n:'4. Lolos MCU & Offering Diterima',v:'34 Operator',p:11}] } },
+                    { type: 'Cohort Chart', title: 'Retensi Karyawan Berdasarkan Periode Bergabung', kpi: 'Retensi Thn-1: 94%', insight: 'Program mentoring operator baru berhasil menjaga tingkat retensi angkatan kerja di atas 92% setelah 12 bulan.', cfg: { rows: ['Batch Q1','Batch Q2','Batch Q3','Batch Q4'], cols: ['Bln 3','Bln 6','Bln 9','Bln 12'], data: [[99,97,95,94],[98,96,95,93],[100,98,96,95],[99,97,96,94]], mode: 'growth' } },
+                    { type: 'Slope Chart', title: 'Perubahan Tingkat Absenteeism & Turnover Karyawan', kpi: 'Absensi Turun 1.4%', insight: 'Tingkat ketidakhadiran tanpa keterangan turun dari 2.8% menjadi 1.4% pasca perbaikan fasilitas mess dan bus jemputan.', cfg: { items: [{n:'Absenteeism Rate',v1:'2.8%',v2:'1.4%',y1:35,y2:82,c:'pos'},{n:'Annual Turnover',v1:'6.4%',v2:'4.1%',y1:28,y2:72,c:'pos'},{n:'Fit to Work Compliance',v1:'91%',v2:'98%',y1:85,y2:22,c:'pos'}] } },
+                    { type: 'Small Multiples', title: 'Tren Kinerja SDM & Jam Lembur per Departemen', kpi: 'Overtime Terkendali', insight: 'Jam lembur per departemen menurun seiring terpenuhinya formasi shift reguler.', cfg: { items: [{n:'Dept Produksi',v:'98.4% Hadir',pts:'10,28 35,22 60,18 85,12'},{n:'Dept Plant',v:'97.8% Hadir',pts:'10,26 35,24 60,18 85,14'},{n:'Dept Logistik',v:'98.1% Hadir',pts:'10,30 35,24 60,20 85,15'},{n:'Dept Eng/HSE',v:'99.2% Hadir',pts:'10,22 35,18 60,14 85,10'}] } },
+                    { type: 'Ordered Bar Chart', title: 'Peringkat Ketidakhadiran (Absenteeism) per Departemen', kpi: 'Rata-rata 1.4%', insight: 'Seluruh departemen berada di bawah ambang batas maksimum toleransi ketidakhadiran (2.5%).', cfg: { items: [{n:'Hauling Shift Malam',v:2.1,u:'%'},{n:'Plant Field Service',v:1.7,u:'%'},{n:'Logistik & Jetty',v:1.4,u:'%'},{n:'Warehouse & SCM',v:1.1,u:'%'},{n:'Engineering & Pit Control',v:0.8,u:'%'}] } },
+                    { type: 'Bullet Chart', title: 'Pencapaian Jam Pelatihan & Sertifikasi (Training Compliance)', kpi: '96% vs Target 90%', insight: 'Realisasi pelatihan kompetensi POP/POM, Basic Mechanic Course, dan Defensive Driving melampaui target tahunan.', cfg: { items: [{n:'Defensive Driving & SIMPER',v:98,t:95},{n:'Basic Mechanic & Diagnostic',v:92,t:90},{n:'Sertifikasi Pengawas (POP/POM)',v:94,t:90}] } },
+                    { type: 'Aging Chart', title: 'Masa Berlaku SIMPER, Kimper & Sertifikat K3 Mendekati Kedaluwarsa', kpi: '18 Dokumen <30 Hari', insight: 'Terdapat 18 SIMPER operator yang akan habis masa berlakunya dalam 30 hari ke depan dan telah dijadwalkan uji ulang.', cfg: { buckets: [{l:'Aktif (>90 Hari)',v:940,c:'pos'},{l:'61–90 Hari',v:112,c:'info'},{l:'31–60 Hari',v:50,c:'warn'},{l:'Segera Habis (<30 Hari)',v:18,c:'neg'}] } }
+                ]
+            },
+            {
+                id: 'hse',
+                num: 11,
+                name: 'Dept HSE / K3LH',
+                short: '11. HSE / Safety',
+                desc: 'Kepatuhan inspeksi keselamatan (SAP/P2H), penutupan temuan bahaya (Hazard Report), matriks risiko, umur tindakan korektif (CAPA), dan peta titik rawan.',
+                charts: [
+                    { type: 'Combo Chart', title: 'Target Inspeksi vs Aktual + Persentase Penyelesaian', kpi: 'Zero LTI • 98% SAP', insight: 'Pencapaian Safety Accountability Program (SAP) termasuk P2H, Safety Talk, dan Observasi mencapai 98.4%.', cfg: { labels: ['Mgg 1','Mgg 2','Mgg 3','Mgg 4','Mgg 5'], plan: [250,250,250,250,250], actual: [244,248,252,246,255], rate: [98,99,100,98,100], unit: 'Inspeksi' } },
+                    { type: 'Waterfall Chart', title: 'Rekonsiliasi Jumlah Temuan Hazard Terbuka (Open Findings)', kpi: 'Sisa 14 Open', insight: 'Dari 42 temuan awal ditambah 68 laporan hazard baru, sebanyak 96 temuan telah berhasil ditutup tuntas (Closed).', cfg: { steps: [{l:'Open Awal',v:'42',b:0,h:38,c:'base'},{l:'Temuan Baru',v:'+68',b:38,h:52,c:'neg'},{l:'Closed Tuntas',v:'-88',b:22,h:68,c:'pos'},{l:'Verifikasi',v:'-8',b:14,h:8,c:'pos'},{l:'Open Akhir',v:'14',b:0,h:18,c:'total'}] } },
+                    { type: 'Control Chart', title: 'Pemantauan Indikator HSE (Fatigue Alert Microsleep Kamera)', kpi: 'Mean 2.1 Alert/Shift', insight: 'Jumlah peringatan dini kelelahan operator (Fatigue Camera) turun dan terkendali setelah penerapan wajib rest 15 menit pada jam 03:00.', cfg: { mean: '2.1', ucl: '4.5', lcl: '0.0', pts: [2.5, 2.2, 2.0, 1.8, 2.1, 1.6, 1.5], labels: ['Sn','Sl','Rb','Km','Jm','Sb','Mg'] } },
+                    { type: 'Quadrant Chart', title: 'Frekuensi Temuan Bahaya vs Tingkat Risiko (Risk Matrix)', kpi: 'Prioritas Tanggul Jalan', insight: 'Temuan tinggi tanggul (bundwall) jalan hauling berada di kuadran Frekuensi Tinggi & Risiko Tinggi—langsung ditindaklanjuti Dozer.', cfg: { xLbl: 'Frekuensi Temuan Hazard', yLbl: 'Tingkat Keparahan Risiko (Severity)', q1: 'Risiko Ekstrem (Stop Work / Langsung Perbaiki)', q2: 'Risiko Tinggi Jarang Terjadi', q3: 'Risiko Rendah Terkendali', q4: 'Housekeeping Rutin', pts: [{n:'Tanggul Jalan Kurang',x:76,y:82,c:'neg'},{n:'Debu Hauling',x:78,y:34,c:'warn'},{n:'Sling Angkat Aus',x:28,y:80,c:'warn'},{n:'Parkir Mundur',x:26,y:24,c:'pos'}] } },
+                    { type: 'Small Multiples', title: 'Tren Insiden Minor & Near-Miss per Area Kerja', kpi: '0 LTI • Near-Miss Turun', insight: 'Seluruh area operasional menunjukkan tren penurunan kejadian hampir celaka (Near-Miss) sepanjang kuartal.', cfg: { items: [{n:'Area Hauling Road',v:'Zero LTI',pts:'10,14 35,20 60,26 85,32'},{n:'Area Workshop Bay',v:'Zero LTI',pts:'10,16 35,22 60,28 85,32'},{n:'Area Loading Pit',v:'Zero LTI',pts:'10,18 35,22 60,26 85,30'},{n:'Area Jetty Port',v:'Zero LTI',pts:'10,20 35,24 60,28 85,32'}] } },
+                    { type: 'Cohort Chart', title: 'Kecepatan Penyelesaian Temuan K3 Berdasarkan Periode Ditemukan', kpi: '96% Closed <14 Hari', insight: 'Tingkat penutupan tindakan perbaikan (CAPA) mencapai 96% dalam kurun waktu kurang dari 2 minggu.', cfg: { rows: ['Temuan W1','Temuan W2','Temuan W3','Temuan W4'], cols: ['H+1','H+3','H+7','H+14'], data: [[45,78,92,98],[48,80,94,97],[52,82,95,99],[50,79,91,96]], mode: 'growth' } },
+                    { type: 'Aging Chart', title: 'Umur Temuan K3 Terbuka & Tindakan Korektif (CAPA Aging)', kpi: '0 Overdue >30 Hari', insight: 'Tidak ada tindakan korektif yang melewati batas jatuh tempo 30 hari; 10 dari 14 temuan baru berumur <7 hari.', cfg: { buckets: [{l:'Baru (<7 Hari)',v:10,c:'pos'},{l:'8–14 Hari',v:3,c:'info'},{l:'15–30 Hari',v:1,c:'warn'},{l:'Overdue (>30 Hari)',v:0,c:'neg'}] } },
+                    { type: 'GIS Map', title: 'Peta Lokasi Titik Rawan (Blackspot) & Temuan Inspeksi Lapangan', kpi: 'Pemetaan Geospasial K3', insight: 'Peta menandai lokasi tikungan tajam KM-08 dan persimpangan ROM untuk pemasangan rambu solar-cell tambahan.', cfg: { mode: 'hse' } },
+                    { type: 'Bullet Chart', title: 'Kepatuhan Inspeksi Keselamatan & Lingkungan vs Target', kpi: 'Rata-rata 97.5%', insight: 'Kepatuhan P2H Awal Shift, Uji Emisi/Air Asam Tambang, dan Reklamasi melampaui target regulasi.', cfg: { items: [{n:'Inspeksi P2H Harian Alat',v:99,t:95},{n:'Baku Mutu Settling Pond (pH)',v:97,t:95},{n:'Progres Revegetasi Lahan',v:94,t:90}] } }
+                ]
+            },
+            {
+                id: 'finance',
+                num: 12,
+                name: 'Dept Finance / Cost Control',
+                short: '12. Finance / Cost Control',
+                desc: 'Kontrol anggaran Budget vs Actual, rekonsiliasi varians Cash Cost ($/MT), struktur biaya per departemen, dan penelusuran deviasi biaya.',
+                charts: [
+                    { type: 'Combo Chart', title: 'Budget vs Actual Cost + Persentase Penyerapan Anggaran', kpi: '96.4% Budget Absorption', insight: 'Realisasi pengeluaran operasional tambang berada 3.6% di bawah pagu anggaran RKAP berkat pengendalian biaya bahan bakar dan ban.', cfg: { labels: ['Jan','Feb','Mar','Apr','Mei'], plan: [2.8,2.9,3.0,2.9,3.1], actual: [2.7,2.8,2.9,2.8,2.95], rate: [96,97,97,96,95], unit: '$M' } },
+                    { type: 'Waterfall Chart', title: 'Rekonsiliasi Budget ke Actual Berdasarkan Komponen Deviasi', kpi: 'Hemat -$110K', insight: 'Efisiensi konsumsi biosolar (-$85K) dan negosiasi kontrak suku cadang (-$65K) berhasil menyerap kenaikan tarif jasa (+$40K).', cfg: { steps: [{l:'Budget RKAP',v:'$2.95M',b:0,h:78,c:'base'},{l:'Tarif Jasa',v:'+$40K',b:78,h:10,c:'neg'},{l:'Hemat Fuel',v:'-$85K',b:66,h:22,c:'pos'},{l:'Diskon SCM',v:'-$65K',b:54,h:12,c:'pos'},{l:'Aktual Cost',v:'$2.84M',b:0,h:68,c:'total'}] } },
+                    { type: 'Slope Chart', title: 'Perubahan Cash Cost per Tonne ($/MT) & Maintenance Cost ($/HM)', kpi: '$28.4/MT (Turun 4%)', insight: 'Biaya pokok produksi batubara turun dari $29.6/MT ke $28.4/MT seiring naiknya volume produksi bulanan.', cfg: { items: [{n:'Mining Cash Cost ($/MT)',v1:'$29.6',v2:'$28.4',y1:30,y2:74,c:'pos'},{n:'OB Removal Cost ($/BCM)',v1:'$2.28',v2:'$2.14',y1:38,y2:80,c:'pos'},{n:'Maint Cost per HM ($/HM)',v1:'$44.5',v2:'$41.2',y1:25,y2:68,c:'pos'}] } },
+                    { type: 'Treemap', title: 'Komposisi Biaya Operasional Berdasarkan Departemen & Kategori', kpi: 'Total $2.84M / Bulan', insight: 'Biaya Pengupasan OB & Fuel (54%) serta Pemeliharaan Plant (24%) merupakan dua pos biaya terbesar di site.', cfg: { items: [{n:'Produksi, Hauling & Fuel (54%)',v:'$1.53M',c:'var(--c1)'},{n:'Plant Maintenance & Overhaul (24%)',v:'$680K',c:'var(--c2)'},{n:'Barging, Jetty & Logistik (13%)',v:'$370K',c:'var(--c3)'},{n:'HSE, HRGA & Overhead Site (9%)',v:'$260K',c:'var(--c4)'}] } },
+                    { type: 'Forecast Chart', title: 'Proyeksi Realisasi Biaya Akhir Tahun (Year-End Outlook)', kpi: 'YTD Hemat -2.8%', insight: 'Proyeksi kumulatif biaya akhir tahun diperkirakan tetap berada di bawah garis batas plafon anggaran RKAP.', cfg: { hist: [8.4, 16.9, 25.2, 33.8], proj: [36.6, 39.5, 42.3], unit: '$M' } },
+                    { type: 'Ordered Bar Chart', title: 'Peringkat Komponen Biaya Terbesar (Cost Drivers)', kpi: 'Top 5 Pos Biaya', insight: 'Lima pos biaya teratas mencakup 86% dari total pengeluaran kas operasional tambang.', cfg: { items: [{n:'1. Bahan Bakar Biosolar B35',v:980,u:'$K'},{n:'2. Kontraktor Kupasan OB & Alat',v:740,u:'$K'},{n:'3. Suku Cadang & Komponen PCR',v:520,u:'$K'},{n:'4. Bahan Peledak (Blasting)',v:340,u:'$K'},{n:'5. Ban OTR 27.00R49 & GET',v:260,u:'$K'}] } },
+                    { type: 'Decomposition Tree', title: 'Penelusuran Penyebab Deviasi Biaya (Cost Variance Tree)', kpi: 'Favorable -$110K', insight: 'Penghematan biaya terbesar berasal dari penurunan spesifik konsumsi BBM pada armada Hauling Pit Utara.', cfg: { root: {n:'Varians Total',v:'-$110K (Hemat)'}, l1: [{n:'Direct Mining Cost',v:'-$85K'},{n:'Site Overhead',v:'-$25K'}], l2: [{n:'Fuel Efficiency',v:'-$62K'},{n:'Fleet HD785 Pit A',v:'-$48K'},{n:'Eco-Mode & Road Grade',v:'-$35K'}] } },
+                    { type: 'Small Multiples', title: 'Tren Biaya Satuan per Departemen & Fleet', kpi: 'Semua Pos Terkendali', insight: 'Tren unit cost pada empat departemen operasional utama menunjukkan kurva melandai yang sehat.', cfg: { items: [{n:'OB Cost ($/BCM)',v:'$2.14',pts:'10,16 35,20 60,26 85,30'},{n:'Coal Getting ($/MT)',v:'$4.85',pts:'10,18 35,22 60,26 85,30'},{n:'Plant Cost ($/HM)',v:'$41.2',pts:'10,15 35,22 60,25 85,32'},{n:'Barging Cost ($/MT)',v:'$3.10',pts:'10,20 35,22 60,25 85,28'}] } }
+                ]
+            },
+            {
+                id: 'executive',
+                num: 13,
+                name: 'Dept Executive / Management',
+                short: '13. Executive / Direksi',
+                desc: 'Ringkasan strategis pencapaian KPI Korporat (Produksi, Cash Cost, PA, Safety), kontribusi faktor deviasi, serta peringkat kinerja antar-departemen.',
+                charts: [
+                    { type: 'Bullet Chart', title: 'Pencapaian KPI Utama Korporat Terhadap Target RKAP', kpi: '4 dari 4 KPI Tercapai', insight: 'Seluruh indikator kunci (Produksi Batubara, Kesiapan Alat PA, Efisiensi Cash Cost, dan K3LH) berada pada zona hijau.', cfg: { items: [{n:'Produksi Batubara (484K / 500K MT)',v:97,t:95},{n:'Physical Availability Fleet (91.8%)',v:92,t:90},{n:'Efisiensi Cash Cost ($28.4 vs $29.5)',v:96,t:92}] } },
+                    { type: 'Combo Chart', title: 'Aktual vs Target Produksi Strategis + Persentase Pencapaian', kpi: 'YTD Achv 98.4%', insight: 'Kinerja operasional dari Kuartal I hingga Kuartal III menjaga stabilitas pencapaian di atas 96% setiap bulannya.', cfg: { labels: ['Q1','Q2','Q3','Okt','Nov'], plan: [1450,1500,1550,500,520], actual: [1410,1485,1530,484,515], rate: [97,99,99,97,99], unit: 'K MT' } },
+                    { type: 'Waterfall Chart', title: 'Kontribusi Faktor Penyebab Deviasi EBITDA & Margin Tambang', kpi: 'EBITDA $14.2M', insight: 'Efisiensi biaya operasional (+$0.9M) dan premi kualitas kalori batubara (+$0.6M) menjaga EBITDA melampaui target.', cfg: { steps: [{l:'Target EBITDA',v:'$13.5M',b:0,h:72,c:'base'},{l:'Volume (-3%)',v:'-$0.8M',b:64,h:10,c:'neg'},{l:'Premi CV/GAR',v:'+$0.6M',b:64,h:12,c:'pos'},{l:'Efisiensi Cost',v:'+$0.9M',b:76,h:14,c:'pos'},{l:'Aktual EBITDA',v:'$14.2M',b:0,h:82,c:'total'}] } },
+                    { type: 'Small Multiples', title: 'Tren 4 KPI Utama Strategis Antarperiode', kpi: 'Kinerja Positif', insight: 'Sinkronisasi peningkatan produksi, penurunan cash cost, stabilitas PA fleet, dan kepatuhan keselamatan kerja.', cfg: { items: [{n:'Coal Production',v:'484K MT',pts:'10,32 35,25 60,18 85,10'},{n:'Cash Cost $/MT',v:'$28.4/MT',pts:'10,14 35,20 60,26 85,32'},{n:'Fleet PA (%)',v:'91.8%',pts:'10,28 35,24 60,18 85,14'},{n:'Safety SAP (%)',v:'98.4%',pts:'10,24 35,20 60,15 85,12'}] } },
+                    { type: 'Forecast Chart', title: 'Proyeksi Produksi, Biaya & Pencapaian Target Akhir Tahun', kpi: 'Outlook 5.95M MT', insight: 'Proyeksi akhir tahun menunjukkan target produksi 6.0 Juta MT akan tercapai 99.2% dengan margin kas yang sehat.', cfg: { hist: [1.4, 2.9, 4.4, 4.9], proj: [5.3, 5.65, 5.95], unit: 'M MT' } },
+                    { type: 'Ordered Bar Chart', title: 'Peringkat Departemen Berdasarkan Pencapaian KPI Balanced Scorecard', kpi: 'Rata-rata Skor 95.8', insight: 'Departemen HSE, Finance, dan Plant menempati peringkat tertinggi dalam pencapaian indikator kinerja utama.', cfg: { items: [{n:'1. Dept HSE / K3LH (Zero LTI)',v:98.4,u:'%'},{n:'2. Dept Produksi & Engineering',v:96.8,u:'%'},{n:'3. Dept Finance / Cost Control',v:96.4,u:'%'},{n:'4. Dept Warehouse & SCM',v:95.2,u:'%'},{n:'5. Dept Plant Maintenance',v:94.2,u:'%'}] } },
+                    { type: 'Decomposition Tree', title: 'Penelusuran Penyebab KPI Belum Mencapai 100% Target', kpi: 'Gap -3.2% Produksi', insight: 'Akar masalah belum tercapainya 100% kuota produksi berasal dari jam hujan tinggi di Pit Selatan pada minggu ke-2.', cfg: { root: {n:'Gap Target Korporat',v:'-3.2% (-16K MT)'}, l1: [{n:'Faktor Cuaca / Rain',v:'-2.1% (-10.5K)'},{n:'Unscheduled BD',v:'-1.1% (-5.5K)'}], l2: [{n:'Pit Selatan Blok B',v:'-8.2K MT'},{n:'Slippery Time >3 Jam',v:'-6.0K MT'},{n:'Kapasitas Pompa Sump',v:'Action Plan Q4'}] } }
+                ]
+            }
+        ];
+
+        // APPLICATION STATE
+        let state = {
+            activeDept: 'plant', // 'all' or dept.id
+            search: '',
+            typeFilter: 'all',
+            palette: 'amber',
+            theme: 'dark',
+            modalChart: null
+        };
+
+        // =========================================================================
+        // PURPOSE-BUILT, CLEAN SVG/CSS CHART CANVAS RENDERER (21 DISTINCT TYPES)
+        // =========================================================================
+        function renderChartCanvas(chart, dept) {
+            const c = chart.cfg || {};
+            const t = chart.type;
+
+            switch (t) {
+                case 'Combo Chart': {
+                    const labels = c.labels || ['P1','P2','P3','P4','P5'];
+                    const plan = c.plan || [100,100,100,100,100];
+                    const actual = c.actual || [92,96,94,98,95];
+                    const rate = c.rate || [92,96,94,98,95];
+                    const maxB = Math.max(...plan, ...actual) * 1.15;
+
+                    const linePts = rate.map((r, i) => {
+                        const x = 42 + i * 70;
+                        const y = 145 - Math.round(((r - 75) / 30) * 110);
+                        return `${x},${Math.max(18, Math.min(135, y))}`;
+                    }).join(' ');
+
+                    return `<div class="mc-canvas">
+  <svg viewBox="0 0 360 175" style="width:100%;height:195px;overflow:visible;">
+    <!-- Horizontal Gridlines -->
+    <line x1="12" y1="25" x2="348" y2="25" stroke="var(--mc-grid)" stroke-dasharray="3 3"/>
+    <line x1="12" y1="85" x2="348" y2="85" stroke="var(--mc-grid)" stroke-dasharray="3 3"/>
+    <line x1="12" y1="145" x2="348" y2="145" stroke="var(--mc-border)"/>
+    <!-- Bars: Plan vs Actual -->
+    ${labels.map((lbl, i) => {
+        const xBase = 24 + i * 70;
+        const hPlan = Math.round((plan[i] / maxB) * 115);
+        const hAct = Math.round((actual[i] / maxB) * 115);
+        return `<g>
+          <rect x="${xBase}" y="${145 - hPlan}" width="16" height="${hPlan}" rx="3" fill="var(--mc-surface)" stroke="var(--mc-border)"><title>Plan ${lbl}: ${plan[i]} ${c.unit||''}</title></rect>
+          <rect x="${xBase + 19}" y="${145 - hAct}" width="16" height="${hAct}" rx="3" fill="var(--c1)"><title>Aktual ${lbl}: ${actual[i]} ${c.unit||''}</title></rect>
+          <text x="${xBase + 18}" y="164" text-anchor="middle" fill="var(--mc-muted)" font-size="10">${lbl}</text>
+        </g>`;
+    }).join('')}
+    <!-- Secondary Axis Line (% Achievement / Compliance) -->
+    <polyline fill="none" stroke="var(--c2)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" points="${linePts}"/>
+    ${linePts.split(' ').map((pt, i) => {
+        const [cx, cy] = pt.split(',');
+        return `<g>
+          <circle cx="${cx}" cy="${cy}" r="4" fill="var(--mc-card)" stroke="var(--c2)" stroke-width="2.5"/>
+          <text x="${cx}" y="${Number(cy) - 8}" text-anchor="middle" fill="var(--c2)" font-size="9.5" font-family="JetBrains Mono" font-weight="700">${rate[i]}%</text>
+        </g>`;
+    }).join('')}
+  </svg>
+</div>`;
+                }
+
+                case 'Control Chart': {
+                    const pts = c.pts || [3.1, 3.4, 3.0, 5.8, 3.3, 3.1, 3.2];
+                    const labels = c.labels || ['H1','H2','H3','H4*','H5','H6','H7'];
+                    const maxP = Math.max(...pts) * 1.15;
+                    const minP = Math.min(...pts) * 0.75;
+                    const range = (maxP - minP) || 1;
+                    const coords = pts.map((v, i) => {
+                        const x = 28 + i * 50;
+                        const y = 135 - Math.round(((v - minP) / range) * 105);
+                        return { x, y, v, anomaly: labels[i].includes('*') };
+                    });
+                    const poly = coords.map(p => `${p.x},${p.y}`).join(' ');
+
+                    return `<div class="mc-canvas">
+  <svg viewBox="0 0 360 170" style="width:100%;height:190px;overflow:visible;">
+    <!-- UCL, Mean CL, LCL Reference Lines -->
+    <line x1="15" y1="28" x2="345" y2="28" stroke="var(--c-neg)" stroke-width="1.3" stroke-dasharray="4 3"/>
+    <text x="345" y="23" text-anchor="end" fill="var(--c-neg)" font-size="9" font-family="JetBrains Mono">UCL: ${c.ucl||'Upper'}</text>
+    <line x1="15" y1="82" x2="345" y2="82" stroke="var(--c4)" stroke-width="1.3" stroke-dasharray="6 3"/>
+    <text x="345" y="77" text-anchor="end" fill="var(--c4)" font-size="9" font-family="JetBrains Mono">Mean: ${c.mean||'CL'}</text>
+    <line x1="15" y1="136" x2="345" y2="136" stroke="var(--c-warn)" stroke-width="1.2" stroke-dasharray="4 3"/>
+    <text x="345" y="147" text-anchor="end" fill="var(--mc-muted)" font-size="9" font-family="JetBrains Mono">LCL: ${c.lcl||'Lower'}</text>
+
+    <polyline fill="none" stroke="var(--c1)" stroke-width="2.4" points="${poly}"/>
+    ${coords.map((p, i) => `<g>
+      <circle cx="${p.x}" cy="${p.y}" r="${p.anomaly ? 5.5 : 4}" fill="${p.anomaly ? 'var(--c-neg)' : 'var(--mc-card)'}" stroke="${p.anomaly ? '#fff' : 'var(--c1)'}" stroke-width="2"/>
+      <text x="${p.x}" y="${p.y - 9}" text-anchor="middle" fill="${p.anomaly ? 'var(--c-neg)' : 'var(--mc-text)'}" font-size="9.5" font-family="JetBrains Mono" font-weight="700">${p.v}</text>
+      <text x="${p.x}" y="162" text-anchor="middle" fill="var(--mc-muted)" font-size="9.5">${labels[i]}</text>
+    </g>`).join('')}
+  </svg>
+</div>`;
+                }
+
+                case 'Histogram': {
+                    const bins = c.bins || ['B1','B2','B3','B4','B5','B6'];
+                    const counts = c.counts || [15, 48, 92, 54, 22, 8];
+                    const maxC = Math.max(...counts) * 1.1;
+                    return `<div class="mc-canvas">
+  <svg viewBox="0 0 360 170" style="width:100%;height:190px;">
+    <line x1="16" y1="142" x2="344" y2="142" stroke="var(--mc-border)"/>
+    ${counts.map((val, i) => {
+        const h = Math.round((val / maxC) * 115);
+        const x = 22 + i * 53;
+        return `<g>
+          <rect x="${x}" y="${142 - h}" width="48" height="${h}" rx="3" fill="var(--c1)" fill-opacity="0.82" stroke="var(--mc-card)" stroke-width="1.5"/>
+          <text x="${x + 24}" y="${136 - h}" text-anchor="middle" fill="var(--mc-text)" font-size="9.5" font-family="JetBrains Mono" font-weight="700">${val}</text>
+          <text x="${x + 24}" y="160" text-anchor="middle" fill="var(--mc-muted)" font-size="9.5">${bins[i]}</text>
+        </g>`;
+    }).join('')}
+    <!-- Smooth Normal Distribution Curve Overlay -->
+    <path d="M 25,138 C 85,130 125,24 165,24 C 205,24 255,130 335,138" fill="none" stroke="var(--c2)" stroke-width="2.2" stroke-dasharray="4 3"/>
+  </svg>
+</div>`;
+                }
+
+                case 'Box Plot': {
+                    const groups = c.groups || ['G1','G2','G3','G4'];
+                    const med = c.med || [4.0, 3.0, 3.5, 2.5];
+                    const q1 = c.q1 || [3.0, 2.2, 2.6, 1.8];
+                    const q3 = c.q3 || [5.2, 3.8, 4.4, 3.2];
+                    const maxQ = Math.max(...q3) * 1.25;
+
+                    return `<div class="mc-canvas" style="gap:12px;">
+  ${groups.map((g, i) => {
+      const pQ1 = Math.round((q1[i] / maxQ) * 100);
+      const pMed = Math.round((med[i] / maxQ) * 100);
+      const pQ3 = Math.round((q3[i] / maxQ) * 100);
+      const minW = Math.max(4, pQ1 - 12);
+      const maxW = Math.min(96, pQ3 + 12);
+      return `<div style="display:grid;grid-template-columns:88px 1fr 62px;align-items:center;gap:10px;font-size:11.5px;">
+        <span style="color:var(--mc-muted);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${g}</span>
+        <div style="height:26px;background:var(--mc-track);border-radius:6px;position:relative;display:flex;align-items:center;">
+          <!-- Whisker Line -->
+          <div style="position:absolute;left:${minW}%;width:${maxW - minW}%;height:2px;background:var(--mc-muted);"></div>
+          <div style="position:absolute;left:${minW}%;width:2px;height:10px;background:var(--mc-muted);"></div>
+          <div style="position:absolute;left:${maxW}%;width:2px;height:10px;background:var(--mc-muted);"></div>
+          <!-- Interquartile Box (Q1 to Q3) -->
+          <div data-tip="${g} | Q1: ${q1[i]}, Med: ${med[i]}, Q3: ${q3[i]} ${c.unit||''}" style="position:absolute;left:${pQ1}%;width:${Math.max(6, pQ3 - pQ1)}%;height:16px;background:rgba(var(--c1-rgb),0.3);border:2px solid var(--c1);border-radius:3px;"></div>
+          <!-- Median Line -->
+          <div style="position:absolute;left:${pMed}%;width:2.5px;height:18px;background:var(--c2);"></div>
+        </div>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;text-align:right;">${med[i]} ${c.unit||''}</span>
+      </div>`;
+  }).join('')}
+</div>`;
+                }
+
+                case 'Small Multiples': {
+                    const items = c.items || [];
+                    return `<div class="mc-canvas">
+  <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;">
+    ${items.map((it, idx) => `<div style="background:var(--mc-track);border:1px solid var(--mc-border);border-radius:8px;padding:10px 12px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+        <span style="font-size:11px;color:var(--mc-muted);font-weight:600;">${it.n}</span>
+        <strong style="font-size:12px;font-family:'JetBrains Mono',monospace;color:var(--mc-text);">${it.v}</strong>
+      </div>
+      <svg viewBox="0 0 95 38" style="width:100%;height:38px;overflow:visible;">
+        <line x1="0" y1="34" x2="95" y2="34" stroke="var(--mc-border)"/>
+        <polyline fill="none" stroke="var(--c${(idx%2)+1})" stroke-width="2.2" stroke-linecap="round" points="${it.pts}"/>
+      </svg>
+    </div>`).join('')}
+  </div>
+</div>`;
+                }
+
+                case 'Quadrant Chart': {
+                    const pts = c.pts || [];
+                    return `<div class="mc-canvas">
+  <div style="position:relative;height:185px;background:var(--mc-track);border:1px solid var(--mc-border);border-radius:8px;overflow:hidden;">
+    <!-- Quadrant Crosshairs -->
+    <div style="position:absolute;left:50%;top:0;bottom:0;border-left:1.5px dashed var(--mc-muted);opacity:0.5;"></div>
+    <div style="position:absolute;top:50%;left:0;right:0;border-top:1.5px dashed var(--mc-muted);opacity:0.5;"></div>
+    <!-- Quadrant Labels -->
+    <span style="position:absolute;top:6px;right:8px;font-size:9.5px;color:var(--c-neg);font-weight:700;">${c.q1||'Kuadran I'}</span>
+    <span style="position:absolute;top:6px;left:8px;font-size:9.5px;color:var(--mc-muted);">${c.q2||'Kuadran II'}</span>
+    <span style="position:absolute;bottom:6px;left:8px;font-size:9.5px;color:var(--c-pos);font-weight:700;">${c.q3||'Kuadran III'}</span>
+    <span style="position:absolute;bottom:6px;right:8px;font-size:9.5px;color:var(--c-warn);">${c.q4||'Kuadran IV'}</span>
+    <!-- Points -->
+    ${pts.map(p => {
+        const col = p.c === 'neg' ? 'var(--c-neg)' : (p.c === 'pos' ? 'var(--c-pos)' : 'var(--c-warn)');
+        return `<div data-tip="${p.n}" style="position:absolute;left:${p.x}%;bottom:${p.y}%;transform:translate(-50%,50%);display:flex;align-items:center;gap:4px;">
+          <span style="width:11px;height:11px;border-radius:50%;background:${col};border:2px solid #fff;display:inline-block;"></span>
+          <span style="font-size:10px;font-weight:700;font-family:'JetBrains Mono',monospace;background:var(--mc-card);padding:1px 5px;border-radius:4px;border:1px solid var(--mc-border);">${p.n}</span>
+        </div>`;
+    }).join('')}
+  </div>
+  <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--mc-muted);margin-top:5px;">
+    <span>Sumbu X: ${c.xLbl||'X'}</span>
+    <span>Sumbu Y: ${c.yLbl||'Y'}</span>
+  </div>
+</div>`;
+                }
+
+                case 'Cohort Chart': {
+                    const rows = c.rows || ['W1','W2','W3','W4'];
+                    const cols = c.cols || ['M0','M1','M2','M3'];
+                    const data = c.data || [[100,60,30,10],[100,55,25,8],[100,62,28,12],[100,50,20,6]];
+                    return `<div class="mc-canvas">
+  <div style="display:grid;grid-template-columns:76px repeat(4,1fr);gap:5px;font-size:11px;align-items:center;">
+    <div></div>
+    ${cols.map(cl => `<div style="text-align:center;color:var(--mc-muted);font-family:'JetBrains Mono',monospace;font-size:10px;">${cl}</div>`).join('')}
+    ${rows.map((rw, rIdx) => `
+      <div style="font-weight:600;color:var(--mc-muted);font-size:10.5px;">${rw}</div>
+      ${data[rIdx].map(val => {
+          const alpha = Math.max(0.15, Math.min(0.9, val / 100));
+          return `<div style="height:30px;border-radius:5px;background:rgba(var(--c1-rgb),${alpha});display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-weight:700;font-size:11px;color:${alpha > 0.55 ? '#080d19' : 'var(--mc-text)'};">${val}%</div>`;
+      }).join('')}
+    `).join('')}
+  </div>
+</div>`;
+                }
+
+                case 'Decomposition Tree': {
+                    const root = c.root || { n: 'Root KPI', v: '100%' };
+                    const l1 = c.l1 || [{n:'Branch A',v:'60%'},{n:'Branch B',v:'40%'}];
+                    const l2 = c.l2 || [{n:'Factor 1',v:'35%'},{n:'Factor 2',v:'25%'},{n:'Factor 3',v:'15%'}];
+                    return `<div class="mc-canvas">
+  <div style="display:grid;grid-template-columns:1fr 1.15fr 1.25fr;gap:12px;align-items:center;font-size:11px;">
+    <!-- Root -->
+    <div style="background:var(--mc-track);border-left:3.5px solid var(--c1);padding:10px;border-radius:6px;">
+      <span style="color:var(--mc-muted);font-size:10px;display:block;">TOTAL METRIK</span>
+      <strong style="font-size:12.5px;display:block;margin-top:2px;">${root.n}</strong>
+      <span style="font-family:'JetBrains Mono',monospace;color:var(--c1);font-weight:700;">${root.v}</span>
+    </div>
+    <!-- Level 1 -->
+    <div style="display:flex;flex-direction:column;gap:8px;">
+      ${l1.map((item, i) => `<div style="background:var(--mc-track);border-left:3px solid var(--c${i+1});padding:8px 10px;border-radius:6px;display:flex;justify-content:space-between;align-items:center;">
+        <span style="font-weight:600;">${item.n}</span>
+        <strong style="font-family:'JetBrains Mono',monospace;font-size:10.5px;">${item.v}</strong>
+      </div>`).join('')}
+    </div>
+    <!-- Level 2 -->
+    <div style="display:flex;flex-direction:column;gap:6px;">
+      ${l2.map(item => `<div style="background:var(--mc-surface);padding:6px 10px;border-radius:5px;display:flex;justify-content:space-between;align-items:center;font-size:10.5px;">
+        <span style="color:var(--mc-muted);">↳ ${item.n}</span>
+        <strong style="font-family:'JetBrains Mono',monospace;color:var(--mc-text);">${item.v}</strong>
+      </div>`).join('')}
+    </div>
+  </div>
+</div>`;
+                }
+
+                case 'Reliability Curve': {
+                    return `<div class="mc-canvas">
+  <svg viewBox="0 0 360 170" style="width:100%;height:190px;">
+    <line x1="24" y1="25" x2="340" y2="25" stroke="var(--mc-grid)" stroke-dasharray="3 3"/>
+    <line x1="24" y1="142" x2="340" y2="142" stroke="var(--mc-border)"/>
+    <!-- B10 Threshold Line (90% Reliability) -->
+    <line x1="24" y1="40" x2="155" y2="40" stroke="var(--c-warn)" stroke-dasharray="4 3"/>
+    <line x1="155" y1="40" x2="155" y2="142" stroke="var(--c-warn)" stroke-dasharray="4 3"/>
+    <!-- Weibull S(t) Survival Curve -->
+    <path d="M 24,26 C 110,26 140,34 185,68 C 230,102 270,136 338,140" fill="none" stroke="var(--c1)" stroke-width="3"/>
+    <circle cx="155" cy="48" r="4.5" fill="var(--c-warn)" stroke="#fff" stroke-width="1.5"/>
+    <text x="162" y="44" fill="var(--c-warn)" font-size="9.5" font-family="JetBrains Mono" font-weight="700">B10 Life: ${c.b10||'8.000 HM'}</text>
+    <circle cx="220" cy="92" r="4.5" fill="var(--c2)" stroke="#fff" stroke-width="1.5"/>
+    <text x="228" y="88" fill="var(--c2)" font-size="9.5" font-family="JetBrains Mono" font-weight="700">B50 Median: ${c.b50||'12.000 HM'}</text>
+    <text x="24" y="160" fill="var(--mc-muted)" font-size="9.5">0 HM (Baru)</text>
+    <text x="340" y="160" text-anchor="end" fill="var(--mc-muted)" font-size="9.5">Umur Pakai (Operating Hours / HM) →</text>
+  </svg>
+</div>`;
+                }
+
+                case 'Waterfall Chart': {
+                    const steps = c.steps || [];
+                    return `<div class="mc-canvas">
+  <div style="display:grid;grid-template-columns:repeat(${steps.length},1fr);gap:8px;height:175px;align-items:flex-end;">
+    ${steps.map(s => {
+        const col = s.c === 'pos' ? 'var(--c-pos)' : (s.c === 'neg' ? 'var(--c-neg)' : (s.c === 'total' ? 'var(--c2)' : 'var(--c1)'));
+        return `<div style="display:flex;flex-direction:column;align-items:center;height:100%;gap:6px;">
+          <div style="flex:1;width:100%;background:var(--mc-track);border-radius:6px;position:relative;overflow:hidden;">
+            <div data-tip="${s.l}: ${s.v}" style="position:absolute;left:12%;right:12%;bottom:${s.b}%;height:${Math.max(14, s.h)}%;background:${col};border-radius:4px;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:9.5px;font-weight:800;color:#fff;">
+              ${s.v}
+            </div>
+          </div>
+          <span style="font-size:10px;color:var(--mc-muted);text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;">${s.l}</span>
+        </div>`;
+    }).join('')}
+  </div>
+</div>`;
+                }
+
+                case 'Sankey Diagram': {
+                    return `<div class="mc-canvas">
+  <svg viewBox="0 0 360 155" style="width:100%;height:175px;">
+    <path d="M 88,42 C 175,42 175,26 262,26" fill="none" stroke="var(--c1)" stroke-width="26" opacity="0.5"/>
+    <path d="M 88,76 C 175,76 175,76 262,76" fill="none" stroke="var(--c2)" stroke-width="18" opacity="0.5"/>
+    <path d="M 88,104 C 175,104 175,122 262,122" fill="none" stroke="var(--c3)" stroke-width="12" opacity="0.5"/>
+    <!-- Left Source Node -->
+    <rect x="6" y="24" width="82" height="96" rx="6" fill="var(--c1)"/>
+    <text x="47" y="68" text-anchor="middle" fill="#080d19" font-size="9.5" font-weight="800">ORIGIN</text>
+    <text x="47" y="82" text-anchor="middle" fill="#080d19" font-size="8.5" font-family="JetBrains Mono" font-weight="700">${(c.src||'Source').slice(0,14)}</text>
+    <!-- Right Destination Nodes -->
+    <rect x="262" y="12" width="92" height="28" rx="5" fill="var(--c1)"/>
+    <text x="308" y="30" text-anchor="middle" fill="#080d19" font-size="9" font-weight="800">${(c.dst1||'Dest 1').slice(0,16)}</text>
+    <rect x="262" y="62" width="92" height="28" rx="5" fill="var(--c2)"/>
+    <text x="308" y="80" text-anchor="middle" fill="#080d19" font-size="9" font-weight="800">${(c.dst2||'Dest 2').slice(0,16)}</text>
+    <rect x="262" y="108" width="92" height="28" rx="5" fill="var(--c3)"/>
+    <text x="308" y="126" text-anchor="middle" fill="#fff" font-size="9" font-weight="700">${(c.dst3||'Dest 3').slice(0,16)}</text>
+  </svg>
+</div>`;
+                }
+
+                case 'Funnel Chart': {
+                    const stages = c.stages || [];
+                    return `<div class="mc-canvas" style="gap:8px;align-items:center;">
+  ${stages.map((st, i) => `<div style="width:${Math.max(48, st.p)}%;background:var(--mc-track);border-left:4px solid var(--c${(i%3)+1});border-radius:6px;padding:8px 12px;display:flex;justify-content:space-between;align-items:center;font-size:11.5px;">
+    <span style="font-weight:600;color:var(--mc-text);">${st.n}</span>
+    <span style="font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--c1);">${st.v} (${st.p}%)</span>
+  </div>`).join('')}
+</div>`;
+                }
+
+                case 'Forecast Chart': {
+                    const hist = c.hist || [100,115,125,140];
+                    const proj = c.proj || [155,170,185];
+                    const all = [...hist, ...proj];
+                    const maxV = Math.max(...all) * 1.15;
+                    const minV = Math.min(...all) * 0.85;
+                    const pts = all.map((v, i) => {
+                        const x = 28 + i * 50;
+                        const y = 140 - Math.round(((v - minV) / (maxV - minV || 1)) * 105);
+                        return { x, y, v };
+                    });
+                    const histPoly = pts.slice(0, 4).map(p => `${p.x},${p.y}`).join(' ');
+                    const projPoly = pts.slice(3).map(p => `${p.x},${p.y}`).join(' ');
+                    const lastP = pts[6];
+                    const conePath = `M ${pts[3].x},${pts[3].y} L ${lastP.x},${lastP.y - 16} L ${lastP.x},${lastP.y + 16} Z`;
+
+                    return `<div class="mc-canvas">
+  <svg viewBox="0 0 360 170" style="width:100%;height:190px;">
+    <line x1="20" y1="145" x2="340" y2="145" stroke="var(--mc-border)"/>
+    <!-- Confidence Interval Cone -->
+    <path d="${conePath}" fill="var(--c2)" fill-opacity="0.22"/>
+    <!-- Historical Solid Line -->
+    <polyline fill="none" stroke="var(--c1)" stroke-width="2.6" points="${histPoly}"/>
+    <!-- Forecast Dashed Line -->
+    <polyline fill="none" stroke="var(--c2)" stroke-width="2.6" stroke-dasharray="5 4" points="${projPoly}"/>
+    ${pts.map((p, i) => `<g>
+      <circle cx="${p.x}" cy="${p.y}" r="4" fill="var(--mc-card)" stroke="${i < 4 ? 'var(--c1)' : 'var(--c2)'}" stroke-width="2.2"/>
+      <text x="${p.x}" y="${p.y - 9}" text-anchor="middle" fill="${i < 4 ? 'var(--mc-text)' : 'var(--c2)'}" font-size="9.5" font-family="JetBrains Mono" font-weight="700">${p.v}</text>
+      <text x="${p.x}" y="162" text-anchor="middle" fill="var(--mc-muted)" font-size="9.5">${i < 4 ? 'Aktual '+(i+1) : 'Proj +'+(i-3)}</text>
+    </g>`).join('')}
+  </svg>
+</div>`;
+                }
+
+                case '100% Stacked Bar': {
+                    const groups = c.groups || ['G1','G2','G3','G4'];
+                    return `<div class="mc-canvas" style="gap:12px;">
+  ${groups.map((g, i) => {
+      const a = c.p1[i], b = c.p2[i], d = c.p3[i];
+      return `<div style="display:flex;flex-direction:column;gap:4px;font-size:11px;">
+        <div style="display:flex;justify-content:space-between;">
+          <span style="font-weight:600;">${g}</span>
+          <span style="font-family:'JetBrains Mono',monospace;color:var(--mc-muted);">${c.l1}: <strong style="color:var(--c-pos)">${a}%</strong> • ${c.l2}: ${b}% • ${c.l3}: ${d}%</span>
+        </div>
+        <div style="height:16px;width:100%;display:flex;border-radius:5px;overflow:hidden;gap:2px;">
+          <div style="width:${a}%;background:var(--c-pos);"></div>
+          <div style="width:${b}%;background:var(--c-warn);"></div>
+          <div style="width:${d}%;background:var(--c-neg);"></div>
+        </div>
+      </div>`;
+  }).join('')}
+</div>`;
+                }
+
+                case 'Slope Chart': {
+                    const items = c.items || [];
+                    return `<div class="mc-canvas">
+  <svg viewBox="0 0 360 160" style="width:100%;height:180px;">
+    <line x1="95" y1="15" x2="95" y2="140" stroke="var(--mc-border)" stroke-width="1.5"/>
+    <line x1="265" y1="15" x2="265" y2="140" stroke="var(--mc-border)" stroke-width="1.5"/>
+    <text x="95" y="12" text-anchor="middle" fill="var(--mc-muted)" font-size="9.5" font-family="JetBrains Mono">PERIODE LALU</text>
+    <text x="265" y="12" text-anchor="middle" fill="var(--mc-muted)" font-size="9.5" font-family="JetBrains Mono">PERIODE INI</text>
+    ${items.map((it, i) => {
+        const col = it.c === 'neg' ? 'var(--c-neg)' : `var(--c${(i%2)+1})`;
+        return `<g>
+          <line x1="95" y1="${it.y1}" x2="265" y2="${it.y2}" stroke="${col}" stroke-width="2.5"/>
+          <circle cx="95" cy="${it.y1}" r="4" fill="${col}"/>
+          <circle cx="265" cy="${it.y2}" r="4" fill="${col}"/>
+          <text x="87" y="${it.y1 + 3}" text-anchor="end" fill="var(--mc-text)" font-size="9.5">${it.n.slice(0,14)} (${it.v1})</text>
+          <text x="273" y="${it.y2 + 3}" fill="${col}" font-size="10" font-family="JetBrains Mono" font-weight="700">${it.v2}</text>
+        </g>`;
+    }).join('')}
+  </svg>
+</div>`;
+                }
+
+                case 'GIS Map': {
+                    return `<div class="mc-canvas">
+  <div style="background:var(--mc-track);border:1px solid var(--mc-border);border-radius:10px;padding:10px;">
+    <svg viewBox="0 0 360 150" style="width:100%;height:160px;">
+      <!-- Pit Contour Polygons -->
+      <polygon points="22,28 98,22 110,74 34,82" fill="rgba(var(--c1-rgb),0.18)" stroke="var(--c1)" stroke-width="1.8"/>
+      <text x="65" y="54" text-anchor="middle" fill="var(--mc-text)" font-size="9.5" font-weight="700">PIT UTARA A</text>
+      <polygon points="140,84 225,78 238,132 148,136" fill="rgba(6,182,212,0.18)" stroke="var(--c2)" stroke-width="1.8"/>
+      <text x="190" y="110" text-anchor="middle" fill="var(--mc-text)" font-size="9.5" font-weight="700">DISPOSAL / DUMP</text>
+      <rect x="268" y="24" width="76" height="46" rx="6" fill="rgba(16,185,129,0.18)" stroke="var(--c-pos)" stroke-width="1.8"/>
+      <text x="306" y="50" text-anchor="middle" fill="var(--mc-text)" font-size="9.5" font-weight="700">ROM / CRUSHER</text>
+      <!-- Haul Road Vector -->
+      <path d="M 104,54 L 185,54 L 185,82 M 185,54 L 268,48" fill="none" stroke="var(--mc-muted)" stroke-width="3" stroke-dasharray="5 3"/>
+      <!-- Active GPS Telemetry Pins -->
+      <circle cx="72" cy="38" r="5" fill="var(--c-pos)" stroke="#fff" stroke-width="1.5"/>
+      <circle cx="152" cy="54" r="5" fill="var(--c1)" stroke="#fff" stroke-width="1.5"/>
+      <circle cx="222" cy="51" r="5" fill="var(--c-neg)" stroke="#fff" stroke-width="1.5"/>
+    </svg>
+  </div>
+</div>`;
+                }
+
+                case 'Treemap': {
+                    const items = c.items || [];
+                    return `<div class="mc-canvas">
+  <div style="display:grid;grid-template-columns:1.6fr 1fr;grid-template-rows:88px 82px;gap:6px;color:#080d19;">
+    <div style="grid-row:1/3;background:var(--c1);border-radius:8px;padding:12px;display:flex;flex-direction:column;justify-content:space-between;">
+      <span style="font-size:11px;font-weight:800;">${items[0]?.n || 'Kategori 1'}</span>
+      <strong style="font-size:18px;font-family:'JetBrains Mono',monospace;">${items[0]?.v || ''}</strong>
+    </div>
+    <div style="background:var(--c2);border-radius:8px;padding:10px;display:flex;flex-direction:column;justify-content:space-between;">
+      <span style="font-size:10.5px;font-weight:800;">${items[1]?.n || 'Kategori 2'}</span>
+      <strong style="font-size:14px;font-family:'JetBrains Mono',monospace;">${items[1]?.v || ''}</strong>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;color:#fff;">
+      <div style="background:var(--c3);border-radius:8px;padding:8px;display:flex;flex-direction:column;justify-content:space-between;">
+        <span style="font-size:9.5px;font-weight:700;">${(items[2]?.n || 'Kat 3').slice(0,18)}</span>
+        <strong style="font-size:12px;font-family:'JetBrains Mono',monospace;">${items[2]?.v || ''}</strong>
+      </div>
+      <div style="background:var(--c4);border-radius:8px;padding:8px;display:flex;flex-direction:column;justify-content:space-between;color:#080d19;">
+        <span style="font-size:9.5px;font-weight:800;">${(items[3]?.n || 'Kat 4').slice(0,18)}</span>
+        <strong style="font-size:12px;font-family:'JetBrains Mono',monospace;">${items[3]?.v || ''}</strong>
+      </div>
+    </div>
+  </div>
+</div>`;
+                }
+
+                case 'Stock Projection Chart': {
+                    return `<div class="mc-canvas">
+  <svg viewBox="0 0 360 170" style="width:100%;height:190px;">
+    <!-- Reorder Point (ROP) & Safety Stock Lines -->
+    <line x1="20" y1="88" x2="340" y2="88" stroke="var(--c-warn)" stroke-width="1.5" stroke-dasharray="5 3"/>
+    <text x="338" y="83" text-anchor="end" fill="var(--c-warn)" font-size="9" font-family="JetBrains Mono" font-weight="700">Reorder Point (ROP: ${c.rop||'120'})</text>
+    <line x1="20" y1="125" x2="340" y2="125" stroke="var(--c-neg)" stroke-width="1.5" stroke-dasharray="3 3"/>
+    <text x="338" y="120" text-anchor="end" fill="var(--c-neg)" font-size="9" font-family="JetBrains Mono">Safety Stock (${c.safety||'60'})</text>
+    <line x1="20" y1="145" x2="340" y2="145" stroke="var(--mc-border)"/>
+    <!-- Saw-Tooth Inventory Depletion & Replenishment Curve -->
+    <polyline fill="none" stroke="var(--c1)" stroke-width="2.6" points="24,30 95,88 135,118 135,34 215,88 255,115"/>
+    <polyline fill="none" stroke="var(--c-neg)" stroke-width="2.4" stroke-dasharray="4 3" points="255,115 320,140"/>
+    <circle cx="95" cy="88" r="4.5" fill="var(--c-warn)"/>
+    <circle cx="215" cy="88" r="4.5" fill="var(--c-warn)"/>
+    <text x="295" y="136" fill="var(--c-neg)" font-size="9" font-family="JetBrains Mono" font-weight="700">Risiko Stockout</text>
+  </svg>
+</div>`;
+                }
+
+                case 'Ordered Bar Chart': {
+                    const items = c.items || [];
+                    const maxV = Math.max(...items.map(x => x.v), 1);
+                    return `<div class="mc-canvas" style="gap:10px;">
+  ${items.map((it, i) => {
+      const w = Math.round((it.v / maxV) * 100);
+      return `<div style="display:grid;grid-template-columns:155px 1fr 58px;align-items:center;gap:10px;font-size:11.5px;">
+        <span style="color:var(--mc-text);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${it.n}</span>
+        <div style="height:12px;background:var(--mc-track);border-radius:4px;overflow:hidden;">
+          <div style="width:${w}%;height:100%;background:${i===0 ? 'var(--c1)' : 'var(--c2)'};border-radius:4px;"></div>
+        </div>
+        <strong style="font-family:'JetBrains Mono',monospace;text-align:right;">${it.v}${it.u||''}</strong>
+      </div>`;
+  }).join('')}
+</div>`;
+                }
+
+                case 'Bullet Chart': {
+                    const items = c.items || [];
+                    return `<div class="mc-canvas" style="gap:14px;">
+  ${items.map((it, i) => `<div style="display:flex;flex-direction:column;gap:5px;">
+    <div style="display:flex;justify-content:space-between;font-size:11.5px;">
+      <span style="font-weight:600;">${it.n}</span>
+      <span style="font-family:'JetBrains Mono',monospace;color:var(--mc-muted);">Aktual: <strong style="color:var(--mc-text)">${it.v}%</strong> (Target ${it.t}%)</span>
+    </div>
+    <div style="height:20px;width:100%;background:var(--mc-track);border-radius:5px;position:relative;display:flex;align-items:center;padding:0 2px;">
+      <div style="width:${Math.min(100, it.v)}%;height:10px;background:var(--c${(i%2)+1});border-radius:3px;"></div>
+      <div title="Target ${it.t}%" style="position:absolute;left:${it.t}%;top:2px;bottom:2px;width:3px;background:var(--c-warn);border-radius:2px;"></div>
+    </div>
+  </div>`).join('')}
+</div>`;
+                }
+
+                case 'Aging Chart': {
+                    const buckets = c.buckets || [];
+                    const maxB = Math.max(...buckets.map(b => b.v), 1);
+                    return `<div class="mc-canvas" style="gap:11px;">
+  ${buckets.map(b => {
+      const w = Math.max(4, Math.round((b.v / maxB) * 100));
+      const col = b.c === 'neg' ? 'var(--c-neg)' : (b.c === 'warn' ? 'var(--c-warn)' : (b.c === 'pos' ? 'var(--c-pos)' : 'var(--c2)'));
+      return `<div style="display:grid;grid-template-columns:135px 1fr 56px;align-items:center;gap:10px;font-size:11.5px;">
+        <span style="color:var(--mc-muted);font-weight:600;">${b.l}</span>
+        <div style="height:14px;background:var(--mc-track);border-radius:4px;overflow:hidden;">
+          <div style="width:${w}%;height:100%;background:${col};border-radius:4px;"></div>
+        </div>
+        <strong style="font-family:'JetBrains Mono',monospace;text-align:right;color:${col};">${b.v}</strong>
+      </div>`;
+  }).join('')}
+</div>`;
+                }
+
+                default:
+                    return `<div class="mc-canvas">Chart Preview</div>`;
+            }
+        }
+
+        // BUILD COMPLETE STANDALONE CARD HTML FOR COPY/EXPORT
+        function buildCardSnippetHTML(chart, dept) {
+            return `<div class="mc-chart-card">
+  <div class="mc-header">
+    <div>
+      <span class="mc-type-pill">${dept.short} • ${chart.type}</span>
+      <h3 class="mc-title">${chart.title}</h3>
+    </div>
+    <div class="mc-kpi-summary">
+      <strong class="mc-kpi-val">${chart.kpi}</strong>
+      <span class="mc-kpi-lbl">Indikator Kunci</span>
+    </div>
+  </div>
+  ${renderChartCanvas(chart, dept)}
+  <div class="mc-legend">
+    <span><strong>Makna Analitik:</strong> ${chart.insight}</span>
+  </div>
+</div>`;
+        }
+
+        function getStandaloneCSS() {
+            const p = PALETTES[state.palette];
+            const isLight = state.theme === 'light';
+            return `:root {
+  --c1: ${p.c1}; --c2: ${p.c2}; --c3: ${p.c3}; --c4: ${p.c4};
+  --c1-rgb: ${p.rgb};
+  --c-pos: #10b981; --c-neg: #f43f5e; --c-warn: #f59e0b;
+  --mc-card: ${isLight ? '#ffffff' : '#0f172a'};
+  --mc-surface: ${isLight ? '#f1f5f9' : '#1e293b'};
+  --mc-text: ${isLight ? '#0f172a' : '#f8fafc'};
+  --mc-muted: ${isLight ? '#64748b' : '#94a3b8'};
+  --mc-border: ${isLight ? '#e2e8f0' : 'rgba(148, 163, 184, 0.16)'};
+  --mc-grid: ${isLight ? '#e2e8f0' : 'rgba(148, 163, 184, 0.12)'};
+  --mc-track: ${isLight ? '#f1f5f9' : 'rgba(30, 41, 59, 0.75)'};
+}
+.mc-chart-card { background: var(--mc-card); color: var(--mc-text); border: 1px solid var(--mc-border); border-radius: 14px; padding: 22px 24px; width: 100%; max-width: 600px; font-family: 'Plus Jakarta Sans', system-ui, sans-serif; font-variant-numeric: tabular-nums; box-sizing: border-box; }
+.mc-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; margin-bottom: 18px; }
+.mc-type-pill { display: inline-block; font-size: 10.5px; font-weight: 700; font-family: monospace; text-transform: uppercase; color: var(--c1); margin-bottom: 4px; }
+.mc-title { margin: 0; font-size: 15.5px; font-weight: 700; line-height: 1.35; }
+.mc-kpi-summary { text-align: right; flex-shrink: 0; }
+.mc-kpi-val { font-size: 16px; font-weight: 800; font-family: monospace; display: block; }
+.mc-kpi-lbl { font-size: 10.5px; color: var(--mc-muted); }
+.mc-canvas { position: relative; min-height: 200px; display: flex; flex-direction: column; justify-content: center; }
+.mc-legend { margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--mc-border); font-size: 11.5px; color: var(--mc-muted); line-height: 1.5; }`;
+        }
+
+        // =========================================================================
+        // UI NAVIGATION & RENDERING
+        // =========================================================================
+        function initApp() {
+            populateChartTypeSelect();
+            renderSidebar();
+            renderMainGrid();
+        }
+
+        function populateChartTypeSelect() {
+            const types = new Set();
+            DEPARTMENTS.forEach(d => d.charts.forEach(c => types.add(c.type)));
+            const sel = document.getElementById('type-filter');
+            Array.from(types).sort().forEach(t => {
+                const opt = document.createElement('option');
+                opt.value = t;
+                opt.textContent = t;
+                sel.appendChild(opt);
+            });
+        }
+
+        function renderSidebar() {
+            const nav = document.getElementById('dept-nav');
+            const totalCharts = DEPARTMENTS.reduce((acc, d) => acc + d.charts.length, 0);
+
+            let html = `
+                <button onclick="selectDepartment('all')" class="w-full text-left px-3 py-2 rounded-lg text-xs font-semibold flex items-center justify-between gap-2 transition cursor-pointer shrink-0 ${state.activeDept === 'all' ? 'bg-amber-500 text-slate-950 font-bold' : 'text-slate-300 hover:bg-slate-900'}">
+                    <span>Semua 13 Departemen</span>
+                    <span class="font-mono text-[11px] px-1.5 py-0.5 rounded ${state.activeDept === 'all' ? 'bg-slate-950/20 text-slate-950' : 'bg-slate-800 text-slate-400'}">${totalCharts}</span>
+                </button>
+            `;
+
+            html += DEPARTMENTS.map(d => {
+                const active = state.activeDept === d.id;
+                return `
+                    <button onclick="selectDepartment('${d.id}')" class="w-full text-left px-3 py-2 rounded-lg text-xs font-medium flex items-center justify-between gap-2 transition cursor-pointer shrink-0 ${active ? 'bg-amber-500 text-slate-950 font-bold shadow-sm' : 'text-slate-400 hover:text-white hover:bg-slate-900/80'}">
+                        <span class="truncate">${d.short}</span>
+                        <span class="font-mono text-[10.5px] px-1.5 py-0.5 rounded ${active ? 'bg-slate-950/20 text-slate-950' : 'bg-slate-900 text-slate-400'}">${d.charts.length}</span>
+                    </button>
+                `;
+            }).join('');
+
+            nav.innerHTML = html;
+        }
+
+        function selectDepartment(deptId) {
+            state.activeDept = deptId;
+            renderSidebar();
+            renderMainGrid();
+        }
+
+        function setSearch(val) {
+            state.search = val.trim().toLowerCase();
+            renderMainGrid();
+        }
+
+        function setTypeFilter(val) {
+            state.typeFilter = val;
+            renderMainGrid();
+        }
+
+        function resetFilters() {
+            state.activeDept = 'all';
+            state.search = '';
+            state.typeFilter = 'all';
+            document.getElementById('search-input').value = '';
+            document.getElementById('type-filter').value = 'all';
+            renderSidebar();
+            renderMainGrid();
+        }
+
+        function setPalette(key) {
+            state.palette = key;
+            const p = PALETTES[key];
+            const root = document.documentElement;
+            root.style.setProperty('--c1', p.c1);
+            root.style.setProperty('--c2', p.c2);
+            root.style.setProperty('--c3', p.c3);
+            root.style.setProperty('--c4', p.c4);
+            root.style.setProperty('--c1-rgb', p.rgb);
+            renderMainGrid();
+        }
+
+        function toggleTheme() {
+            state.theme = state.theme === 'dark' ? 'light' : 'dark';
+            document.getElementById('theme-btn').textContent = state.theme === 'dark' ? '🌙 Mode Gelap' : '☀️ Mode Terang';
+            renderMainGrid();
+        }
+
+        function renderMainGrid() {
+            const grid = document.getElementById('charts-grid');
+            const empty = document.getElementById('empty-state');
+
+            // Update Banner Info
+            if (state.activeDept === 'all') {
+                document.getElementById('active-dept-badge').textContent = '13 Departemen Tambang';
+                document.getElementById('active-dept-title').textContent = 'Semua Komponen Visualisasi Data Pertambangan';
+                document.getElementById('active-dept-desc').textContent = 'Menampilkan seluruh grafik standar untuk Plant, Logistik, Production, Engineering, Dispatcher, Fuel, Tyre, SCM, Warehouse, HRGA, HSE, Finance, dan Executive.';
+            } else {
+                const dObj = DEPARTMENTS.find(d => d.id === state.activeDept);
+                if (dObj) {
+                    document.getElementById('active-dept-badge').textContent = `${dObj.num}. ${dObj.name}`;
+                    document.getElementById('active-dept-title').textContent = `Visualisasi Data ${dObj.name}`;
+                    document.getElementById('active-dept-desc').textContent = dObj.desc;
+                }
+            }
+
+            // Collect Matching Charts
+            const items = [];
+            DEPARTMENTS.forEach(dept => {
+                if (state.activeDept !== 'all' && state.activeDept !== dept.id) return;
+                dept.charts.forEach((chart, idx) => {
+                    const matchType = state.typeFilter === 'all' || chart.type === state.typeFilter;
+                    const matchSearch = !state.search
+                        || chart.title.toLowerCase().includes(state.search)
+                        || chart.type.toLowerCase().includes(state.search)
+                        || chart.insight.toLowerCase().includes(state.search)
+                        || dept.name.toLowerCase().includes(state.search);
+                    if (matchType && matchSearch) {
+                        items.push({ dept, chart, key: `${dept.id}-${idx}` });
+                    }
+                });
+            });
+
+            document.getElementById('active-chart-count').textContent = `${items.length} Visualisasi`;
+
+            if (items.length === 0) {
+                grid.innerHTML = '';
+                empty.classList.remove('hidden');
+                return;
+            }
+            empty.classList.add('hidden');
+
+            grid.innerHTML = items.map(({ dept, chart, key }) => `
+                <article class="rounded-2xl border border-slate-800/90 bg-slate-900/50 overflow-hidden flex flex-col justify-between transition hover:border-slate-700">
+                    <!-- Clean Chart Preview Canvas -->
+                    <div class="p-3 sm:p-4 ${state.theme === 'light' ? 'theme-light bg-slate-100' : ''}">
+                        <div class="mc-chart-card">
+                            <div class="mc-header">
+                                <div>
+                                    <span class="mc-type-pill">${dept.short} • ${chart.type}</span>
+                                    <h3 class="mc-title">${chart.title}</h3>
+                                </div>
+                                <div class="mc-kpi-summary">
+                                    <strong class="mc-kpi-val">${chart.kpi}</strong>
+                                    <span class="mc-kpi-lbl">Ringkasan</span>
+                                </div>
+                            </div>
+
+                            ${renderChartCanvas(chart, dept)}
+
+                            <!-- Clear Analytical Meaning Bar -->
+                            <div class="mc-legend">
+                                <span><strong style="color:var(--mc-text);">Makna Data:</strong> ${chart.insight}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Minimal Footer Action Bar for Copying Code -->
+                    <div class="px-4 py-2.5 bg-slate-950/90 border-t border-slate-800/80 flex items-center justify-between gap-2 text-xs">
+                        <button onclick="openCodeModal('${key}')" class="text-slate-300 hover:text-amber-400 font-medium flex items-center gap-1.5 cursor-pointer">
+                            <span>&lt;/&gt; Lihat Source Code</span>
+                        </button>
+                        <div class="flex items-center gap-1.5">
+                            <button onclick="copySnippet('${key}','html')" class="px-2.5 py-1 rounded-md bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800 font-medium cursor-pointer">
+                                Salin HTML
+                            </button>
+                            <button onclick="copySnippet('${key}','css')" class="px-2.5 py-1 rounded-md bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800 font-medium cursor-pointer">
+                                Salin CSS
+                            </button>
+                            <button onclick="copySnippet('${key}','all')" class="px-3 py-1 rounded-md bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/30 font-semibold cursor-pointer">
+                                Salin Semua
+                            </button>
+                        </div>
+                    </div>
+                </article>
+            `).join('');
+        }
+
+        // =========================================================================
+        // MODAL & CLIPBOARD ACTIONS
+        // =========================================================================
+        function findChartByKey(key) {
+            const [deptId, idxStr] = key.split('-');
+            const dept = DEPARTMENTS.find(d => d.id === deptId);
+            if (!dept) return null;
+            return { dept, chart: dept.charts[Number(idxStr)] };
+        }
+
+        function openCodeModal(key) {
+            const found = findChartByKey(key);
+            if (!found) return;
+            state.modalChart = found;
+            document.getElementById('modal-dept').textContent = `${found.dept.name} • ${found.chart.type}`;
+            document.getElementById('modal-title').textContent = found.chart.title;
+            document.getElementById('modal-html').value = buildCardSnippetHTML(found.chart, found.dept);
+            document.getElementById('modal-css').value = getStandaloneCSS();
+            document.getElementById('code-modal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('code-modal').classList.add('hidden');
+        }
+
+        function copySnippet(key, mode) {
+            const found = findChartByKey(key);
+            if (!found) return;
+            const html = buildCardSnippetHTML(found.chart, found.dept);
+            const css = getStandaloneCSS();
+            let text = html;
+            if (mode === 'css') text = css;
+            if (mode === 'all') text = `<!-- ${found.dept.name}: ${found.chart.title} -->\n<style>\n${css}\n</style>\n\n${html}`;
+            copyText(text, `Kode ${mode.toUpperCase()} "${found.chart.title}" berhasil disalin.`);
+        }
+
+        function copyFromModal(mode) {
+            const html = document.getElementById('modal-html').value;
+            const css = document.getElementById('modal-css').value;
+            let text = html;
+            if (mode === 'css') text = css;
+            if (mode === 'all') text = `<style>\n${css}\n</style>\n\n${html}`;
+            copyText(text, `Kode ${mode.toUpperCase()} berhasil disalin ke clipboard.`);
+        }
+
+        function copyText(str, msg) {
+            const ta = document.createElement('textarea');
+            ta.value = str;
+            ta.style.position = 'fixed';
+            ta.style.left = '-9999px';
+            document.body.appendChild(ta);
+            ta.select();
+            try {
+                document.execCommand('copy');
+                showToast(msg);
+            } catch (e) {
+                console.error(e);
+            }
+            document.body.removeChild(ta);
+        }
+
+        function exportDeptBundle() {
+            const targetDepts = state.activeDept === 'all'
+                ? DEPARTMENTS
+                : DEPARTMENTS.filter(d => d.id === state.activeDept);
+            const css = getStandaloneCSS();
+            const cardsHTML = targetDepts.map(dept => `
+                <h2 style="margin:32px 0 16px;font-size:20px;border-bottom:1px solid #334155;padding-bottom:8px;">${dept.num}. ${dept.name}</h2>
+                <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(460px,1fr));gap:20px;">
+                    ${dept.charts.map(c => buildCardSnippetHTML(c, dept)).join('\n')}
+                </div>
+            `).join('\n');
+
+            const doc = `<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>MineChart.studio Export — ${state.activeDept.toUpperCase()}</title>
+<style>
+${css}
+body { background: #080d19; color: #f8fafc; font-family: system-ui, sans-serif; margin: 0; padding: 32px; max-width: 1440px; margin: 0 auto; }
+</style>
+</head>
+<body>
+<h1>MineChart.studio — Paket Visualisasi Data Pertambangan</h1>
+${cardsHTML}
+</body>
+</html>`;
+
+            const blob = new Blob([doc], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `minechart-${state.activeDept}-bundle.html`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            showToast('File HTML Departemen berhasil diunduh.');
+        }
+
+        let toastTimer = null;
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            document.getElementById('toast-msg').textContent = msg;
+            t.classList.remove('translate-y-16', 'opacity-0');
+            t.classList.add('translate-y-0', 'opacity-100');
+            if (toastTimer) clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => {
+                t.classList.add('translate-y-16', 'opacity-0');
+                t.classList.remove('translate-y-0', 'opacity-100');
+            }, 2400);
+        }
+
+        window.onload = initApp;
+    </script>
+</body>
+</html>
