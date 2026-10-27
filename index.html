@@ -224,6 +224,17 @@
         html.theme-light #code-modal textarea { background: #ffffff !important; color: #0f766e !important; }
         html.theme-light #code-modal .border-slate-800 { border-color: #e2e8f0 !important; }
     </style>
+<style id="mc-mobile-dept-nav">
+        @media (max-width: 1023.5px) {
+            #dept-nav { flex-direction: column !important; overflow-x: visible !important; overflow-y: auto; max-height: 60vh; }
+            #dept-nav.dept-nav-collapsed { display: none !important; }
+            #dept-header { scroll-margin-top: 140px; }
+        }
+        #dept-toggle[aria-expanded="true"] #dept-toggle-chevron { transform: rotate(180deg); }
+        html.theme-light #dept-toggle { background: #ffffff !important; border-color: #cbd5e1 !important; }
+        html.theme-light #dept-toggle-label { color: #0f172a !important; }
+        html.theme-light #dept-toggle .text-slate-400 { color: #64748b !important; }
+    </style>
 </head>
 <body class="bg-[#080d19] text-slate-100 font-sans antialiased min-h-screen flex flex-col">
 
@@ -290,10 +301,17 @@
 
         <!-- Left Navigation Sidebar (13 Mining Departments) -->
         <aside class="w-full lg:w-72 shrink-0 border-b lg:border-b-0 lg:border-r border-slate-800/80 bg-[#080d19] lg:sticky lg:top-16 lg:h-[calc(100vh-4rem)] overflow-y-auto p-4">
-            <div class="text-[11px] font-mono uppercase tracking-wider text-slate-400 font-semibold mb-2.5 px-2">
+            <div class="hidden lg:block text-[11px] font-mono uppercase tracking-wider text-slate-400 font-semibold mb-2.5 px-2">
                 Departemen Pertambangan
             </div>
-            <nav id="dept-nav" aria-label="Daftar departemen" class="flex lg:flex-col gap-1 overflow-x-auto lg:overflow-x-visible pb-2 lg:pb-0"></nav>
+            <button id="dept-toggle" onclick="toggleDeptNav()" aria-expanded="false" aria-controls="dept-nav" class="lg:hidden w-full flex items-center justify-between gap-2 px-3 py-2.5 rounded-lg bg-slate-900 border border-slate-800 text-left cursor-pointer">
+                <span class="min-w-0">
+                    <span class="block text-[11px] font-mono uppercase tracking-wider text-slate-400 font-semibold">Departemen Aktif</span>
+                    <span id="dept-toggle-label" class="block text-sm font-bold text-white truncate">1. Dept Plant / Maintenance</span>
+                </span>
+                <span id="dept-toggle-chevron" class="text-amber-400 text-base leading-none transition-transform shrink-0">&#9662;</span>
+            </button>
+            <nav id="dept-nav" aria-label="Daftar departemen" class="dept-nav-collapsed flex lg:flex-col gap-1 overflow-x-auto lg:overflow-x-visible pb-2 lg:pb-0"></nav>
         </aside>
 
         <!-- Right Content Area -->
@@ -672,6 +690,20 @@
                 btn.textContent = state.theme === 'dark' ? '🌙 Mode Gelap' : '☀️ Mode Terang';
                 btn.setAttribute('aria-pressed', state.theme === 'light' ? 'true' : 'false');
             }
+        }
+        function updateDeptToggleLabel() {
+            const lbl = document.getElementById('dept-toggle-label');
+            if (!lbl) return;
+            const d = DEPARTMENTS.find(x => x.id === state.activeDept);
+            lbl.textContent = state.activeDept === 'all' ? 'Semua 13 Departemen' : (d ? d.num + '. ' + d.name : '');
+        }
+        function toggleDeptNav(force) {
+            const nav = document.getElementById('dept-nav');
+            const btn = document.getElementById('dept-toggle');
+            if (!nav) return;
+            const show = (typeof force === 'boolean') ? force : nav.classList.contains('dept-nav-collapsed');
+            nav.classList.toggle('dept-nav-collapsed', !show);
+            if (btn) btn.setAttribute('aria-expanded', show ? 'true' : 'false');
         }
         function fallbackCopy(str, done, fail) {
             const ta = document.createElement('textarea');
@@ -1429,6 +1461,7 @@
             renderSidebar();
             renderMainGrid();
             applyTheme();
+            updateDeptToggleLabel();
         }
 
                 function populateChartTypeSelect() {
@@ -1468,11 +1501,17 @@
             nav.innerHTML = html;
         }
 
-                function selectDepartment(deptId) {
+                        function selectDepartment(deptId) {
             state.activeDept = deptId;
             savePrefs();
             renderSidebar();
             renderMainGrid();
+            updateDeptToggleLabel();
+            if (window.matchMedia('(max-width: 1023px)').matches) {
+                toggleDeptNav(false);
+                const hdr = document.getElementById('dept-header');
+                if (hdr) hdr.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
         }
 
         function setSearch(val) {
@@ -1485,7 +1524,7 @@
             renderMainGrid();
         }
 
-        function resetFilters() {
+                function resetFilters() {
             state.activeDept = 'all';
             state.search = '';
             state.typeFilter = 'all';
@@ -1493,6 +1532,12 @@
             document.getElementById('type-filter').value = 'all';
             renderSidebar();
             renderMainGrid();
+            updateDeptToggleLabel();
+            if (window.matchMedia('(max-width: 1023px)').matches) {
+                toggleDeptNav(false);
+                const hdr = document.getElementById('dept-header');
+                if (hdr) hdr.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
         }
 
                 function setPalette(key) {
