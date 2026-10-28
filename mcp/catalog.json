@@ -1,0 +1,4610 @@
+{
+  "name": "MineChart.studio",
+  "version": "5.0",
+  "description": "Pustaka Visualisasi Data 13 Departemen Pertambangan. Chart definitions with sample/illustrative data (Data Sampel) — cfg describes the data shape each chart type expects, not live mining figures.",
+  "source": "DEPARTMENTS array in index.html",
+  "departments": [
+    {
+      "id": "plant",
+      "num": 1,
+      "name": "Dept Plant / Maintenance",
+      "short": "1. Plant / Maintenance",
+      "desc": "Kepatuhan Preventive Maintenance (PM), kestabilan MTTR & Breakdown Hours, analisis backlog Work Order, serta umur komponen Weibull.",
+      "charts": [
+        {
+          "id": "plant-0",
+          "type": "Combo Chart",
+          "title": "PM Plan vs Actual + PM Compliance",
+          "kpi": "94.2% Compliance",
+          "insight": "Realisasi PM mencapai 148 dari 157 jadwal unit; deviasi hanya terjadi pada shift hujan di Pit B.",
+          "cfg": {
+            "labels": [
+              "Mgg 1",
+              "Mgg 2",
+              "Mgg 3",
+              "Mgg 4",
+              "Mgg 5"
+            ],
+            "plan": [
+              38,
+              40,
+              42,
+              38,
+              40
+            ],
+            "actual": [
+              36,
+              39,
+              40,
+              35,
+              39
+            ],
+            "rate": [
+              95,
+              97,
+              95,
+              92,
+              98
+            ],
+            "unit": "Unit"
+          }
+        },
+        {
+          "id": "plant-1",
+          "type": "Control Chart",
+          "title": "Kestabilan MTTR & Breakdown Hours",
+          "kpi": "Mean 3.4 Jam",
+          "insight": "Durasi perbaikan terkendali di bawah UCL (5.5 jam), kecuali 1 anomali pecah hose utama PC2000 pada Hari ke-4.",
+          "cfg": {
+            "mean": "3.4 Jam",
+            "ucl": "5.5 Jam",
+            "lcl": "1.2 Jam",
+            "pts": [
+              3.1,
+              3.5,
+              2.9,
+              5.9,
+              3.2,
+              3,
+              3.3
+            ],
+            "labels": [
+              "H1",
+              "H2",
+              "H3",
+              "H4*",
+              "H5",
+              "H6",
+              "H7"
+            ]
+          }
+        },
+        {
+          "id": "plant-2",
+          "type": "Histogram",
+          "title": "Distribusi Durasi Breakdown & Waktu Perbaikan",
+          "kpi": "Modus 2–4 Jam",
+          "insight": "74% kejadian breakdown selesai diperbaiki dalam rentang waktu kurang dari 4 jam di bay workshop.",
+          "cfg": {
+            "bins": [
+              "<1j",
+              "1-2j",
+              "2-4j",
+              "4-6j",
+              "6-8j",
+              ">8j"
+            ],
+            "counts": [
+              18,
+              46,
+              88,
+              42,
+              19,
+              8
+            ]
+          }
+        },
+        {
+          "id": "plant-3",
+          "type": "Box Plot",
+          "title": "Variasi MTTR Antarunit Alat Berat",
+          "kpi": "Median 3.2 Jam",
+          "insight": "Armada Excavator PC2000 memiliki rentang variasi perbaikan terlebar dibanding HD785 dan Dozer D375.",
+          "cfg": {
+            "groups": [
+              "PC2000",
+              "HD785-7",
+              "D375A",
+              "GD825A"
+            ],
+            "med": [
+              4.1,
+              2.8,
+              3.3,
+              2.2
+            ],
+            "q1": [
+              2.8,
+              2,
+              2.4,
+              1.6
+            ],
+            "q3": [
+              5.6,
+              3.7,
+              4.3,
+              3
+            ],
+            "unit": "Jam"
+          }
+        },
+        {
+          "id": "plant-4",
+          "type": "Small Multiples",
+          "title": "Tren PA, MTTR, dan Breakdown Hours per Unit",
+          "kpi": "PA Fleet 91.8%",
+          "insight": "Perbandingan langsung menunjukkan EX-01 dan DT-104 konsisten stabil, sedangkan DZ-08 mengalami kenaikan jam rusak.",
+          "cfg": {
+            "items": [
+              {
+                "n": "EX-201 (PA%)",
+                "v": "93.4%",
+                "pts": "10,30 35,24 60,20 85,14"
+              },
+              {
+                "n": "DT-104 (PA%)",
+                "v": "91.2%",
+                "pts": "10,28 35,26 60,22 85,18"
+              },
+              {
+                "n": "DZ-08 (BD Jam)",
+                "v": "14.5j",
+                "pts": "10,32 35,28 60,16 85,8"
+              },
+              {
+                "n": "GR-03 (MTTR)",
+                "v": "2.4j",
+                "pts": "10,16 35,20 60,25 85,28"
+              }
+            ]
+          }
+        },
+        {
+          "id": "plant-5",
+          "type": "Quadrant Chart",
+          "title": "Frekuensi Breakdown vs Total Downtime",
+          "kpi": "2 Unit Kritis",
+          "insight": "Unit di Kuadran Kanan-Atas (DT-112 & EX-204) sering rusak dan memakan downtime lama—prioritas utama overhaul.",
+          "cfg": {
+            "xLbl": "Frekuensi Breakdown (Kali/Bulan)",
+            "yLbl": "Total Downtime (Jam)",
+            "q1": "Kronis (Prioritas PCR)",
+            "q2": "MajorBD (Jarang tapi Lama)",
+            "q3": "Armada Sehat",
+            "q4": "Minor Stoppages",
+            "pts": [
+              {
+                "n": "DT-112",
+                "x": 78,
+                "y": 82,
+                "c": "neg"
+              },
+              {
+                "n": "EX-204",
+                "x": 72,
+                "y": 70,
+                "c": "neg"
+              },
+              {
+                "n": "DZ-04",
+                "x": 26,
+                "y": 75,
+                "c": "warn"
+              },
+              {
+                "n": "DT-101",
+                "x": 24,
+                "y": 25,
+                "c": "pos"
+              },
+              {
+                "n": "GR-02",
+                "x": 80,
+                "y": 28,
+                "c": "warn"
+              }
+            ]
+          }
+        },
+        {
+          "id": "plant-6",
+          "type": "Cohort Chart",
+          "title": "Perkembangan Backlog Work Order (WO) per Periode",
+          "kpi": "89% Closed M+3",
+          "insight": "Backlog WO yang terbit di bulan Januari telah terselesaikan 94% pada minggu ke-4 setelah kedatangan part.",
+          "cfg": {
+            "rows": [
+              "Jan W1",
+              "Jan W2",
+              "Jan W3",
+              "Jan W4"
+            ],
+            "cols": [
+              "Mgg 0",
+              "Mgg +1",
+              "Mgg +2",
+              "Mgg +3"
+            ],
+            "data": [
+              [
+                100,
+                62,
+                28,
+                6
+              ],
+              [
+                100,
+                58,
+                24,
+                9
+              ],
+              [
+                100,
+                64,
+                31,
+                12
+              ],
+              [
+                100,
+                54,
+                22,
+                11
+              ]
+            ],
+            "mode": "decay"
+          }
+        },
+        {
+          "id": "plant-7",
+          "type": "Decomposition Tree",
+          "title": "Dekomposisi Downtime: Fleet → Unit → Sistem → Komponen",
+          "kpi": "420 Jam Total BD",
+          "insight": "60% downtime bersumber dari Fleet Hauling HD785, didominasi oleh kebocoran Hydraulic Hose & Main Pump.",
+          "cfg": {
+            "root": {
+              "n": "Total Downtime",
+              "v": "420 Jam"
+            },
+            "l1": [
+              {
+                "n": "Fleet HD785",
+                "v": "252j (60%)"
+              },
+              {
+                "n": "Fleet PC2000",
+                "v": "168j (40%)"
+              }
+            ],
+            "l2": [
+              {
+                "n": "Unit DT-112",
+                "v": "96j"
+              },
+              {
+                "n": "Sistem Hidrolik",
+                "v": "68j"
+              },
+              {
+                "n": "Hose & Seal Kit",
+                "v": "48j"
+              }
+            ]
+          }
+        },
+        {
+          "id": "plant-8",
+          "type": "Reliability Curve",
+          "title": "Kurva Keandalan Weibull — Umur Pakai Komponen",
+          "kpi": "B10 Life: 8.200 HM",
+          "insight": "Probabilitas hidup transmisi bertahan 90% hingga 8.200 HM; jadwal PCR optimal ditetapkan pada 11.500 HM.",
+          "cfg": {
+            "b10": "8.200 HM",
+            "b50": "12.400 HM",
+            "comp": "Transmission & Final Drive"
+          }
+        },
+        {
+          "id": "plant-9",
+          "type": "Waterfall Chart",
+          "title": "Rekonsiliasi Perubahan Biaya Maintenance Antarperiode",
+          "kpi": "Aktual $412K",
+          "insight": "Kenaikan harga suku cadang (+$38K) berhasil ditekan oleh efisiensi preventive maintenance (-$24K).",
+          "cfg": {
+            "steps": [
+              {
+                "l": "Bulan Lalu",
+                "v": "$398K",
+                "b": 0,
+                "h": 68,
+                "c": "base"
+              },
+              {
+                "l": "Part OEM",
+                "v": "+$38K",
+                "b": 68,
+                "h": 16,
+                "c": "neg"
+              },
+              {
+                "l": "Jasa Luar",
+                "v": "+$14K",
+                "b": 84,
+                "h": 8,
+                "c": "neg"
+              },
+              {
+                "l": "Efisiensi PM",
+                "v": "-$24K",
+                "b": 68,
+                "h": 24,
+                "c": "pos"
+              },
+              {
+                "l": "Klaim Garansi",
+                "v": "-$14K",
+                "b": 58,
+                "h": 10,
+                "c": "pos"
+              },
+              {
+                "l": "Bulan Ini",
+                "v": "$412K",
+                "b": 0,
+                "h": 68,
+                "c": "total"
+              }
+            ]
+          }
+        },
+        {
+          "id": "plant-10",
+          "type": "Gauge Chart",
+          "title": "Physical Availability vs Target Fleet",
+          "kpi": "PA 91,8%",
+          "insight": "PA fleet 91,8% tinggal 0,2 poin dari target 92% — satu unit kritis yang kembali beroperasi menutup selisihnya.",
+          "cfg": {
+            "value": 91.8,
+            "target": 92,
+            "min": 0,
+            "max": 100,
+            "unit": "%",
+            "label": "PA Fleet"
+          }
+        },
+        {
+          "id": "plant-11",
+          "type": "Pareto Chart",
+          "title": "Pareto Penyebab Breakdown (Aturan 80/20)",
+          "kpi": "Top 2: 65%",
+          "insight": "Hose hidrolik dan elektrikal menyumbang 65% breakdown — stok dan inspeksi preventif dua kelompok ini paling berdampak.",
+          "cfg": {
+            "labels": [
+              "Hose Hidrolik",
+              "Elektrikal",
+              "Engine",
+              "Undercarriage",
+              "Lainnya"
+            ],
+            "values": [
+              38,
+              27,
+              18,
+              11,
+              6
+            ]
+          }
+        },
+        {
+          "id": "plant-12",
+          "type": "Gantt Chart",
+          "title": "Jadwal Overhaul Mayor per Unit",
+          "kpi": "4 unit",
+          "insight": "Overhaul tidak tumpang tindih pada unit yang sama — PC2000 selesai sebelum D375A masuk, ketersediaan fleet terjaga.",
+          "cfg": {
+            "tasks": [
+              {
+                "n": "PC2000-02 Engine OH",
+                "start": 0,
+                "end": 3
+              },
+              {
+                "n": "HD785-07 Transmisi",
+                "start": 2,
+                "end": 4
+              },
+              {
+                "n": "D375A Undercarriage",
+                "start": 4,
+                "end": 6
+              },
+              {
+                "n": "EX3600 Pompa Hidrolik",
+                "start": 1,
+                "end": 2
+              }
+            ],
+            "maxEnd": 6,
+            "unit": "Minggu"
+          }
+        }
+      ]
+    },
+    {
+      "id": "logistik",
+      "num": 2,
+      "name": "Dept Logistik",
+      "short": "2. Logistik",
+      "desc": "Ketepatan pengiriman barang ke site tambang, distribusi & variasi lead time rute/vendor, alur ekspedisi, serta proyeksi kedatangan.",
+      "charts": [
+        {
+          "id": "logistik-0",
+          "type": "Combo Chart",
+          "title": "Target Pengiriman vs Aktual + Ketepatan Pengiriman (OTD)",
+          "kpi": "OTD 93.5%",
+          "insight": "Volume pengiriman kargo suku cadang dan logistik mencapai 93.5% tepat waktu meskipun kendala pasang surut sungai.",
+          "cfg": {
+            "labels": [
+              "Mgg 1",
+              "Mgg 2",
+              "Mgg 3",
+              "Mgg 4",
+              "Mgg 5"
+            ],
+            "plan": [
+              120,
+              135,
+              140,
+              125,
+              130
+            ],
+            "actual": [
+              114,
+              128,
+              132,
+              115,
+              126
+            ],
+            "rate": [
+              95,
+              95,
+              94,
+              92,
+              97
+            ],
+            "unit": "Trip"
+          }
+        },
+        {
+          "id": "logistik-1",
+          "type": "Histogram",
+          "title": "Distribusi Waktu Pengiriman (Transit Days)",
+          "kpi": "Rata-rata 4.2 Hari",
+          "insight": "Mayoritas pengiriman rute Balikpapan–Site tiba dalam waktu 3 hingga 5 hari kalender.",
+          "cfg": {
+            "bins": [
+              "1-2 Hr",
+              "3-4 Hr",
+              "5-6 Hr",
+              "7-8 Hr",
+              "9-10 Hr",
+              ">10 Hr"
+            ],
+            "counts": [
+              15,
+              72,
+              86,
+              34,
+              14,
+              6
+            ]
+          }
+        },
+        {
+          "id": "logistik-2",
+          "type": "Box Plot",
+          "title": "Variasi Lead Time Antarvendor & Rute Ekspedisi",
+          "kpi": "Median 4.5 Hari",
+          "insight": "Rute Tongkang Sungai memiliki sebaran waktu tempuh paling lebar dibanding Kargo Darat Lintas Kalimantan.",
+          "cfg": {
+            "groups": [
+              "Darat Eks",
+              "Reguler",
+              "Tongkang",
+              "Udara VIP"
+            ],
+            "med": [
+              3.2,
+              5,
+              8.5,
+              1.5
+            ],
+            "q1": [
+              2.5,
+              4,
+              6.2,
+              1
+            ],
+            "q3": [
+              4.1,
+              6.4,
+              11.2,
+              2
+            ],
+            "unit": "Hari"
+          }
+        },
+        {
+          "id": "logistik-3",
+          "type": "Control Chart",
+          "title": "Kestabilan Lead Time Pengiriman Logistik",
+          "kpi": "Mean 4.6 Hari",
+          "insight": "Waktu pengiriman stabil dalam batas kendali, dengan satu lonjakan 8.2 hari akibat perbaikan jembatan provinsi.",
+          "cfg": {
+            "mean": "4.6 Hr",
+            "ucl": "7.5 Hr",
+            "lcl": "1.8 Hr",
+            "pts": [
+              4.2,
+              4.5,
+              4.8,
+              8.2,
+              4.4,
+              4.1,
+              4.3
+            ],
+            "labels": [
+              "P1",
+              "P2",
+              "P3",
+              "P4*",
+              "P5",
+              "P6",
+              "P7"
+            ]
+          }
+        },
+        {
+          "id": "logistik-4",
+          "type": "Small Multiples",
+          "title": "Tren Pengiriman per Rute & Ekspedisi",
+          "kpi": "4 Rute Utama",
+          "insight": "Rute Darat Utama dan Port Jetty mengalami peningkatan frekuensi pengiriman secara konsisten.",
+          "cfg": {
+            "items": [
+              {
+                "n": "Rute Darat A",
+                "v": "142 Trip",
+                "pts": "10,32 35,26 60,18 85,10"
+              },
+              {
+                "n": "Rute Sungai B",
+                "v": "64 Trip",
+                "pts": "10,24 35,22 60,25 85,20"
+              },
+              {
+                "n": "Udara Urgent",
+                "v": "18 Lot",
+                "pts": "10,15 35,22 60,28 85,30"
+              },
+              {
+                "n": "Lokal Site",
+                "v": "210 Trip",
+                "pts": "10,30 35,24 60,16 85,12"
+              }
+            ]
+          }
+        },
+        {
+          "id": "logistik-5",
+          "type": "Quadrant Chart",
+          "title": "Lead Time vs Tingkat Keterlambatan Ekspedisi",
+          "kpi": "1 Vendor Kritis",
+          "insight": "Ekspedisi Mitra-C berada di kuadran Lead Time Lama & Sering Terlambat—perlu realokasi kuota kargo.",
+          "cfg": {
+            "xLbl": "Rata-rata Lead Time (Hari)",
+            "yLbl": "% Keterlambatan",
+            "q1": "Evaluasi / Ganti Rute",
+            "q2": "Cepat tapi Tidak Stabil",
+            "q3": "Mitra Ekspedisi Terbaik",
+            "q4": "Jauh tapi Tepat Jadwal",
+            "pts": [
+              {
+                "n": "Mitra-C",
+                "x": 76,
+                "y": 78,
+                "c": "neg"
+              },
+              {
+                "n": "TransKal",
+                "x": 28,
+                "y": 22,
+                "c": "pos"
+              },
+              {
+                "n": "BargeLog",
+                "x": 74,
+                "y": 26,
+                "c": "warn"
+              },
+              {
+                "n": "KilatEx",
+                "x": 30,
+                "y": 68,
+                "c": "warn"
+              }
+            ]
+          }
+        },
+        {
+          "id": "logistik-6",
+          "type": "Sankey Diagram",
+          "title": "Aliran Barang: Supplier → Hub Konsolidasi → Gudang Site",
+          "kpi": "1.450 Ton Kargo",
+          "insight": "65% barang dari supplier nasional dikonsolidasikan melalui Hub Samarinda sebelum dikirim ke Gudang Utama Site.",
+          "cfg": {
+            "src": "Supplier OEM (1.450T)",
+            "mid1": "Hub Konsolidasi (65%)",
+            "mid2": "Direct Site (35%)",
+            "dst1": "Main WH Site",
+            "dst2": "Workshop Bay",
+            "dst3": "Fuel/Lube Depot"
+          }
+        },
+        {
+          "id": "logistik-7",
+          "type": "Funnel Chart",
+          "title": "Konversi Proses: Permintaan → Pengiriman → Penerimaan",
+          "kpi": "96.4% Diterima",
+          "insight": "Dari 420 dokumen permintaan pengiriman (DO), 405 telah diterima lengkap (GRN) di gudang tambang.",
+          "cfg": {
+            "stages": [
+              {
+                "n": "1. Permintaan Kirim (DO)",
+                "v": "420 Lot",
+                "p": 100
+              },
+              {
+                "n": "2. Muat & Manifest (Shipped)",
+                "v": "414 Lot",
+                "p": 98
+              },
+              {
+                "n": "3. Tiba di Pos Site",
+                "v": "409 Lot",
+                "p": 97
+              },
+              {
+                "n": "4. Berita Acara Terima (GRN)",
+                "v": "405 Lot",
+                "p": 96
+              }
+            ]
+          }
+        },
+        {
+          "id": "logistik-8",
+          "type": "Cohort Chart",
+          "title": "Status Penyelesaian Pengiriman Berdasarkan Periode Awal",
+          "kpi": "98% Tuntas H+7",
+          "insight": "Kargo yang diberangkatkan pada pekan pertama hingga keempat rata-rata tuntas 98% dalam 7 hari.",
+          "cfg": {
+            "rows": [
+              "Batch W1",
+              "Batch W2",
+              "Batch W3",
+              "Batch W4"
+            ],
+            "cols": [
+              "Hari 1",
+              "Hari 3",
+              "Hari 5",
+              "Hari 7"
+            ],
+            "data": [
+              [
+                25,
+                68,
+                92,
+                99
+              ],
+              [
+                22,
+                64,
+                90,
+                98
+              ],
+              [
+                28,
+                72,
+                94,
+                99
+              ],
+              [
+                24,
+                66,
+                89,
+                97
+              ]
+            ],
+            "mode": "growth"
+          }
+        },
+        {
+          "id": "logistik-9",
+          "type": "Forecast Chart",
+          "title": "Proyeksi Kebutuhan Kargo & Waktu Kedatangan",
+          "kpi": "Proyeksi 580 Ton",
+          "insight": "Kebutuhan angkut diproyeksikan naik 18% bulan depan menjelang jadwal Major Overhaul armada.",
+          "cfg": {
+            "hist": [
+              410,
+              435,
+              420,
+              465
+            ],
+            "proj": [
+              495,
+              540,
+              580
+            ],
+            "unit": "Ton"
+          }
+        },
+        {
+          "id": "logistik-10",
+          "type": "Waterfall Chart",
+          "title": "Analisis Penyebab Keterlambatan & Perubahan Biaya Logistik",
+          "kpi": "Aktual $148K",
+          "insight": "Biaya tambahan antrean pelabuhan (+$12K) dan cuaca (+$8K) menjadi faktor utama deviasi anggaran logistik.",
+          "cfg": {
+            "steps": [
+              {
+                "l": "Budget",
+                "v": "$132K",
+                "b": 0,
+                "h": 65,
+                "c": "base"
+              },
+              {
+                "l": "Antre Port",
+                "v": "+$12K",
+                "b": 65,
+                "h": 14,
+                "c": "neg"
+              },
+              {
+                "l": "Cuaca/Jalan",
+                "v": "+$8K",
+                "b": 79,
+                "h": 10,
+                "c": "neg"
+              },
+              {
+                "l": "Backhaul",
+                "v": "-$4K",
+                "b": 74,
+                "h": 15,
+                "c": "pos"
+              },
+              {
+                "l": "Aktual",
+                "v": "$148K",
+                "b": 0,
+                "h": 74,
+                "c": "total"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "production",
+      "num": 3,
+      "name": "Dept Production",
+      "short": "3. Production",
+      "desc": "Pencapaian produksi OB & Batubara vs Plan, waterfall kehilangan jam produksi, cycle time, proporsi waktu kerja, dan aliran tonase pit-ke-crusher.",
+      "charts": [
+        {
+          "id": "production-0",
+          "type": "Combo Chart",
+          "title": "Produksi Plan vs Actual + Achievement (%)",
+          "kpi": "Achv 96.8%",
+          "insight": "Produksi batubara bulanan mencapai 484K MT dari target 500K MT (96.8%), dengan tren membaik di minggu ke-4.",
+          "cfg": {
+            "labels": [
+              "Mgg 1",
+              "Mgg 2",
+              "Mgg 3",
+              "Mgg 4",
+              "Mgg 5"
+            ],
+            "plan": [
+              100,
+              100,
+              100,
+              100,
+              100
+            ],
+            "actual": [
+              92,
+              95,
+              98,
+              99,
+              100
+            ],
+            "rate": [
+              92,
+              95,
+              98,
+              99,
+              100
+            ],
+            "unit": "K MT"
+          }
+        },
+        {
+          "id": "production-1",
+          "type": "Waterfall Chart",
+          "title": "Analisis Kehilangan Produksi (Production Loss Bridge)",
+          "kpi": "-36K MT Loss",
+          "insight": "Hujan & slippery road (-18K MT) serta antrean di loading point (-9K MT) menjadi kontributor terbesar kehilangan tonase.",
+          "cfg": {
+            "steps": [
+              {
+                "l": "Plan RKAP",
+                "v": "520K",
+                "b": 0,
+                "h": 88,
+                "c": "base"
+              },
+              {
+                "l": "Hujan/Licin",
+                "v": "-18K",
+                "b": 72,
+                "h": 16,
+                "c": "neg"
+              },
+              {
+                "l": "Breakdown",
+                "v": "-9K",
+                "b": 63,
+                "h": 9,
+                "c": "neg"
+              },
+              {
+                "l": "Antrean/Delay",
+                "v": "-9K",
+                "b": 54,
+                "h": 9,
+                "c": "neg"
+              },
+              {
+                "l": "Aktual",
+                "v": "484K",
+                "b": 0,
+                "h": 74,
+                "c": "total"
+              }
+            ]
+          }
+        },
+        {
+          "id": "production-2",
+          "type": "Histogram",
+          "title": "Distribusi Cycle Time & Produktivitas Hauling",
+          "kpi": "Mean 24.5 Menit",
+          "insight": "Sebagian besar siklus angkut HD785 berada pada rentang optimal 22–26 menit per ritase.",
+          "cfg": {
+            "bins": [
+              "16-19m",
+              "20-22m",
+              "23-25m",
+              "26-28m",
+              "29-31m",
+              ">32m"
+            ],
+            "counts": [
+              14,
+              52,
+              94,
+              48,
+              22,
+              9
+            ]
+          }
+        },
+        {
+          "id": "production-3",
+          "type": "Box Plot",
+          "title": "Variasi Cycle Time Antarshift & Rute Pit",
+          "kpi": "Shift 2 +2.4 Menit",
+          "insight": "Shift Malam (Shift 2) pada Rute Pit Selatan memiliki median cycle time lebih lambat akibat visibilitas tanjakan.",
+          "cfg": {
+            "groups": [
+              "S1 Pit-A",
+              "S2 Pit-A",
+              "S1 Pit-B",
+              "S2 Pit-B"
+            ],
+            "med": [
+              22.5,
+              24.2,
+              25,
+              27.4
+            ],
+            "q1": [
+              20.5,
+              22,
+              23,
+              25
+            ],
+            "q3": [
+              24.5,
+              26.8,
+              27.2,
+              30.5
+            ],
+            "unit": "Mnt"
+          }
+        },
+        {
+          "id": "production-4",
+          "type": "100% Stacked Bar",
+          "title": "Proporsi Productive Time, Standby, dan Delay",
+          "kpi": "72% Productive",
+          "insight": "Rata-rata waktu efektif operasi mencapai 72%, dengan porsi Standby cuaca 18% dan Delay operasional 10%.",
+          "cfg": {
+            "groups": [
+              "Fleet EX-01",
+              "Fleet EX-02",
+              "Fleet EX-03",
+              "Fleet EX-04"
+            ],
+            "p1": [
+              76,
+              72,
+              68,
+              74
+            ],
+            "p2": [
+              15,
+              18,
+              20,
+              16
+            ],
+            "p3": [
+              9,
+              10,
+              12,
+              10
+            ],
+            "l1": "Productive",
+            "l2": "Standby",
+            "l3": "Delay"
+          }
+        },
+        {
+          "id": "production-5",
+          "type": "Small Multiples",
+          "title": "Tren Produksi per Fleet & Shift Operasional",
+          "kpi": "4 Fleet Utama",
+          "insight": "Fleet Pit Utara (EX-01 & EX-02) menunjukkan kenaikan produktivitas BCM/jam pasca perbaikan front loading.",
+          "cfg": {
+            "items": [
+              {
+                "n": "Fleet EX-01",
+                "v": "640 BCM/j",
+                "pts": "10,32 35,25 60,18 85,12"
+              },
+              {
+                "n": "Fleet EX-02",
+                "v": "615 BCM/j",
+                "pts": "10,28 35,24 60,20 85,15"
+              },
+              {
+                "n": "Shift Siang",
+                "v": "252K MT",
+                "pts": "10,26 35,22 60,18 85,14"
+              },
+              {
+                "n": "Shift Malam",
+                "v": "232K MT",
+                "pts": "10,30 35,28 60,24 85,20"
+              }
+            ]
+          }
+        },
+        {
+          "id": "production-6",
+          "type": "Control Chart",
+          "title": "Pemantauan Pola Cycle Time & Produktivitas Harian",
+          "kpi": "CL 24.5 Menit",
+          "insight": "Perubahan pola cycle time terdeteksi melewati batas atas pada hari ke-5 saat penyempitan jalan angkut KM 12.",
+          "cfg": {
+            "mean": "24.5m",
+            "ucl": "29.0m",
+            "lcl": "20.0m",
+            "pts": [
+              23.8,
+              24.4,
+              24.1,
+              25,
+              30.2,
+              24.8,
+              24.2
+            ],
+            "labels": [
+              "Sn",
+              "Sl",
+              "Rb",
+              "Km",
+              "Jm*",
+              "Sb",
+              "Mg"
+            ]
+          }
+        },
+        {
+          "id": "production-7",
+          "type": "Sankey Diagram",
+          "title": "Aliran Tonase dari Pit ke Dumping Point & Crusher",
+          "kpi": "484K MT Terangkut",
+          "insight": "70% batubara dari Pit Utara & Selatan langsung masuk ke Hopper Crusher, sementara 30% disimpan di ROM Stockpile.",
+          "cfg": {
+            "src": "Pit Coal Getting (484K)",
+            "mid1": "Pit Utara (60%)",
+            "mid2": "Pit Selatan (40%)",
+            "dst1": "Crusher Plant (340K)",
+            "dst2": "ROM Stockpile (110K)",
+            "dst3": "Direct Barging (34K)"
+          }
+        },
+        {
+          "id": "production-8",
+          "type": "Forecast Chart",
+          "title": "Proyeksi Pencapaian Produksi Akhir Periode",
+          "kpi": "Outlook 101.2%",
+          "insight": "Dengan laju harian saat ini (16.8K MT/hari), target produksi bulanan diproyeksikan terlampaui +1.2% di akhir bulan.",
+          "cfg": {
+            "hist": [
+              115,
+              235,
+              360,
+              484
+            ],
+            "proj": [
+              520,
+              565,
+              610
+            ],
+            "unit": "K MT"
+          }
+        },
+        {
+          "id": "production-9",
+          "type": "Slope Chart",
+          "title": "Perbandingan Produksi Antarperiode per Pit Block",
+          "kpi": "Pit Utara +14%",
+          "insight": "Produksi Pit Utara meningkat signifikan dari 245K ke 280K MT, mengkompensasi penurunan di Pit Barat.",
+          "cfg": {
+            "items": [
+              {
+                "n": "Pit Utara A",
+                "v1": "245K",
+                "v2": "280K",
+                "y1": 75,
+                "y2": 28,
+                "c": "pos"
+              },
+              {
+                "n": "Pit Selatan B",
+                "v1": "180K",
+                "v2": "195K",
+                "y1": 90,
+                "y2": 68,
+                "c": "pos"
+              },
+              {
+                "n": "Pit Barat C",
+                "v1": "130K",
+                "v2": "109K",
+                "y1": 55,
+                "y2": 98,
+                "c": "neg"
+              }
+            ]
+          }
+        },
+        {
+          "id": "production-10",
+          "type": "Quadrant Chart",
+          "title": "Cycle Time vs Produktivitas untuk Identifikasi Perbaikan",
+          "kpi": "Fleet EX-03 Evaluasi",
+          "insight": "Fleet EX-03 berada di area Cycle Time Tinggi & Produktivitas Rendah akibat antrean spotting di front sempit.",
+          "cfg": {
+            "xLbl": "Rata-rata Cycle Time (Menit)",
+            "yLbl": "Produktivitas (BCM/Jam)",
+            "q1": "Jarak Jauh Muatan Optimal",
+            "q2": "Kinerja Terbaik (Cepat & Produktif)",
+            "q3": "Jarak Dekat Muatan Kurang",
+            "q4": "Bottleneck (Lambat & Output Rendah)",
+            "pts": [
+              {
+                "n": "Fleet EX-01",
+                "x": 28,
+                "y": 82,
+                "c": "pos"
+              },
+              {
+                "n": "Fleet EX-02",
+                "x": 34,
+                "y": 76,
+                "c": "pos"
+              },
+              {
+                "n": "Fleet EX-03",
+                "x": 78,
+                "y": 28,
+                "c": "neg"
+              },
+              {
+                "n": "Fleet EX-04",
+                "x": 68,
+                "y": 72,
+                "c": "warn"
+              }
+            ]
+          }
+        },
+        {
+          "id": "production-11",
+          "type": "Decomposition Tree",
+          "title": "Penelusuran Pencapaian Produksi: Pit → Fleet → Shift → Loss",
+          "kpi": "Deviasi -36K MT",
+          "insight": "Deviasi produksi terkonsentrasi di Pit Selatan (Shift 2) yang kehilangan 4.2 jam kerja efektif akibat slippery.",
+          "cfg": {
+            "root": {
+              "n": "Gap Produksi",
+              "v": "-36K MT"
+            },
+            "l1": [
+              {
+                "n": "Pit Selatan B",
+                "v": "-24K (67%)"
+              },
+              {
+                "n": "Pit Utara A",
+                "v": "-12K (33%)"
+              }
+            ],
+            "l2": [
+              {
+                "n": "Fleet EX-03",
+                "v": "-16K"
+              },
+              {
+                "n": "Shift Malam",
+                "v": "-11K"
+              },
+              {
+                "n": "Slippery & Antre",
+                "v": "-8K"
+              }
+            ]
+          }
+        },
+        {
+          "id": "production-12",
+          "type": "Scatter Plot",
+          "title": "Waktu Siklus vs Jarak Angkut",
+          "kpi": "Jarak 4,2 km: 31 mnt",
+          "insight": "Waktu siklus naik seiring jarak — titik di atas garis tren menandakan rit yang terhambat antrean atau jalan rusak.",
+          "cfg": {
+            "points": [
+              [
+                1.2,
+                14
+              ],
+              [
+                2.1,
+                19
+              ],
+              [
+                3.4,
+                26
+              ],
+              [
+                1.8,
+                17
+              ],
+              [
+                4.2,
+                31
+              ],
+              [
+                2.8,
+                23
+              ],
+              [
+                0.9,
+                12
+              ],
+              [
+                3.9,
+                29
+              ]
+            ],
+            "xMax": 5,
+            "yMax": 35,
+            "xLbl": "Jarak (km)",
+            "yLbl": "Siklus (menit)"
+          }
+        }
+      ]
+    },
+    {
+      "id": "engineering",
+      "num": 4,
+      "name": "Dept Engineering / Mine Plan",
+      "short": "4. Engineering / Mine Plan",
+      "desc": "Kepatuhan desain tambang (Mine Plan Compliance), deviasi kupasan Overburden, aliran material antararea, dan peta geospasial Pit-Disposal.",
+      "charts": [
+        {
+          "id": "engineering-0",
+          "type": "Combo Chart",
+          "title": "Mine Plan vs Actual + Achievement (%)",
+          "kpi": "Plan Compliance 95%",
+          "insight": "Kesesuaian penggalian terhadap batas desain sekuens tambang mencapai 95.4% tanpa penggalian di luar boundary.",
+          "cfg": {
+            "labels": [
+              "Blok A1",
+              "Blok A2",
+              "Blok B1",
+              "Blok B2",
+              "Blok C1"
+            ],
+            "plan": [
+              650,
+              720,
+              580,
+              610,
+              540
+            ],
+            "actual": [
+              630,
+              705,
+              540,
+              590,
+              515
+            ],
+            "rate": [
+              97,
+              98,
+              93,
+              97,
+              95
+            ],
+            "unit": "K BCM"
+          }
+        },
+        {
+          "id": "engineering-1",
+          "type": "Waterfall Chart",
+          "title": "Analisis Deviasi Volume Overburden Terhadap Rencana",
+          "kpi": "Aktual 2.98M BCM",
+          "insight": "Deviasi volume kupasan OB sebesar -120K BCM dipengaruhi oleh penyesuaian geologi lereng (slope stability) dan cuaca.",
+          "cfg": {
+            "steps": [
+              {
+                "l": "Mine Plan",
+                "v": "3.10M",
+                "b": 0,
+                "h": 85,
+                "c": "base"
+              },
+              {
+                "l": "Redesign Lereng",
+                "v": "-55K",
+                "b": 73,
+                "h": 12,
+                "c": "neg"
+              },
+              {
+                "l": "Dewatering/Hujan",
+                "v": "-85K",
+                "b": 58,
+                "h": 15,
+                "c": "neg"
+              },
+              {
+                "l": "OptimasiBlasting",
+                "v": "+$20K",
+                "b": 58,
+                "h": 10,
+                "c": "pos"
+              },
+              {
+                "l": "Aktual OB",
+                "v": "2.98M",
+                "b": 0,
+                "h": 76,
+                "c": "total"
+              }
+            ]
+          }
+        },
+        {
+          "id": "engineering-2",
+          "type": "Slope Chart",
+          "title": "Perubahan Pencapaian Mine Plan Antarperiode (Q1 vs Q2)",
+          "kpi": "SR Turun ke 6.2",
+          "insight": "Kepatuhan elevasi lantai tambang (floor compliance) meningkat dari 88% ke 95% pada Kuartal II.",
+          "cfg": {
+            "items": [
+              {
+                "n": "Floor Compliance",
+                "v1": "88%",
+                "v2": "95%",
+                "y1": 78,
+                "y2": 28,
+                "c": "pos"
+              },
+              {
+                "n": "Slope Compliance",
+                "v1": "91%",
+                "v2": "96%",
+                "y1": 65,
+                "y2": 22,
+                "c": "pos"
+              },
+              {
+                "n": "Haul Grade <8%",
+                "v1": "84%",
+                "v2": "92%",
+                "y1": 92,
+                "y2": 45,
+                "c": "pos"
+              }
+            ]
+          }
+        },
+        {
+          "id": "engineering-3",
+          "type": "Small Multiples",
+          "title": "Tren Produksi & Stripping Ratio per Pit",
+          "kpi": "SR Rata-rata 1:6.3",
+          "insight": "Pit Utara mempertahankan rasio kupasan rendah (5.8), sedangkan Pit Selatan berada pada fase pre-stripping (7.1).",
+          "cfg": {
+            "items": [
+              {
+                "n": "Pit Utara (SR)",
+                "v": "1 : 5.8",
+                "pts": "10,20 35,22 60,24 85,26"
+              },
+              {
+                "n": "Pit Selatan (SR)",
+                "v": "1 : 7.1",
+                "pts": "10,30 35,22 60,16 85,14"
+              },
+              {
+                "n": "Pit Barat (OB)",
+                "v": "820K BCM",
+                "pts": "10,32 35,26 60,20 85,12"
+              },
+              {
+                "n": "Disposal Fill",
+                "v": "94% Cap",
+                "pts": "10,28 35,24 60,18 85,10"
+              }
+            ]
+          }
+        },
+        {
+          "id": "engineering-4",
+          "type": "Control Chart",
+          "title": "Pemantauan Kestabilan Indikator Operasional (Stripping Ratio)",
+          "kpi": "Target SR 6.4",
+          "insight": "Rasio kupasan tanah penutup harian terjaga di sekitar garis tengah 6.4 BCM/MT sepanjang bulan berjalan.",
+          "cfg": {
+            "mean": "6.40",
+            "ucl": "7.20",
+            "lcl": "5.60",
+            "pts": [
+              6.3,
+              6.5,
+              6.2,
+              6.6,
+              6.4,
+              6.5,
+              6.3
+            ],
+            "labels": [
+              "M1",
+              "M2",
+              "M3",
+              "M4",
+              "M5",
+              "M6",
+              "M7"
+            ]
+          }
+        },
+        {
+          "id": "engineering-5",
+          "type": "Sankey Diagram",
+          "title": "Aliran Material Antararea (Cut & Fill Pit ke Disposal)",
+          "kpi": "2.98M BCM OB",
+          "insight": "62% material OB dari Pit Utara digunakan untuk In-Pit Backfilling, sisanya dikirim ke Out-Pit Waste Dump Barat.",
+          "cfg": {
+            "src": "Total Kupasan OB (2.98M)",
+            "mid1": "Blasting Rock (70%)",
+            "mid2": "Free Digging (30%)",
+            "dst1": "In-Pit Dump (1.85M)",
+            "dst2": "Waste Dump B (830K)",
+            "dst3": "Road Material (300K)"
+          }
+        },
+        {
+          "id": "engineering-6",
+          "type": "Forecast Chart",
+          "title": "Proyeksi Pencapaian Sekuens Rencana Tambang Tahunan",
+          "kpi": "YTD 97.4% RKAP",
+          "insight": "Dengan percepatan dewatering di Sump Utama, target bukaan tambang Kuartal IV diproyeksikan tercapai 100%.",
+          "cfg": {
+            "hist": [
+              2.8,
+              5.7,
+              8.6,
+              11.6
+            ],
+            "proj": [
+              14.8,
+              18.1,
+              21.5
+            ],
+            "unit": "M BCM"
+          }
+        },
+        {
+          "id": "engineering-7",
+          "type": "GIS Map",
+          "title": "Peta Geospasial Pit, Disposal, Jalan Hauling & Area Kerja",
+          "kpi": "5 Blok Aktif",
+          "insight": "Visualisasi spasial menunjukkan jarak angkut rata-rata dari Pit Utara ke Disposal Timur adalah 3.2 KM dengan grade <7%.",
+          "cfg": {
+            "mode": "mineplan"
+          }
+        },
+        {
+          "id": "engineering-8",
+          "type": "Gantt Chart",
+          "title": "Jadwal Shutdown & Rencana Tambang 8 Minggu",
+          "kpi": "5 pekerjaan",
+          "insight": "Shutdown crusher dijadwalkan setelah strip OB Panel 4 selesai — urutan ini menjaga umpan ROM tidak putus.",
+          "cfg": {
+            "tasks": [
+              {
+                "n": "Strip OB Panel 4",
+                "start": 0,
+                "end": 2
+              },
+              {
+                "n": "Shutdown Crusher",
+                "start": 2,
+                "end": 3
+              },
+              {
+                "n": "Pembukaan Pit C",
+                "start": 3,
+                "end": 6
+              },
+              {
+                "n": "Perbaikan Jalan Haul",
+                "start": 1,
+                "end": 4
+              },
+              {
+                "n": "Relokasi Stockpile",
+                "start": 5,
+                "end": 8
+              }
+            ],
+            "maxEnd": 8,
+            "unit": "Minggu"
+          }
+        }
+      ]
+    },
+    {
+      "id": "dispatcher",
+      "num": 5,
+      "name": "Dept Dispatcher / Fleet",
+      "short": "5. Dispatcher / Fleet",
+      "desc": "Kendali ritase real-time FMS, waktu hilang akibat antrean (queuing) & ganti shift, deteksi anomali cycle time, serta posisi GPS unit.",
+      "charts": [
+        {
+          "id": "dispatcher-0",
+          "type": "Combo Chart",
+          "title": "Target vs Aktual Ritase + Rata-rata Cycle Time",
+          "kpi": "1.280 Ritase/Shift",
+          "insight": "Ketika rata-rata cycle time berhasil ditekan ke 23 menit pada Shift 1, total ritase melampaui target harian.",
+          "cfg": {
+            "labels": [
+              "Shift 1",
+              "Shift 2",
+              "Shift 3",
+              "Shift 4",
+              "Shift 5"
+            ],
+            "plan": [
+              1250,
+              1250,
+              1250,
+              1250,
+              1250
+            ],
+            "actual": [
+              1290,
+              1180,
+              1275,
+              1210,
+              1310
+            ],
+            "rate": [
+              98,
+              91,
+              97,
+              93,
+              99
+            ],
+            "unit": "Rit"
+          }
+        },
+        {
+          "id": "dispatcher-1",
+          "type": "Waterfall Chart",
+          "title": "Analisis Waktu Hilang: Antrean, Delay, Breakdown & Shift Change",
+          "kpi": "18.2 Jam Efektif",
+          "insight": "Pergantian shift & P5M (-1.4 jam) serta antrean di loading point (-1.8 jam) adalah peluang penghematan waktu terbesar.",
+          "cfg": {
+            "steps": [
+              {
+                "l": "Jam Kalender",
+                "v": "24.0j",
+                "b": 0,
+                "h": 90,
+                "c": "base"
+              },
+              {
+                "l": "Hujan/Stby",
+                "v": "-2.6j",
+                "b": 76,
+                "h": 14,
+                "c": "neg"
+              },
+              {
+                "l": "Antre/Spot",
+                "v": "-1.8j",
+                "b": 64,
+                "h": 12,
+                "c": "neg"
+              },
+              {
+                "l": "Ganti Shift",
+                "v": "-1.4j",
+                "b": 54,
+                "h": 10,
+                "c": "neg"
+              },
+              {
+                "l": "Jam Operasi",
+                "v": "18.2j",
+                "b": 0,
+                "h": 68,
+                "c": "total"
+              }
+            ]
+          }
+        },
+        {
+          "id": "dispatcher-2",
+          "type": "Histogram",
+          "title": "Distribusi Waktu Antrean (Queue Time) di Loading Point",
+          "kpi": "Rata-rata 1.8 Menit",
+          "insight": "82% kedatangan Dump Truck menunggu kurang dari 2 menit (Match Factor ideal 0.96).",
+          "cfg": {
+            "bins": [
+              "<1 mnt",
+              "1-2 mnt",
+              "2-3 mnt",
+              "3-4 mnt",
+              "4-5 mnt",
+              ">5 mnt"
+            ],
+            "counts": [
+              68,
+              92,
+              38,
+              18,
+              9,
+              4
+            ]
+          }
+        },
+        {
+          "id": "dispatcher-3",
+          "type": "Box Plot",
+          "title": "Variasi Cycle Time Antarunit & Jalur Hauling",
+          "kpi": "Rute KM-14 Stabil",
+          "insight": "Jalur Hauling Barat memiliki sebaran waktu tempuh paling konsisten setelah pelebaran tikungan.",
+          "cfg": {
+            "groups": [
+              "Jalur Utara",
+              "Jalur Barat",
+              "Jalur Timur",
+              "Ramp Sump"
+            ],
+            "med": [
+              22,
+              21.2,
+              26.5,
+              29
+            ],
+            "q1": [
+              20,
+              19.8,
+              24,
+              26.5
+            ],
+            "q3": [
+              24.2,
+              22.8,
+              29.5,
+              32.5
+            ],
+            "unit": "Mnt"
+          }
+        },
+        {
+          "id": "dispatcher-4",
+          "type": "Control Chart",
+          "title": "Deteksi Penyimpangan Cycle Time Real-Time FMS",
+          "kpi": "1 Spike Terdeteksi",
+          "insight": "Sistem dispatch mendeteksi lonjakan cycle time ke 31.5 menit pada pukul 14:00 akibat grader meratakan jalan.",
+          "cfg": {
+            "mean": "23.5m",
+            "ucl": "28.5m",
+            "lcl": "18.5m",
+            "pts": [
+              22.8,
+              23.4,
+              23.1,
+              31.5,
+              24,
+              23.2,
+              22.9
+            ],
+            "labels": [
+              "08:00",
+              "10:00",
+              "12:00",
+              "14:00*",
+              "16:00",
+              "18:00",
+              "20:00"
+            ]
+          }
+        },
+        {
+          "id": "dispatcher-5",
+          "type": "100% Stacked Bar",
+          "title": "Proporsi Waktu Operasi, Standby, dan Delay Armada",
+          "kpi": "UA 79.4%",
+          "insight": "Armada HD785 mencapai utilisasi efektif tertinggi dibanding unit pendukung.",
+          "cfg": {
+            "groups": [
+              "HD785 Fleet",
+              "PC2000 Fleet",
+              "Dozer Fleet",
+              "Grader Fleet"
+            ],
+            "p1": [
+              78,
+              81,
+              68,
+              72
+            ],
+            "p2": [
+              14,
+              11,
+              22,
+              20
+            ],
+            "p3": [
+              8,
+              8,
+              10,
+              8
+            ],
+            "l1": "Operasi",
+            "l2": "Standby",
+            "l3": "Delay"
+          }
+        },
+        {
+          "id": "dispatcher-6",
+          "type": "Small Multiples",
+          "title": "Tren Produktivitas Setiap Unit Utama (Ton/Jam)",
+          "kpi": "Rata-rata 215 T/Jam",
+          "insight": "Pemantauan individu memperlihatkan DT-101 hingga DT-104 beroperasi stabil di atas garis target.",
+          "cfg": {
+            "items": [
+              {
+                "n": "DT-101",
+                "v": "224 T/j",
+                "pts": "10,28 35,24 60,18 85,12"
+              },
+              {
+                "n": "DT-102",
+                "v": "218 T/j",
+                "pts": "10,26 35,22 60,20 85,16"
+              },
+              {
+                "n": "DT-103",
+                "v": "212 T/j",
+                "pts": "10,30 35,25 60,22 85,18"
+              },
+              {
+                "n": "DT-104",
+                "v": "229 T/j",
+                "pts": "10,26 35,20 60,14 85,10"
+              }
+            ]
+          }
+        },
+        {
+          "id": "dispatcher-7",
+          "type": "Quadrant Chart",
+          "title": "Cycle Time vs Produktivitas Unit Hauling",
+          "kpi": "Optimasi Routing",
+          "insight": "Unit dengan cycle time tinggi dan tonase rendah langsung dialihkan otomatis oleh Dynamic Dispatch ke Excavator terdekat.",
+          "cfg": {
+            "xLbl": "Cycle Time (Menit)",
+            "yLbl": "Tonase per Jam",
+            "q1": "Muatan Penuh Rute Jauh",
+            "q2": "Unit Performa Puncak",
+            "q3": "Underload Rute Dekat",
+            "q4": "Perlu Rerouting Dispatch",
+            "pts": [
+              {
+                "n": "DT-101",
+                "x": 26,
+                "y": 84,
+                "c": "pos"
+              },
+              {
+                "n": "DT-104",
+                "x": 32,
+                "y": 78,
+                "c": "pos"
+              },
+              {
+                "n": "DT-118",
+                "x": 76,
+                "y": 25,
+                "c": "neg"
+              },
+              {
+                "n": "DT-115",
+                "x": 72,
+                "y": 68,
+                "c": "warn"
+              }
+            ]
+          }
+        },
+        {
+          "id": "dispatcher-8",
+          "type": "GIS Map",
+          "title": "Peta Lokasi GPS Unit Aktif & Kepadatan Jalur Operasional",
+          "kpi": "68 Unit Online",
+          "insight": "Peta telemetri live menampilkan distribusi posisi unit aktif serta titik antrean di persimpangan ROM.",
+          "cfg": {
+            "mode": "dispatch"
+          }
+        },
+        {
+          "id": "dispatcher-9",
+          "type": "Heatmap",
+          "title": "Heatmap Downtime per Shift × Pit",
+          "kpi": "Shift 3 Pit A: 21 jam",
+          "insight": "Shift 3 di Pit A paling panas (21 jam) — antrean dan visibilitas malam menjadi penyebab yang perlu diurai.",
+          "cfg": {
+            "rows": [
+              "Shift 1",
+              "Shift 2",
+              "Shift 3"
+            ],
+            "cols": [
+              "Pit A",
+              "Pit B",
+              "Pit C",
+              "Pit D"
+            ],
+            "values": [
+              [
+                12,
+                8,
+                19,
+                6
+              ],
+              [
+                9,
+                14,
+                11,
+                17
+              ],
+              [
+                21,
+                7,
+                13,
+                9
+              ]
+            ],
+            "unit": "jam"
+          }
+        }
+      ]
+    },
+    {
+      "id": "fuel",
+      "num": 6,
+      "name": "Dept Fuel",
+      "short": "6. Fuel Management",
+      "desc": "Pengendalian Fuel Ratio (L/BCM & L/MT), konsumsi biosolar per HM alat berat, deteksi overburn/kebocoran, dan proyeksi kuota tangki.",
+      "charts": [
+        {
+          "id": "fuel-0",
+          "type": "Combo Chart",
+          "title": "Konsumsi Aktual vs Standar + Fuel Ratio (L/BCM)",
+          "kpi": "0.81 L/BCM",
+          "insight": "Fuel ratio berhasil dijaga pada 0.81 Liter/BCM (di bawah pagu RKAP 0.85 L/BCM) berkat disiplin Eco-Mode.",
+          "cfg": {
+            "labels": [
+              "Mgg 1",
+              "Mgg 2",
+              "Mgg 3",
+              "Mgg 4",
+              "Mgg 5"
+            ],
+            "plan": [
+              420,
+              430,
+              440,
+              425,
+              435
+            ],
+            "actual": [
+              405,
+              418,
+              432,
+              410,
+              415
+            ],
+            "rate": [
+              96,
+              97,
+              98,
+              96,
+              95
+            ],
+            "unit": "KL"
+          }
+        },
+        {
+          "id": "fuel-1",
+          "type": "Waterfall Chart",
+          "title": "Analisis Deviasi Konsumsi Fuel Berdasarkan Faktor Terukur",
+          "kpi": "Hemat -18 KL",
+          "insight": "Kenaikan elevasi angkut (+22 KL) berhasil dikompensasi oleh pengurangan waktu idle (-26 KL) dan perbaikan grade jalan (-14 KL).",
+          "cfg": {
+            "steps": [
+              {
+                "l": "Standar RKAP",
+                "v": "1.750KL",
+                "b": 0,
+                "h": 78,
+                "c": "base"
+              },
+              {
+                "l": "Elevasi Pit",
+                "v": "+22KL",
+                "b": 78,
+                "h": 12,
+                "c": "neg"
+              },
+              {
+                "l": "Stop Idle",
+                "v": "-26KL",
+                "b": 64,
+                "h": 26,
+                "c": "pos"
+              },
+              {
+                "l": "Grade Jalan",
+                "v": "-14KL",
+                "b": 54,
+                "h": 10,
+                "c": "pos"
+              },
+              {
+                "l": "Aktual Fuel",
+                "v": "1.732KL",
+                "b": 0,
+                "h": 72,
+                "c": "total"
+              }
+            ]
+          }
+        },
+        {
+          "id": "fuel-2",
+          "type": "Histogram",
+          "title": "Distribusi Konsumsi Fuel per Hour Meter (L/HM) — HD785",
+          "kpi": "Mean 64.5 L/HM",
+          "insight": "Mayoritas Dump Truck HD785 mengonsumsi bahan bakar pada kisaran normal 60–68 Liter per jam operasi.",
+          "cfg": {
+            "bins": [
+              "52-56L",
+              "57-61L",
+              "62-66L",
+              "67-71L",
+              "72-76L",
+              ">76L"
+            ],
+            "counts": [
+              16,
+              48,
+              92,
+              44,
+              15,
+              5
+            ]
+          }
+        },
+        {
+          "id": "fuel-3",
+          "type": "Box Plot",
+          "title": "Variasi Konsumsi Bahan Bakar Antarunit (L/HM)",
+          "kpi": "PC2000: 128 L/HM",
+          "insight": "Sebaran konsumsi solar unit PC2000 di Pit B lebih tinggi karena material overburden keras (blasting rock).",
+          "cfg": {
+            "groups": [
+              "PC2000",
+              "HD785",
+              "D375A",
+              "GD825A"
+            ],
+            "med": [
+              128,
+              64,
+              58,
+              34
+            ],
+            "q1": [
+              118,
+              59,
+              52,
+              30
+            ],
+            "q3": [
+              138,
+              70,
+              64,
+              39
+            ],
+            "unit": "L/j"
+          }
+        },
+        {
+          "id": "fuel-4",
+          "type": "Control Chart",
+          "title": "Perubahan Pola Konsumsi Fuel Harian (Deteksi Anomali)",
+          "kpi": "1 Anomali Sensor",
+          "insight": "Lonjakan konsumsi di atas UCL pada Hari ke-4 memicu audit lapangan dan ditemukan kalibrasi flowmeter Fuel Truck FT-03 bergeser.",
+          "cfg": {
+            "mean": "0.81 L",
+            "ucl": "0.90 L",
+            "lcl": "0.72 L",
+            "pts": [
+              0.8,
+              0.82,
+              0.79,
+              0.94,
+              0.81,
+              0.8,
+              0.79
+            ],
+            "labels": [
+              "H1",
+              "H2",
+              "H3",
+              "H4*",
+              "H5",
+              "H6",
+              "H7"
+            ]
+          }
+        },
+        {
+          "id": "fuel-5",
+          "type": "Quadrant Chart",
+          "title": "Konsumsi Fuel per HM vs Produktivitas Unit",
+          "kpi": "2 Unit Boros",
+          "insight": "Unit di kuadran Kanan-Bawah (Konsumsi Tinggi namun Produktivitas Rendah) dijadwalkan tune-up injector.",
+          "cfg": {
+            "xLbl": "Fuel Burn Rate (Liter/HM)",
+            "yLbl": "Produktivitas (BCM/HM)",
+            "q1": "Heavy Load Produktif",
+            "q2": "Efisiensi Terbaik (Eco)",
+            "q3": "Low Load / Standby",
+            "q4": "Boros BBM (Cek Injector)",
+            "pts": [
+              {
+                "n": "DT-109",
+                "x": 80,
+                "y": 24,
+                "c": "neg"
+              },
+              {
+                "n": "EX-202",
+                "x": 74,
+                "y": 82,
+                "c": "warn"
+              },
+              {
+                "n": "DT-104",
+                "x": 28,
+                "y": 80,
+                "c": "pos"
+              },
+              {
+                "n": "DT-111",
+                "x": 32,
+                "y": 74,
+                "c": "pos"
+              }
+            ]
+          }
+        },
+        {
+          "id": "fuel-6",
+          "type": "Small Multiples",
+          "title": "Tren Konsumsi Spesifik Setiap Unit Utama",
+          "kpi": "4 Armada Pantauan",
+          "insight": "Tiga dari empat unit menunjukkan tren penurunan konsumsi spesifik pasca penggantian filter udara & solar.",
+          "cfg": {
+            "items": [
+              {
+                "n": "EX-201",
+                "v": "124 L/j",
+                "pts": "10,16 35,20 60,26 85,30"
+              },
+              {
+                "n": "EX-202",
+                "v": "129 L/j",
+                "pts": "10,18 35,22 60,24 85,28"
+              },
+              {
+                "n": "DT-101",
+                "v": "62.4 L/j",
+                "pts": "10,14 35,20 60,25 85,32"
+              },
+              {
+                "n": "DZ-301",
+                "v": "56.8 L/j",
+                "pts": "10,20 35,22 60,25 85,28"
+              }
+            ]
+          }
+        },
+        {
+          "id": "fuel-7",
+          "type": "Forecast Chart",
+          "title": "Proyeksi Kebutuhan Biosolar B35 Bulanan",
+          "kpi": "1.820 KL Bulan Depan",
+          "insight": "Berdasarkan target peningkatan OB bulan depan, pasokan tangki utama perlu ditambah 90 KL.",
+          "cfg": {
+            "hist": [
+              1620,
+              1680,
+              1710,
+              1732
+            ],
+            "proj": [
+              1765,
+              1795,
+              1820
+            ],
+            "unit": "KL"
+          }
+        },
+        {
+          "id": "fuel-8",
+          "type": "Decomposition Tree",
+          "title": "Dekomposisi Konsumsi Fuel: Lokasi → Fleet → Unit → Periode",
+          "kpi": "1.732 KL Total",
+          "insight": "Pit Utara menyerap 58% total solar, dengan proporsi terbesar pada armada Hauling HD785 Shift Siang.",
+          "cfg": {
+            "root": {
+              "n": "Total Biosolar",
+              "v": "1.732 KL"
+            },
+            "l1": [
+              {
+                "n": "Pit Utara A",
+                "v": "1.005 KL (58%)"
+              },
+              {
+                "n": "Pit Selatan B",
+                "v": "727 KL (42%)"
+              }
+            ],
+            "l2": [
+              {
+                "n": "Fleet HD785",
+                "v": "620 KL"
+              },
+              {
+                "n": "Unit DT-109",
+                "v": "48 KL"
+              },
+              {
+                "n": "Shift Siang",
+                "v": "26 KL"
+              }
+            ]
+          }
+        },
+        {
+          "id": "fuel-9",
+          "type": "Donut Chart",
+          "title": "Komposisi Konsumsi BBM per Tipe Armada",
+          "kpi": "HD785: 41%",
+          "insight": "HD785 menyerap 41% BBM armada — prioritas utama program eco-driving dan pemantauan idle time.",
+          "cfg": {
+            "labels": [
+              "HD785",
+              "PC2000",
+              "Dozer",
+              "Support",
+              "Genset"
+            ],
+            "values": [
+              41,
+              23,
+              14,
+              12,
+              10
+            ],
+            "unit": "%"
+          }
+        },
+        {
+          "id": "fuel-10",
+          "type": "Scatter Plot",
+          "title": "Hubungan Muatan vs Konsumsi BBM per Rit",
+          "kpi": "Korelasi kuat",
+          "insight": "Rit dengan muatan di atas 80 ton cenderung boros BBM per ton — muatan optimal berada di 70–85 ton.",
+          "cfg": {
+            "points": [
+              [
+                62,
+                41
+              ],
+              [
+                78,
+                52
+              ],
+              [
+                55,
+                38
+              ],
+              [
+                90,
+                61
+              ],
+              [
+                70,
+                47
+              ],
+              [
+                84,
+                55
+              ],
+              [
+                48,
+                34
+              ],
+              [
+                95,
+                64
+              ]
+            ],
+            "xMax": 100,
+            "yMax": 70,
+            "xLbl": "Muatan (ton)",
+            "yLbl": "BBM (liter/rit)"
+          }
+        }
+      ]
+    },
+    {
+      "id": "tyre",
+      "num": 7,
+      "name": "Dept Tyre",
+      "short": "7. Tyre Management",
+      "desc": "Umur pakai ban alat berat (Lifetime HM), Cost per Hour ($/HM), penyebab kerusakan dini (cut/separation), dan kurva reliabilitas ban.",
+      "charts": [
+        {
+          "id": "tyre-0",
+          "type": "Combo Chart",
+          "title": "Target Umur Tyre vs Aktual (HM) + Biaya per Jam ($/HM)",
+          "kpi": "4.620 HM (96%)",
+          "insight": "Umur rata-rata ban radial 27.00R49 mencapai 4.620 HM dengan penurunan biaya ke $3.15 per jam operasi.",
+          "cfg": {
+            "labels": [
+              "Brand-A",
+              "Brand-B",
+              "Brand-C",
+              "Pos Front",
+              "Pos Rear"
+            ],
+            "plan": [
+              4800,
+              4800,
+              4500,
+              4800,
+              4800
+            ],
+            "actual": [
+              4720,
+              4580,
+              4190,
+              4690,
+              4550
+            ],
+            "rate": [
+              98,
+              95,
+              93,
+              98,
+              95
+            ],
+            "unit": "HM"
+          }
+        },
+        {
+          "id": "tyre-1",
+          "type": "Waterfall Chart",
+          "title": "Analisis Perubahan Biaya Tyre: Pembelian, Pemakaian & Scrap",
+          "kpi": "Aktual $184K",
+          "insight": "Program rotasi ban tepat waktu (-$16K) dan perbaikan minor vulcanizing (-$9K) berhasil menekan biaya penggantian.",
+          "cfg": {
+            "steps": [
+              {
+                "l": "Budget Tyre",
+                "v": "$195K",
+                "b": 0,
+                "h": 76,
+                "c": "base"
+              },
+              {
+                "l": "Rock Cut",
+                "v": "+$14K",
+                "b": 76,
+                "h": 12,
+                "c": "neg"
+              },
+              {
+                "l": "Rotasi Posisi",
+                "v": "-$16K",
+                "b": 64,
+                "h": 24,
+                "c": "pos"
+              },
+              {
+                "l": "Repair Patch",
+                "v": "-$9K",
+                "b": 54,
+                "h": 10,
+                "c": "pos"
+              },
+              {
+                "l": "Aktual Cost",
+                "v": "$184K",
+                "b": 0,
+                "h": 68,
+                "c": "total"
+              }
+            ]
+          }
+        },
+        {
+          "id": "tyre-2",
+          "type": "Histogram",
+          "title": "Distribusi Umur Pelepasan Ban (Scrap Lifetime HM)",
+          "kpi": "Modus 4.500–5.000 HM",
+          "insight": "68% ban mencapai umur ekonomis di atas 4.000 HM sebelum dilepas karena batas keausan tapak (worn out).",
+          "cfg": {
+            "bins": [
+              "<2K HM",
+              "2-3K HM",
+              "3-4K HM",
+              "4-5K HM",
+              "5-6K HM",
+              ">6K HM"
+            ],
+            "counts": [
+              6,
+              14,
+              38,
+              84,
+              42,
+              12
+            ]
+          }
+        },
+        {
+          "id": "tyre-3",
+          "type": "Box Plot",
+          "title": "Variasi Umur Tyre Antarunit & Posisi Roda",
+          "kpi": "Front Tyre Lebih Stabil",
+          "insight": "Ban posisi belakang (Rear Drive) memiliki variasi umur lebih lebar karena beban traksi di tanjakan basah.",
+          "cfg": {
+            "groups": [
+              "Pos 1-2 Front",
+              "Pos 3-4 Rear",
+              "Pos 5-6 Rear",
+              "Fleet Pit-B"
+            ],
+            "med": [
+              4850,
+              4420,
+              4380,
+              4150
+            ],
+            "q1": [
+              4500,
+              3900,
+              3850,
+              3600
+            ],
+            "q3": [
+              5200,
+              4800,
+              4750,
+              4600
+            ],
+            "unit": "HM"
+          }
+        },
+        {
+          "id": "tyre-4",
+          "type": "Control Chart",
+          "title": "Pemantauan Tekanan N2 & Suhu TKPH Harian",
+          "kpi": "Mean 105 PSI",
+          "insight": "Tekanan nitrogen ban terjaga stabil di dalam batas spesifikasi pabrik untuk mencegah heat separation.",
+          "cfg": {
+            "mean": "105 PSI",
+            "ucl": "115 PSI",
+            "lcl": "95 PSI",
+            "pts": [
+              104,
+              106,
+              105,
+              107,
+              104,
+              105,
+              106
+            ],
+            "labels": [
+              "Sn",
+              "Sl",
+              "Rb",
+              "Km",
+              "Jm",
+              "Sb",
+              "Mg"
+            ]
+          }
+        },
+        {
+          "id": "tyre-5",
+          "type": "Quadrant Chart",
+          "title": "Umur Tyre (HM) vs Biaya per Jam ($/HM)",
+          "kpi": "Brand-A Optimal",
+          "insight": "Ban Brand-A berada di kuadran Umur Panjang & Biaya/Jam Rendah, menjadi referensi kontrak tahun depan.",
+          "cfg": {
+            "xLbl": "Rata-rata Umur Pakai (HM)",
+            "yLbl": "Cost per Hour ($/HM)",
+            "q1": "Harga Beli Terlalu Mahal",
+            "q2": "Boros & Cepat Rusak",
+            "q3": "Murah tapi Umur Pendek",
+            "q4": "Best Value (Awet & Ekonomis)",
+            "pts": [
+              {
+                "n": "Brand-A OEM",
+                "x": 82,
+                "y": 24,
+                "c": "pos"
+              },
+              {
+                "n": "Brand-B",
+                "x": 72,
+                "y": 32,
+                "c": "pos"
+              },
+              {
+                "n": "Brand-C",
+                "x": 30,
+                "y": 76,
+                "c": "neg"
+              },
+              {
+                "n": "Brand-D",
+                "x": 68,
+                "y": 70,
+                "c": "warn"
+              }
+            ]
+          }
+        },
+        {
+          "id": "tyre-6",
+          "type": "Small Multiples",
+          "title": "Tren Umur Tyre per Fleet Hauling",
+          "kpi": "4 Fleet HD785",
+          "insight": "Seluruh fleet menunjukkan tren peningkatan umur ban setelah penyiraman batu tajam di front loading.",
+          "cfg": {
+            "items": [
+              {
+                "n": "Fleet Utara-1",
+                "v": "4.780 HM",
+                "pts": "10,30 35,24 60,18 85,12"
+              },
+              {
+                "n": "Fleet Utara-2",
+                "v": "4.650 HM",
+                "pts": "10,28 35,22 60,18 85,14"
+              },
+              {
+                "n": "Fleet Selatan",
+                "v": "4.410 HM",
+                "pts": "10,32 35,28 60,22 85,18"
+              },
+              {
+                "n": "Fleet Coal",
+                "v": "5.120 HM",
+                "pts": "10,26 35,20 60,14 85,10"
+              }
+            ]
+          }
+        },
+        {
+          "id": "tyre-7",
+          "type": "Reliability Curve",
+          "title": "Kurva Keandalan Umur Ban Berdasarkan Jam Operasi (HM)",
+          "kpi": "B10: 3.400 HM",
+          "insight": "90% populasi ban bertahan melewati 3.400 HM tanpa kegagalan dini (impact break/rock cut).",
+          "cfg": {
+            "b10": "3.400 HM",
+            "b50": "4.680 HM",
+            "comp": "Radial Off-The-Road Tyre 27.00R49"
+          }
+        },
+        {
+          "id": "tyre-8",
+          "type": "Donut Chart",
+          "title": "Penyebab Kerusakan Ban per Kategori",
+          "kpi": "Batu: 34%",
+          "insight": "Potongan batu di jalan angkut menjadi penyebab utama — pembersihan jalan dan pemantauan tekanan ban menekan 34% kasus ini.",
+          "cfg": {
+            "labels": [
+              "Potong/Batu",
+              "Overload",
+              "Tekanan",
+              "Aus Normal",
+              "Lainnya"
+            ],
+            "values": [
+              34,
+              26,
+              18,
+              15,
+              7
+            ],
+            "unit": "%"
+          }
+        },
+        {
+          "id": "tyre-9",
+          "type": "Pareto Chart",
+          "title": "Pareto Penyebab Ban Gagal Dini",
+          "kpi": "Top 2: 60%",
+          "insight": "Tekanan rendah dan overload menyumbang 60% ban gagal dini — dua penyebab ini yang harus dibereskan dulu.",
+          "cfg": {
+            "labels": [
+              "Tekanan Rendah",
+              "Overload",
+              "Jalan Kasar",
+              "Alignment",
+              "Lainnya"
+            ],
+            "values": [
+              32,
+              28,
+              19,
+              13,
+              8
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "scm",
+      "num": 8,
+      "name": "Dept SCM / Procurement",
+      "short": "8. SCM / Procurement",
+      "desc": "Kecepatan siklus PR ke PO hingga GRN, stabilitas lead time pengadaan, evaluasi performa supplier, serta analisis akar masalah keterlambatan part.",
+      "charts": [
+        {
+          "id": "scm-0",
+          "type": "Combo Chart",
+          "title": "Target vs Aktual Lead Time Pengadaan + Ketepatan Pemenuhan",
+          "kpi": "SLA PR-PO 94%",
+          "insight": "Rata-rata pemrosesan Purchase Order berhasil ditekan menjadi 6.2 hari kerja dengan tingkat pemenuhan 94%.",
+          "cfg": {
+            "labels": [
+              "Jan",
+              "Feb",
+              "Mar",
+              "Apr",
+              "Mei"
+            ],
+            "plan": [
+              7,
+              7,
+              7,
+              7,
+              7
+            ],
+            "actual": [
+              6.8,
+              6.5,
+              6.4,
+              6.1,
+              5.9
+            ],
+            "rate": [
+              91,
+              92,
+              94,
+              95,
+              96
+            ],
+            "unit": "Hari"
+          }
+        },
+        {
+          "id": "scm-1",
+          "type": "Waterfall Chart",
+          "title": "Analisis Perubahan Biaya Pengadaan & Negosiasi Kontrak",
+          "kpi": "Saving -$42K",
+          "insight": "Konsolidasi volume kontrak tahunan (Blanket Order) menghasilkan penghematan harga beli sebesar -$42K.",
+          "cfg": {
+            "steps": [
+              {
+                "l": "Estimasi PR",
+                "v": "$620K",
+                "b": 0,
+                "h": 80,
+                "c": "base"
+              },
+              {
+                "l": "Kenaikan Kurs",
+                "v": "+$18K",
+                "b": 80,
+                "h": 10,
+                "c": "neg"
+              },
+              {
+                "l": "Diskon Kontrak",
+                "v": "-$42K",
+                "b": 62,
+                "h": 28,
+                "c": "pos"
+              },
+              {
+                "l": "Lokal Sourcing",
+                "v": "-$16K",
+                "b": 52,
+                "h": 10,
+                "c": "pos"
+              },
+              {
+                "l": "Nilai PO Final",
+                "v": "$580K",
+                "b": 0,
+                "h": 68,
+                "c": "total"
+              }
+            ]
+          }
+        },
+        {
+          "id": "scm-2",
+          "type": "Funnel Chart",
+          "title": "Konversi Pengadaan: PR → PO → Penerimaan Barang (GRN)",
+          "kpi": "93.8% Fulfilled",
+          "insight": "Dari 340 PR yang disetujui, 98% telah terbit PO dan 93.8% barang telah tiba di gudang site.",
+          "cfg": {
+            "stages": [
+              {
+                "n": "1. Purchase Requisition (PR Approved)",
+                "v": "340 Dok",
+                "p": 100
+              },
+              {
+                "n": "2. RFQ & Evaluasi Vendor",
+                "v": "336 Dok",
+                "p": 99
+              },
+              {
+                "n": "3. Purchase Order (PO Released)",
+                "v": "332 Dok",
+                "p": 98
+              },
+              {
+                "n": "4. Barang Diterima (GRN Complete)",
+                "v": "319 Dok",
+                "p": 94
+              }
+            ]
+          }
+        },
+        {
+          "id": "scm-3",
+          "type": "Box Plot",
+          "title": "Variasi Lead Time Pengadaan Antarvendor Utama",
+          "kpi": "Vendor Lokal Cepat",
+          "insight": "Vendor distributor resmi dalam negeri memiliki variasi lead time jauh lebih sempit dibanding impor.",
+          "cfg": {
+            "groups": [
+              "OEM Ind",
+              "Tier-1 Lokal",
+              " fabrikasi",
+              "Impor Singapura"
+            ],
+            "med": [
+              6,
+              4.5,
+              8,
+              16.5
+            ],
+            "q1": [
+              5,
+              3.5,
+              6.5,
+              13
+            ],
+            "q3": [
+              7.5,
+              6,
+              10,
+              21
+            ],
+            "unit": "Hari"
+          }
+        },
+        {
+          "id": "scm-4",
+          "type": "Control Chart",
+          "title": "Kestabilan Lead Time Siklus PR-ke-PO",
+          "kpi": "Mean 4.2 Hari",
+          "insight": "Waktu proses persetujuan internal PR menjadi PO berada dalam kendali statistik di bawah 7 hari.",
+          "cfg": {
+            "mean": "4.2 Hr",
+            "ucl": "6.8 Hr",
+            "lcl": "1.5 Hr",
+            "pts": [
+              4.4,
+              4.1,
+              4.3,
+              3.9,
+              4.5,
+              4,
+              3.8
+            ],
+            "labels": [
+              "M1",
+              "M2",
+              "M3",
+              "M4",
+              "M5",
+              "M6",
+              "M7"
+            ]
+          }
+        },
+        {
+          "id": "scm-5",
+          "type": "Quadrant Chart",
+          "title": "Lead Time vs Tingkat Keterlambatan Supplier",
+          "kpi": "Evaluasi 1 Supplier",
+          "insight": "Supplier di Kuadran Kanan-Atas memiliki waktu tunggu lama sekaligus sering meleset dari tanggal janji PO.",
+          "cfg": {
+            "xLbl": "Rata-rata Lead Time (Hari)",
+            "yLbl": "% Keterlambatan PO",
+            "q1": "Penalti / Cari Subtitusi",
+            "q2": "Janji Cepat tapi Meleset",
+            "q3": "Preferred Vendor (Cepat & Tepat)",
+            "q4": "Indent OEM (Lama tapi Pasti)",
+            "pts": [
+              {
+                "n": "Vendor-X",
+                "x": 78,
+                "y": 76,
+                "c": "neg"
+              },
+              {
+                "n": "Trakindo/UT",
+                "x": 70,
+                "y": 18,
+                "c": "pos"
+              },
+              {
+                "n": "MitraPart",
+                "x": 26,
+                "y": 20,
+                "c": "pos"
+              },
+              {
+                "n": "GlobalSupply",
+                "x": 32,
+                "y": 68,
+                "c": "warn"
+              }
+            ]
+          }
+        },
+        {
+          "id": "scm-6",
+          "type": "Cohort Chart",
+          "title": "Penyelesaian Umur PR & PO Berdasarkan Periode Pembuatan",
+          "kpi": "96% Closed M+2",
+          "insight": "Dokumen PO yang diterbitkan tiap bulan rata-rata terselesaikan 96% sebelum melewati 60 hari.",
+          "cfg": {
+            "rows": [
+              "PO Jan",
+              "PO Feb",
+              "PO Mar",
+              "PO Apr"
+            ],
+            "cols": [
+              "<15 Hr",
+              "<30 Hr",
+              "<45 Hr",
+              "<60 Hr"
+            ],
+            "data": [
+              [
+                48,
+                82,
+                94,
+                98
+              ],
+              [
+                52,
+                85,
+                95,
+                99
+              ],
+              [
+                46,
+                80,
+                92,
+                96
+              ],
+              [
+                54,
+                86,
+                96,
+                99
+              ]
+            ],
+            "mode": "growth"
+          }
+        },
+        {
+          "id": "scm-7",
+          "type": "Forecast Chart",
+          "title": "Proyeksi Nilai Kebutuhan Pengadaan Suku Cadang",
+          "kpi": "Q3 Outlook $610K",
+          "insight": "Anggaran pengadaan diproyeksikan meningkat moderat seiring jadwal servis 5.000 HM armada baru.",
+          "cfg": {
+            "hist": [
+              520,
+              545,
+              560,
+              580
+            ],
+            "proj": [
+              590,
+              602,
+              610
+            ],
+            "unit": "$K"
+          }
+        },
+        {
+          "id": "scm-8",
+          "type": "Decomposition Tree",
+          "title": "Analisis Keterlambatan & Stockout Berdasarkan Vendor & Material",
+          "kpi": "13 PO Terlambat",
+          "insight": "Mayoritas keterlambatan berasal dari item komponen elektrikal impor yang tertahan proses bea cukai.",
+          "cfg": {
+            "root": {
+              "n": "Total PO Delay",
+              "v": "13 PO"
+            },
+            "l1": [
+              {
+                "n": "Part Impor",
+                "v": "9 PO (69%)"
+              },
+              {
+                "n": "Part Lokal",
+                "v": "4 PO (31%)"
+              }
+            ],
+            "l2": [
+              {
+                "n": "Vendor Global",
+                "v": "6 PO"
+              },
+              {
+                "n": "Sensor & Modul ECM",
+                "v": "5 PO"
+              },
+              {
+                "n": "Bea Cukai / Kapal",
+                "v": "4 PO"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "warehouse",
+      "num": 9,
+      "name": "Dept Warehouse / Inventory",
+      "short": "9. Warehouse / Inventory",
+      "desc": "Pemantauan saldo stok vs Reorder Point (ROP), rekonsiliasi mutasi barang, nilai persediaan ABC-XYZ, dan pencegahan risiko stockout.",
+      "charts": [
+        {
+          "id": "warehouse-0",
+          "type": "Combo Chart",
+          "title": "Saldo Stok + Pemakaian Bulanan + Indikator Reorder Point",
+          "kpi": "Service Level 96.4%",
+          "insight": "Saldo stok gudang terjaga aman di atas garis Reorder Point (ROP), mencegah terjadinya breakdown waiting part.",
+          "cfg": {
+            "labels": [
+              "Jan",
+              "Feb",
+              "Mar",
+              "Apr",
+              "Mei"
+            ],
+            "plan": [
+              850,
+              820,
+              840,
+              810,
+              830
+            ],
+            "actual": [
+              620,
+              640,
+              610,
+              590,
+              605
+            ],
+            "rate": [
+              96,
+              95,
+              97,
+              96,
+              97
+            ],
+            "unit": "Item"
+          }
+        },
+        {
+          "id": "warehouse-1",
+          "type": "Waterfall Chart",
+          "title": "Rekonsiliasi Mutasi Persediaan: Awal + Masuk − Keluar ± Adj",
+          "kpi": "Stok Akhir $1.42M",
+          "insight": "Penerimaan GRN (+$480K) dan pengeluaran GI ke workshop (-$450K) seimbang, dengan akurasi stok opname 99.8%.",
+          "cfg": {
+            "steps": [
+              {
+                "l": "Stok Awal",
+                "v": "$1.39M",
+                "b": 0,
+                "h": 72,
+                "c": "base"
+              },
+              {
+                "l": "Terima (GRN)",
+                "v": "+$480K",
+                "b": 72,
+                "h": 20,
+                "c": "pos"
+              },
+              {
+                "l": "Keluar (GI)",
+                "v": "-$450K",
+                "b": 74,
+                "h": 18,
+                "c": "neg"
+              },
+              {
+                "l": "Adjustment",
+                "v": "-$2K",
+                "b": 73,
+                "h": 3,
+                "c": "warn"
+              },
+              {
+                "l": "Stok Akhir",
+                "v": "$1.42M",
+                "b": 0,
+                "h": 74,
+                "c": "total"
+              }
+            ]
+          }
+        },
+        {
+          "id": "warehouse-2",
+          "type": "Treemap",
+          "title": "Komposisi Nilai Stok Berdasarkan Kategori & Stock Code",
+          "kpi": "Kelas A: 68% Nilai",
+          "insight": "Komponen Engine Overhaul, Undercarriage, dan Ban OTR menyumbang porsi nilai aset persediaan terbesar.",
+          "cfg": {
+            "items": [
+              {
+                "n": "Engine & Powertrain [SC-101]",
+                "v": "$520K (37%)",
+                "c": "var(--c1)"
+              },
+              {
+                "n": "Hydraulic & Pump [SC-204]",
+                "v": "$360K (25%)",
+                "c": "var(--c2)"
+              },
+              {
+                "n": "Tyre & Rim [SC-309]",
+                "v": "$310K (22%)",
+                "c": "var(--c3)"
+              },
+              {
+                "n": "GET, Filter & Lube [SC-412]",
+                "v": "$230K (16%)",
+                "c": "var(--c4)"
+              }
+            ]
+          }
+        },
+        {
+          "id": "warehouse-3",
+          "type": "Stock Projection Chart",
+          "title": "Proyeksi Deplesi Stok & Peringatan Risiko Stockout (ROP)",
+          "kpi": "ROP: 120 Pcs",
+          "insight": "Simulasi kurva gergaji (saw-tooth) menunjukkan stok Filter Oli HD785 akan menyentuh ROP pada Hari ke-14 sehingga PO otomatis diterbitkan.",
+          "cfg": {
+            "rop": "120 Pcs",
+            "safety": "60 Pcs",
+            "item": "Oil Filter Element [SC-41209]"
+          }
+        },
+        {
+          "id": "warehouse-4",
+          "type": "Histogram",
+          "title": "Distribusi Frekuensi Pemakaian Spare Part Fast-Moving",
+          "kpi": "ITO 4.8x / Tahun",
+          "insight": "Sebagian besar item fast-moving dikeluarkan dari gudang antara 15 hingga 35 kali per bulan.",
+          "cfg": {
+            "bins": [
+              "1-10x",
+              "11-20x",
+              "21-30x",
+              "31-40x",
+              "41-50x",
+              ">50x"
+            ],
+            "counts": [
+              24,
+              68,
+              95,
+              54,
+              28,
+              12
+            ]
+          }
+        },
+        {
+          "id": "warehouse-5",
+          "type": "Box Plot",
+          "title": "Variasi Konsumsi Antarjenis Material Gudang",
+          "kpi": "Filter Paling Stabil",
+          "insight": "Pemakaian Filter & Pelumas sangat terprediksi mengikuti jadwal PM, sedangkan komponen Undercarriage bervariasi.",
+          "cfg": {
+            "groups": [
+              "Filter PM",
+              "GET Teeth",
+              "Hose Hyd",
+              "Electrical"
+            ],
+            "med": [
+              45,
+              38,
+              28,
+              16
+            ],
+            "q1": [
+              40,
+              28,
+              18,
+              10
+            ],
+            "q3": [
+              50,
+              48,
+              42,
+              26
+            ],
+            "unit": "Pcs"
+          }
+        },
+        {
+          "id": "warehouse-6",
+          "type": "Quadrant Chart",
+          "title": "Nilai Pemakaian vs Criticality / Risiko Stockout (VED-ABC)",
+          "kpi": "14 Item Vital-A",
+          "insight": "Item di Kuadran Kanan-Atas (Vital & Nilai Tinggi) wajib dijaga dengan skema Vendor Held Stock (Consignment).",
+          "cfg": {
+            "xLbl": "Nilai Pemakaian Tahunan ($)",
+            "yLbl": "Tingkat Kritikalitas Alat (VED)",
+            "q1": "Vital & High Cost (Consignment)",
+            "q2": "Vital & Low Cost (Safety Stock Tinggi)",
+            "q3": "Non-Kritis & Murah",
+            "q4": "Mahal tapi Jarang Pakai (Order by Request)",
+            "pts": [
+              {
+                "n": "Main Pump PC2000",
+                "x": 82,
+                "y": 86,
+                "c": "neg"
+              },
+              {
+                "n": "Seal Kit PM",
+                "x": 28,
+                "y": 82,
+                "c": "warn"
+              },
+              {
+                "n": "Tyre 27.00R49",
+                "x": 86,
+                "y": 76,
+                "c": "warn"
+              },
+              {
+                "n": "Baut Kabin",
+                "x": 22,
+                "y": 20,
+                "c": "pos"
+              }
+            ]
+          }
+        },
+        {
+          "id": "warehouse-7",
+          "type": "Cohort Chart",
+          "title": "Pergerakan Umur Stok (Inventory Aging) per Batch Penerimaan",
+          "kpi": "Dead Stock < 2%",
+          "insight": "96% barang yang diterima pada Kuartal I telah terpakai habis dalam 90 hari, meminimalkan risiko dead stock.",
+          "cfg": {
+            "rows": [
+              "GRN Jan",
+              "GRN Feb",
+              "GRN Mar",
+              "GRN Apr"
+            ],
+            "cols": [
+              "30 Hr",
+              "60 Hr",
+              "90 Hr",
+              "120 Hr"
+            ],
+            "data": [
+              [
+                100,
+                52,
+                18,
+                3
+              ],
+              [
+                100,
+                48,
+                15,
+                2
+              ],
+              [
+                100,
+                55,
+                21,
+                4
+              ],
+              [
+                100,
+                46,
+                16,
+                2
+              ]
+            ],
+            "mode": "decay"
+          }
+        },
+        {
+          "id": "warehouse-8",
+          "type": "Decomposition Tree",
+          "title": "Penelusuran Nilai Persediaan hingga Level Stock Code",
+          "kpi": "$1.42M Total Aset",
+          "insight": "Penelusuran hierarki menunjukkan Gudang Utama memegang 82% nilai stok, didominasi oleh komponen Kelas A.",
+          "cfg": {
+            "root": {
+              "n": "Total Inventory",
+              "v": "$1.42M"
+            },
+            "l1": [
+              {
+                "n": "Central WH",
+                "v": "$1.16M (82%)"
+              },
+              {
+                "n": "Sub-WH Pit",
+                "v": "$260K (18%)"
+              }
+            ],
+            "l2": [
+              {
+                "n": "Kelas A (Fast)",
+                "v": "$820K"
+              },
+              {
+                "n": "Engine Parts",
+                "v": "$520K"
+              },
+              {
+                "n": "SC-10192 Injector",
+                "v": "$145K"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "hrga",
+      "num": 10,
+      "name": "Dept HRGA",
+      "short": "10. HRGA & Manpower",
+      "desc": "Pemenuhan jumlah operator & mekanik (Manpower Plan), rekonsiliasi headcount, corong rekrutmen, retensi, absensi, dan masa berlaku SIMPER/Sertifikat.",
+      "charts": [
+        {
+          "id": "hrga-0",
+          "type": "Combo Chart",
+          "title": "Manpower Plan vs Actual + Pemenuhan Tenaga Kerja (%)",
+          "kpi": "98.2% Terpenuhi",
+          "insight": "Jumlah operator alat berat dan mekanik mencapai 1.120 personel dari kebutuhan 1.140 personel (98.2%).",
+          "cfg": {
+            "labels": [
+              "Produksi",
+              "Plant",
+              "Logistik",
+              "Engineering",
+              "HSE/GA"
+            ],
+            "plan": [
+              620,
+              240,
+              110,
+              80,
+              90
+            ],
+            "actual": [
+              610,
+              234,
+              108,
+              79,
+              89
+            ],
+            "rate": [
+              98,
+              97,
+              98,
+              99,
+              99
+            ],
+            "unit": "Org"
+          }
+        },
+        {
+          "id": "hrga-1",
+          "type": "Waterfall Chart",
+          "title": "Rekonsiliasi Headcount: Karyawan Awal + Masuk − Keluar = Akhir",
+          "kpi": "1.120 Karyawan",
+          "insight": "Rekrutmen operator baru (+34 orang) menutup angka resign alami (-12 orang) dan pensiun (-4 orang).",
+          "cfg": {
+            "steps": [
+              {
+                "l": "Awal Tahun",
+                "v": "1.102",
+                "b": 0,
+                "h": 74,
+                "c": "base"
+              },
+              {
+                "l": "Hire Baru",
+                "v": "+34",
+                "b": 74,
+                "h": 16,
+                "c": "pos"
+              },
+              {
+                "l": "Mutasi Masuk",
+                "v": "+6",
+                "b": 90,
+                "h": 6,
+                "c": "pos"
+              },
+              {
+                "l": "Resign/Habis",
+                "v": "-18",
+                "b": 82,
+                "h": 14,
+                "c": "neg"
+              },
+              {
+                "l": "Akhir Periode",
+                "v": "1.120",
+                "b": 0,
+                "h": 82,
+                "c": "total"
+              }
+            ]
+          }
+        },
+        {
+          "id": "hrga-2",
+          "type": "Funnel Chart",
+          "title": "Tahapan Rekrutmen Operator: Kandidat → Seleksi → Diterima",
+          "kpi": "11.3% Lolos Akhir",
+          "insight": "Dari 300 pelamar operator HD785, 34 kandidat terbaik lulus tes praktik lapangan dan MCU.",
+          "cfg": {
+            "stages": [
+              {
+                "n": "1. Lamaran Masuk & Screening CV",
+                "v": "300 Kandidat",
+                "p": 100
+              },
+              {
+                "n": "2. Tes Tertulis & Psikotes K3",
+                "v": "145 Kandidat",
+                "p": 48
+              },
+              {
+                "n": "3. Uji Praktik Alat Berat & Wawancara",
+                "v": "58 Kandidat",
+                "p": 19
+              },
+              {
+                "n": "4. Lolos MCU & Offering Diterima",
+                "v": "34 Operator",
+                "p": 11
+              }
+            ]
+          }
+        },
+        {
+          "id": "hrga-3",
+          "type": "Cohort Chart",
+          "title": "Retensi Karyawan Berdasarkan Periode Bergabung",
+          "kpi": "Retensi Thn-1: 94%",
+          "insight": "Program mentoring operator baru berhasil menjaga tingkat retensi angkatan kerja di atas 92% setelah 12 bulan.",
+          "cfg": {
+            "rows": [
+              "Batch Q1",
+              "Batch Q2",
+              "Batch Q3",
+              "Batch Q4"
+            ],
+            "cols": [
+              "Bln 3",
+              "Bln 6",
+              "Bln 9",
+              "Bln 12"
+            ],
+            "data": [
+              [
+                99,
+                97,
+                95,
+                94
+              ],
+              [
+                98,
+                96,
+                95,
+                93
+              ],
+              [
+                100,
+                98,
+                96,
+                95
+              ],
+              [
+                99,
+                97,
+                96,
+                94
+              ]
+            ],
+            "mode": "growth"
+          }
+        },
+        {
+          "id": "hrga-4",
+          "type": "Slope Chart",
+          "title": "Perubahan Tingkat Absenteeism & Turnover Karyawan",
+          "kpi": "Absensi Turun 1.4%",
+          "insight": "Tingkat ketidakhadiran tanpa keterangan turun dari 2.8% menjadi 1.4% pasca perbaikan fasilitas mess dan bus jemputan.",
+          "cfg": {
+            "items": [
+              {
+                "n": "Absenteeism Rate",
+                "v1": "2.8%",
+                "v2": "1.4%",
+                "y1": 35,
+                "y2": 82,
+                "c": "pos"
+              },
+              {
+                "n": "Annual Turnover",
+                "v1": "6.4%",
+                "v2": "4.1%",
+                "y1": 28,
+                "y2": 72,
+                "c": "pos"
+              },
+              {
+                "n": "Fit to Work Compliance",
+                "v1": "91%",
+                "v2": "98%",
+                "y1": 85,
+                "y2": 22,
+                "c": "pos"
+              }
+            ]
+          }
+        },
+        {
+          "id": "hrga-5",
+          "type": "Small Multiples",
+          "title": "Tren Kinerja SDM & Jam Lembur per Departemen",
+          "kpi": "Overtime Terkendali",
+          "insight": "Jam lembur per departemen menurun seiring terpenuhinya formasi shift reguler.",
+          "cfg": {
+            "items": [
+              {
+                "n": "Dept Produksi",
+                "v": "98.4% Hadir",
+                "pts": "10,28 35,22 60,18 85,12"
+              },
+              {
+                "n": "Dept Plant",
+                "v": "97.8% Hadir",
+                "pts": "10,26 35,24 60,18 85,14"
+              },
+              {
+                "n": "Dept Logistik",
+                "v": "98.1% Hadir",
+                "pts": "10,30 35,24 60,20 85,15"
+              },
+              {
+                "n": "Dept Eng/HSE",
+                "v": "99.2% Hadir",
+                "pts": "10,22 35,18 60,14 85,10"
+              }
+            ]
+          }
+        },
+        {
+          "id": "hrga-6",
+          "type": "Ordered Bar Chart",
+          "title": "Peringkat Ketidakhadiran (Absenteeism) per Departemen",
+          "kpi": "Rata-rata 1.4%",
+          "insight": "Seluruh departemen berada di bawah ambang batas maksimum toleransi ketidakhadiran (2.5%).",
+          "cfg": {
+            "items": [
+              {
+                "n": "Hauling Shift Malam",
+                "v": 2.1,
+                "u": "%"
+              },
+              {
+                "n": "Plant Field Service",
+                "v": 1.7,
+                "u": "%"
+              },
+              {
+                "n": "Logistik & Jetty",
+                "v": 1.4,
+                "u": "%"
+              },
+              {
+                "n": "Warehouse & SCM",
+                "v": 1.1,
+                "u": "%"
+              },
+              {
+                "n": "Engineering & Pit Control",
+                "v": 0.8,
+                "u": "%"
+              }
+            ]
+          }
+        },
+        {
+          "id": "hrga-7",
+          "type": "Bullet Chart",
+          "title": "Pencapaian Jam Pelatihan & Sertifikasi (Training Compliance)",
+          "kpi": "96% vs Target 90%",
+          "insight": "Realisasi pelatihan kompetensi POP/POM, Basic Mechanic Course, dan Defensive Driving melampaui target tahunan.",
+          "cfg": {
+            "items": [
+              {
+                "n": "Defensive Driving & SIMPER",
+                "v": 98,
+                "t": 95
+              },
+              {
+                "n": "Basic Mechanic & Diagnostic",
+                "v": 92,
+                "t": 90
+              },
+              {
+                "n": "Sertifikasi Pengawas (POP/POM)",
+                "v": 94,
+                "t": 90
+              }
+            ]
+          }
+        },
+        {
+          "id": "hrga-8",
+          "type": "Aging Chart",
+          "title": "Masa Berlaku SIMPER, Kimper & Sertifikat K3 Mendekati Kedaluwarsa",
+          "kpi": "18 Dokumen <30 Hari",
+          "insight": "Terdapat 18 SIMPER operator yang akan habis masa berlakunya dalam 30 hari ke depan dan telah dijadwalkan uji ulang.",
+          "cfg": {
+            "buckets": [
+              {
+                "l": "Aktif (>90 Hari)",
+                "v": 940,
+                "c": "pos"
+              },
+              {
+                "l": "61–90 Hari",
+                "v": 112,
+                "c": "info"
+              },
+              {
+                "l": "31–60 Hari",
+                "v": 50,
+                "c": "warn"
+              },
+              {
+                "l": "Segera Habis (<30 Hari)",
+                "v": 18,
+                "c": "neg"
+              }
+            ]
+          }
+        },
+        {
+          "id": "hrga-9",
+          "type": "Radar Chart",
+          "title": "Radar Kompetensi Operator per Dimensi",
+          "kpi": "Safety: 88",
+          "insight": "Safety paling kuat (88), kepemimpinan paling lemah (66) — program pengembangan mandor menjadi prioritas HRGA.",
+          "cfg": {
+            "labels": [
+              "Safety",
+              "Operasi Unit",
+              "Perawatan Dasar",
+              "Komunikasi",
+              "Administrasi",
+              "Kepemimpinan"
+            ],
+            "values": [
+              88,
+              82,
+              74,
+              79,
+              71,
+              66
+            ],
+            "max": 100
+          }
+        }
+      ]
+    },
+    {
+      "id": "hse",
+      "num": 11,
+      "name": "Dept HSE / K3LH",
+      "short": "11. HSE / Safety",
+      "desc": "Kepatuhan inspeksi keselamatan (SAP/P2H), penutupan temuan bahaya (Hazard Report), matriks risiko, umur tindakan korektif (CAPA), dan peta titik rawan.",
+      "charts": [
+        {
+          "id": "hse-0",
+          "type": "Combo Chart",
+          "title": "Target Inspeksi vs Aktual + Persentase Penyelesaian",
+          "kpi": "Zero LTI • 98% SAP",
+          "insight": "Pencapaian Safety Accountability Program (SAP) termasuk P2H, Safety Talk, dan Observasi mencapai 98.4%.",
+          "cfg": {
+            "labels": [
+              "Mgg 1",
+              "Mgg 2",
+              "Mgg 3",
+              "Mgg 4",
+              "Mgg 5"
+            ],
+            "plan": [
+              250,
+              250,
+              250,
+              250,
+              250
+            ],
+            "actual": [
+              244,
+              248,
+              252,
+              246,
+              255
+            ],
+            "rate": [
+              98,
+              99,
+              100,
+              98,
+              100
+            ],
+            "unit": "Inspeksi"
+          }
+        },
+        {
+          "id": "hse-1",
+          "type": "Waterfall Chart",
+          "title": "Rekonsiliasi Jumlah Temuan Hazard Terbuka (Open Findings)",
+          "kpi": "Sisa 14 Open",
+          "insight": "Dari 42 temuan awal ditambah 68 laporan hazard baru, sebanyak 96 temuan telah berhasil ditutup tuntas (Closed).",
+          "cfg": {
+            "steps": [
+              {
+                "l": "Open Awal",
+                "v": "42",
+                "b": 0,
+                "h": 38,
+                "c": "base"
+              },
+              {
+                "l": "Temuan Baru",
+                "v": "+68",
+                "b": 38,
+                "h": 52,
+                "c": "neg"
+              },
+              {
+                "l": "Closed Tuntas",
+                "v": "-88",
+                "b": 22,
+                "h": 68,
+                "c": "pos"
+              },
+              {
+                "l": "Verifikasi",
+                "v": "-8",
+                "b": 14,
+                "h": 8,
+                "c": "pos"
+              },
+              {
+                "l": "Open Akhir",
+                "v": "14",
+                "b": 0,
+                "h": 18,
+                "c": "total"
+              }
+            ]
+          }
+        },
+        {
+          "id": "hse-2",
+          "type": "Control Chart",
+          "title": "Pemantauan Indikator HSE (Fatigue Alert Microsleep Kamera)",
+          "kpi": "Mean 2.1 Alert/Shift",
+          "insight": "Jumlah peringatan dini kelelahan operator (Fatigue Camera) turun dan terkendali setelah penerapan wajib rest 15 menit pada jam 03:00.",
+          "cfg": {
+            "mean": "2.1",
+            "ucl": "4.5",
+            "lcl": "0.0",
+            "pts": [
+              2.5,
+              2.2,
+              2,
+              1.8,
+              2.1,
+              1.6,
+              1.5
+            ],
+            "labels": [
+              "Sn",
+              "Sl",
+              "Rb",
+              "Km",
+              "Jm",
+              "Sb",
+              "Mg"
+            ]
+          }
+        },
+        {
+          "id": "hse-3",
+          "type": "Quadrant Chart",
+          "title": "Frekuensi Temuan Bahaya vs Tingkat Risiko (Risk Matrix)",
+          "kpi": "Prioritas Tanggul Jalan",
+          "insight": "Temuan tinggi tanggul (bundwall) jalan hauling berada di kuadran Frekuensi Tinggi & Risiko Tinggi—langsung ditindaklanjuti Dozer.",
+          "cfg": {
+            "xLbl": "Frekuensi Temuan Hazard",
+            "yLbl": "Tingkat Keparahan Risiko (Severity)",
+            "q1": "Risiko Ekstrem (Stop Work / Langsung Perbaiki)",
+            "q2": "Risiko Tinggi Jarang Terjadi",
+            "q3": "Risiko Rendah Terkendali",
+            "q4": "Housekeeping Rutin",
+            "pts": [
+              {
+                "n": "Tanggul Jalan Kurang",
+                "x": 76,
+                "y": 82,
+                "c": "neg"
+              },
+              {
+                "n": "Debu Hauling",
+                "x": 78,
+                "y": 34,
+                "c": "warn"
+              },
+              {
+                "n": "Sling Angkat Aus",
+                "x": 28,
+                "y": 80,
+                "c": "warn"
+              },
+              {
+                "n": "Parkir Mundur",
+                "x": 26,
+                "y": 24,
+                "c": "pos"
+              }
+            ]
+          }
+        },
+        {
+          "id": "hse-4",
+          "type": "Small Multiples",
+          "title": "Tren Insiden Minor & Near-Miss per Area Kerja",
+          "kpi": "0 LTI • Near-Miss Turun",
+          "insight": "Seluruh area operasional menunjukkan tren penurunan kejadian hampir celaka (Near-Miss) sepanjang kuartal.",
+          "cfg": {
+            "items": [
+              {
+                "n": "Area Hauling Road",
+                "v": "Zero LTI",
+                "pts": "10,14 35,20 60,26 85,32"
+              },
+              {
+                "n": "Area Workshop Bay",
+                "v": "Zero LTI",
+                "pts": "10,16 35,22 60,28 85,32"
+              },
+              {
+                "n": "Area Loading Pit",
+                "v": "Zero LTI",
+                "pts": "10,18 35,22 60,26 85,30"
+              },
+              {
+                "n": "Area Jetty Port",
+                "v": "Zero LTI",
+                "pts": "10,20 35,24 60,28 85,32"
+              }
+            ]
+          }
+        },
+        {
+          "id": "hse-5",
+          "type": "Cohort Chart",
+          "title": "Kecepatan Penyelesaian Temuan K3 Berdasarkan Periode Ditemukan",
+          "kpi": "96% Closed <14 Hari",
+          "insight": "Tingkat penutupan tindakan perbaikan (CAPA) mencapai 96% dalam kurun waktu kurang dari 2 minggu.",
+          "cfg": {
+            "rows": [
+              "Temuan W1",
+              "Temuan W2",
+              "Temuan W3",
+              "Temuan W4"
+            ],
+            "cols": [
+              "H+1",
+              "H+3",
+              "H+7",
+              "H+14"
+            ],
+            "data": [
+              [
+                45,
+                78,
+                92,
+                98
+              ],
+              [
+                48,
+                80,
+                94,
+                97
+              ],
+              [
+                52,
+                82,
+                95,
+                99
+              ],
+              [
+                50,
+                79,
+                91,
+                96
+              ]
+            ],
+            "mode": "growth"
+          }
+        },
+        {
+          "id": "hse-6",
+          "type": "Aging Chart",
+          "title": "Umur Temuan K3 Terbuka & Tindakan Korektif (CAPA Aging)",
+          "kpi": "0 Overdue >30 Hari",
+          "insight": "Tidak ada tindakan korektif yang melewati batas jatuh tempo 30 hari; 10 dari 14 temuan baru berumur <7 hari.",
+          "cfg": {
+            "buckets": [
+              {
+                "l": "Baru (<7 Hari)",
+                "v": 10,
+                "c": "pos"
+              },
+              {
+                "l": "8–14 Hari",
+                "v": 3,
+                "c": "info"
+              },
+              {
+                "l": "15–30 Hari",
+                "v": 1,
+                "c": "warn"
+              },
+              {
+                "l": "Overdue (>30 Hari)",
+                "v": 0,
+                "c": "neg"
+              }
+            ]
+          }
+        },
+        {
+          "id": "hse-7",
+          "type": "GIS Map",
+          "title": "Peta Lokasi Titik Rawan (Blackspot) & Temuan Inspeksi Lapangan",
+          "kpi": "Pemetaan Geospasial K3",
+          "insight": "Peta menandai lokasi tikungan tajam KM-08 dan persimpangan ROM untuk pemasangan rambu solar-cell tambahan.",
+          "cfg": {
+            "mode": "hse"
+          }
+        },
+        {
+          "id": "hse-8",
+          "type": "Bullet Chart",
+          "title": "Kepatuhan Inspeksi Keselamatan & Lingkungan vs Target",
+          "kpi": "Rata-rata 97.5%",
+          "insight": "Kepatuhan P2H Awal Shift, Uji Emisi/Air Asam Tambang, dan Reklamasi melampaui target regulasi.",
+          "cfg": {
+            "items": [
+              {
+                "n": "Inspeksi P2H Harian Alat",
+                "v": 99,
+                "t": 95
+              },
+              {
+                "n": "Baku Mutu Settling Pond (pH)",
+                "v": 97,
+                "t": 95
+              },
+              {
+                "n": "Progres Revegetasi Lahan",
+                "v": 94,
+                "t": 90
+              }
+            ]
+          }
+        },
+        {
+          "id": "hse-9",
+          "type": "Gauge Chart",
+          "title": "Skor Kinerja Keselamatan (HSE Score)",
+          "kpi": "87 poin",
+          "insight": "Skor 87 dari target 90 — pengungkit terbesarnya kepatuhan penggunaan APD dan pelaporan near-miss.",
+          "cfg": {
+            "value": 87,
+            "target": 90,
+            "min": 0,
+            "max": 100,
+            "unit": "",
+            "label": "Skor HSE"
+          }
+        },
+        {
+          "id": "hse-10",
+          "type": "Heatmap",
+          "title": "Heatmap Insiden per Area × Bulan",
+          "kpi": "Haul Road tertinggi",
+          "insight": "Haul Road paling panas di Juli (4 kejadian) — patroli dan perbaikan permukaan jalan difokuskan ke sana.",
+          "cfg": {
+            "rows": [
+              "Pit",
+              "Workshop",
+              "Jetty",
+              "Haul Road"
+            ],
+            "cols": [
+              "Mei",
+              "Jun",
+              "Jul",
+              "Agu"
+            ],
+            "values": [
+              [
+                2,
+                1,
+                3,
+                1
+              ],
+              [
+                1,
+                0,
+                1,
+                2
+              ],
+              [
+                0,
+                1,
+                0,
+                1
+              ],
+              [
+                3,
+                2,
+                4,
+                2
+              ]
+            ],
+            "unit": "kejadian"
+          }
+        }
+      ]
+    },
+    {
+      "id": "finance",
+      "num": 12,
+      "name": "Dept Finance / Cost Control",
+      "short": "12. Finance / Cost Control",
+      "desc": "Kontrol anggaran Budget vs Actual, rekonsiliasi varians Cash Cost ($/MT), struktur biaya per departemen, dan penelusuran deviasi biaya.",
+      "charts": [
+        {
+          "id": "finance-0",
+          "type": "Combo Chart",
+          "title": "Budget vs Actual Cost + Persentase Penyerapan Anggaran",
+          "kpi": "96.4% Budget Absorption",
+          "insight": "Realisasi pengeluaran operasional tambang berada 3.6% di bawah pagu anggaran RKAP berkat pengendalian biaya bahan bakar dan ban.",
+          "cfg": {
+            "labels": [
+              "Jan",
+              "Feb",
+              "Mar",
+              "Apr",
+              "Mei"
+            ],
+            "plan": [
+              2.8,
+              2.9,
+              3,
+              2.9,
+              3.1
+            ],
+            "actual": [
+              2.7,
+              2.8,
+              2.9,
+              2.8,
+              2.95
+            ],
+            "rate": [
+              96,
+              97,
+              97,
+              96,
+              95
+            ],
+            "unit": "$M"
+          }
+        },
+        {
+          "id": "finance-1",
+          "type": "Waterfall Chart",
+          "title": "Rekonsiliasi Budget ke Actual Berdasarkan Komponen Deviasi",
+          "kpi": "Hemat -$110K",
+          "insight": "Efisiensi konsumsi biosolar (-$85K) dan negosiasi kontrak suku cadang (-$65K) berhasil menyerap kenaikan tarif jasa (+$40K).",
+          "cfg": {
+            "steps": [
+              {
+                "l": "Budget RKAP",
+                "v": "$2.95M",
+                "b": 0,
+                "h": 78,
+                "c": "base"
+              },
+              {
+                "l": "Tarif Jasa",
+                "v": "+$40K",
+                "b": 78,
+                "h": 10,
+                "c": "neg"
+              },
+              {
+                "l": "Hemat Fuel",
+                "v": "-$85K",
+                "b": 66,
+                "h": 22,
+                "c": "pos"
+              },
+              {
+                "l": "Diskon SCM",
+                "v": "-$65K",
+                "b": 54,
+                "h": 12,
+                "c": "pos"
+              },
+              {
+                "l": "Aktual Cost",
+                "v": "$2.84M",
+                "b": 0,
+                "h": 68,
+                "c": "total"
+              }
+            ]
+          }
+        },
+        {
+          "id": "finance-2",
+          "type": "Slope Chart",
+          "title": "Perubahan Cash Cost per Tonne ($/MT) & Maintenance Cost ($/HM)",
+          "kpi": "$28.4/MT (Turun 4%)",
+          "insight": "Biaya pokok produksi batubara turun dari $29.6/MT ke $28.4/MT seiring naiknya volume produksi bulanan.",
+          "cfg": {
+            "items": [
+              {
+                "n": "Mining Cash Cost ($/MT)",
+                "v1": "$29.6",
+                "v2": "$28.4",
+                "y1": 30,
+                "y2": 74,
+                "c": "pos"
+              },
+              {
+                "n": "OB Removal Cost ($/BCM)",
+                "v1": "$2.28",
+                "v2": "$2.14",
+                "y1": 38,
+                "y2": 80,
+                "c": "pos"
+              },
+              {
+                "n": "Maint Cost per HM ($/HM)",
+                "v1": "$44.5",
+                "v2": "$41.2",
+                "y1": 25,
+                "y2": 68,
+                "c": "pos"
+              }
+            ]
+          }
+        },
+        {
+          "id": "finance-3",
+          "type": "Treemap",
+          "title": "Komposisi Biaya Operasional Berdasarkan Departemen & Kategori",
+          "kpi": "Total $2.84M / Bulan",
+          "insight": "Biaya Pengupasan OB & Fuel (54%) serta Pemeliharaan Plant (24%) merupakan dua pos biaya terbesar di site.",
+          "cfg": {
+            "items": [
+              {
+                "n": "Produksi, Hauling & Fuel (54%)",
+                "v": "$1.53M",
+                "c": "var(--c1)"
+              },
+              {
+                "n": "Plant Maintenance & Overhaul (24%)",
+                "v": "$680K",
+                "c": "var(--c2)"
+              },
+              {
+                "n": "Barging, Jetty & Logistik (13%)",
+                "v": "$370K",
+                "c": "var(--c3)"
+              },
+              {
+                "n": "HSE, HRGA & Overhead Site (9%)",
+                "v": "$260K",
+                "c": "var(--c4)"
+              }
+            ]
+          }
+        },
+        {
+          "id": "finance-4",
+          "type": "Forecast Chart",
+          "title": "Proyeksi Realisasi Biaya Akhir Tahun (Year-End Outlook)",
+          "kpi": "YTD Hemat -2.8%",
+          "insight": "Proyeksi kumulatif biaya akhir tahun diperkirakan tetap berada di bawah garis batas plafon anggaran RKAP.",
+          "cfg": {
+            "hist": [
+              8.4,
+              16.9,
+              25.2,
+              33.8
+            ],
+            "proj": [
+              36.6,
+              39.5,
+              42.3
+            ],
+            "unit": "$M"
+          }
+        },
+        {
+          "id": "finance-5",
+          "type": "Ordered Bar Chart",
+          "title": "Peringkat Komponen Biaya Terbesar (Cost Drivers)",
+          "kpi": "Top 5 Pos Biaya",
+          "insight": "Lima pos biaya teratas mencakup 86% dari total pengeluaran kas operasional tambang.",
+          "cfg": {
+            "items": [
+              {
+                "n": "1. Bahan Bakar Biosolar B35",
+                "v": 980,
+                "u": "$K"
+              },
+              {
+                "n": "2. Kontraktor Kupasan OB & Alat",
+                "v": 740,
+                "u": "$K"
+              },
+              {
+                "n": "3. Suku Cadang & Komponen PCR",
+                "v": 520,
+                "u": "$K"
+              },
+              {
+                "n": "4. Bahan Peledak (Blasting)",
+                "v": 340,
+                "u": "$K"
+              },
+              {
+                "n": "5. Ban OTR 27.00R49 & GET",
+                "v": 260,
+                "u": "$K"
+              }
+            ]
+          }
+        },
+        {
+          "id": "finance-6",
+          "type": "Decomposition Tree",
+          "title": "Penelusuran Penyebab Deviasi Biaya (Cost Variance Tree)",
+          "kpi": "Favorable -$110K",
+          "insight": "Penghematan biaya terbesar berasal dari penurunan spesifik konsumsi BBM pada armada Hauling Pit Utara.",
+          "cfg": {
+            "root": {
+              "n": "Varians Total",
+              "v": "-$110K (Hemat)"
+            },
+            "l1": [
+              {
+                "n": "Direct Mining Cost",
+                "v": "-$85K"
+              },
+              {
+                "n": "Site Overhead",
+                "v": "-$25K"
+              }
+            ],
+            "l2": [
+              {
+                "n": "Fuel Efficiency",
+                "v": "-$62K"
+              },
+              {
+                "n": "Fleet HD785 Pit A",
+                "v": "-$48K"
+              },
+              {
+                "n": "Eco-Mode & Road Grade",
+                "v": "-$35K"
+              }
+            ]
+          }
+        },
+        {
+          "id": "finance-7",
+          "type": "Small Multiples",
+          "title": "Tren Biaya Satuan per Departemen & Fleet",
+          "kpi": "Semua Pos Terkendali",
+          "insight": "Tren unit cost pada empat departemen operasional utama menunjukkan kurva melandai yang sehat.",
+          "cfg": {
+            "items": [
+              {
+                "n": "OB Cost ($/BCM)",
+                "v": "$2.14",
+                "pts": "10,16 35,20 60,26 85,30"
+              },
+              {
+                "n": "Coal Getting ($/MT)",
+                "v": "$4.85",
+                "pts": "10,18 35,22 60,26 85,30"
+              },
+              {
+                "n": "Plant Cost ($/HM)",
+                "v": "$41.2",
+                "pts": "10,15 35,22 60,25 85,32"
+              },
+              {
+                "n": "Barging Cost ($/MT)",
+                "v": "$3.10",
+                "pts": "10,20 35,22 60,25 85,28"
+              }
+            ]
+          }
+        },
+        {
+          "id": "finance-8",
+          "type": "Donut Chart",
+          "title": "Komposisi Biaya Operasional per Kelompok",
+          "kpi": "BBM: 38%",
+          "insight": "BBM 38% dari total biaya — setiap penghematan 1% BBM setara penurunan biaya terbesar dibanding kelompok lain.",
+          "cfg": {
+            "labels": [
+              "BBM",
+              "Maintenance",
+              "Ban",
+              "Tenaga Kerja",
+              "Lainnya"
+            ],
+            "values": [
+              38,
+              24,
+              11,
+              18,
+              9
+            ],
+            "unit": "%"
+          }
+        }
+      ]
+    },
+    {
+      "id": "executive",
+      "num": 13,
+      "name": "Dept Executive / Management",
+      "short": "13. Executive / Direksi",
+      "desc": "Ringkasan strategis pencapaian KPI Korporat (Produksi, Cash Cost, PA, Safety), kontribusi faktor deviasi, serta peringkat kinerja antar-departemen.",
+      "charts": [
+        {
+          "id": "executive-0",
+          "type": "Bullet Chart",
+          "title": "Pencapaian KPI Utama Korporat Terhadap Target RKAP",
+          "kpi": "4 dari 4 KPI Tercapai",
+          "insight": "Seluruh indikator kunci (Produksi Batubara, Kesiapan Alat PA, Efisiensi Cash Cost, dan K3LH) berada pada zona hijau.",
+          "cfg": {
+            "items": [
+              {
+                "n": "Produksi Batubara (484K / 500K MT)",
+                "v": 97,
+                "t": 95
+              },
+              {
+                "n": "Physical Availability Fleet (91.8%)",
+                "v": 92,
+                "t": 90
+              },
+              {
+                "n": "Efisiensi Cash Cost ($28.4 vs $29.5)",
+                "v": 96,
+                "t": 92
+              }
+            ]
+          }
+        },
+        {
+          "id": "executive-1",
+          "type": "Combo Chart",
+          "title": "Aktual vs Target Produksi Strategis + Persentase Pencapaian",
+          "kpi": "YTD Achv 98.4%",
+          "insight": "Kinerja operasional dari Kuartal I hingga Kuartal III menjaga stabilitas pencapaian di atas 96% setiap bulannya.",
+          "cfg": {
+            "labels": [
+              "Q1",
+              "Q2",
+              "Q3",
+              "Okt",
+              "Nov"
+            ],
+            "plan": [
+              1450,
+              1500,
+              1550,
+              500,
+              520
+            ],
+            "actual": [
+              1410,
+              1485,
+              1530,
+              484,
+              515
+            ],
+            "rate": [
+              97,
+              99,
+              99,
+              97,
+              99
+            ],
+            "unit": "K MT"
+          }
+        },
+        {
+          "id": "executive-2",
+          "type": "Waterfall Chart",
+          "title": "Kontribusi Faktor Penyebab Deviasi EBITDA & Margin Tambang",
+          "kpi": "EBITDA $14.2M",
+          "insight": "Efisiensi biaya operasional (+$0.9M) dan premi kualitas kalori batubara (+$0.6M) menjaga EBITDA melampaui target.",
+          "cfg": {
+            "steps": [
+              {
+                "l": "Target EBITDA",
+                "v": "$13.5M",
+                "b": 0,
+                "h": 72,
+                "c": "base"
+              },
+              {
+                "l": "Volume (-3%)",
+                "v": "-$0.8M",
+                "b": 64,
+                "h": 10,
+                "c": "neg"
+              },
+              {
+                "l": "Premi CV/GAR",
+                "v": "+$0.6M",
+                "b": 64,
+                "h": 12,
+                "c": "pos"
+              },
+              {
+                "l": "Efisiensi Cost",
+                "v": "+$0.9M",
+                "b": 76,
+                "h": 14,
+                "c": "pos"
+              },
+              {
+                "l": "Aktual EBITDA",
+                "v": "$14.2M",
+                "b": 0,
+                "h": 82,
+                "c": "total"
+              }
+            ]
+          }
+        },
+        {
+          "id": "executive-3",
+          "type": "Small Multiples",
+          "title": "Tren 4 KPI Utama Strategis Antarperiode",
+          "kpi": "Kinerja Positif",
+          "insight": "Sinkronisasi peningkatan produksi, penurunan cash cost, stabilitas PA fleet, dan kepatuhan keselamatan kerja.",
+          "cfg": {
+            "items": [
+              {
+                "n": "Coal Production",
+                "v": "484K MT",
+                "pts": "10,32 35,25 60,18 85,10"
+              },
+              {
+                "n": "Cash Cost $/MT",
+                "v": "$28.4/MT",
+                "pts": "10,14 35,20 60,26 85,32"
+              },
+              {
+                "n": "Fleet PA (%)",
+                "v": "91.8%",
+                "pts": "10,28 35,24 60,18 85,14"
+              },
+              {
+                "n": "Safety SAP (%)",
+                "v": "98.4%",
+                "pts": "10,24 35,20 60,15 85,12"
+              }
+            ]
+          }
+        },
+        {
+          "id": "executive-4",
+          "type": "Forecast Chart",
+          "title": "Proyeksi Produksi, Biaya & Pencapaian Target Akhir Tahun",
+          "kpi": "Outlook 5.95M MT",
+          "insight": "Proyeksi akhir tahun menunjukkan target produksi 6.0 Juta MT akan tercapai 99.2% dengan margin kas yang sehat.",
+          "cfg": {
+            "hist": [
+              1.4,
+              2.9,
+              4.4,
+              4.9
+            ],
+            "proj": [
+              5.3,
+              5.65,
+              5.95
+            ],
+            "unit": "M MT"
+          }
+        },
+        {
+          "id": "executive-5",
+          "type": "Ordered Bar Chart",
+          "title": "Peringkat Departemen Berdasarkan Pencapaian KPI Balanced Scorecard",
+          "kpi": "Rata-rata Skor 95.8",
+          "insight": "Departemen HSE, Finance, dan Plant menempati peringkat tertinggi dalam pencapaian indikator kinerja utama.",
+          "cfg": {
+            "items": [
+              {
+                "n": "1. Dept HSE / K3LH (Zero LTI)",
+                "v": 98.4,
+                "u": "%"
+              },
+              {
+                "n": "2. Dept Produksi & Engineering",
+                "v": 96.8,
+                "u": "%"
+              },
+              {
+                "n": "3. Dept Finance / Cost Control",
+                "v": 96.4,
+                "u": "%"
+              },
+              {
+                "n": "4. Dept Warehouse & SCM",
+                "v": 95.2,
+                "u": "%"
+              },
+              {
+                "n": "5. Dept Plant Maintenance",
+                "v": 94.2,
+                "u": "%"
+              }
+            ]
+          }
+        },
+        {
+          "id": "executive-6",
+          "type": "Decomposition Tree",
+          "title": "Penelusuran Penyebab KPI Belum Mencapai 100% Target",
+          "kpi": "Gap -3.2% Produksi",
+          "insight": "Akar masalah belum tercapainya 100% kuota produksi berasal dari jam hujan tinggi di Pit Selatan pada minggu ke-2.",
+          "cfg": {
+            "root": {
+              "n": "Gap Target Korporat",
+              "v": "-3.2% (-16K MT)"
+            },
+            "l1": [
+              {
+                "n": "Faktor Cuaca / Rain",
+                "v": "-2.1% (-10.5K)"
+              },
+              {
+                "n": "Unscheduled BD",
+                "v": "-1.1% (-5.5K)"
+              }
+            ],
+            "l2": [
+              {
+                "n": "Pit Selatan Blok B",
+                "v": "-8.2K MT"
+              },
+              {
+                "n": "Slippery Time >3 Jam",
+                "v": "-6.0K MT"
+              },
+              {
+                "n": "Kapasitas Pompa Sump",
+                "v": "Action Plan Q4"
+              }
+            ]
+          }
+        },
+        {
+          "id": "executive-7",
+          "type": "Gauge Chart",
+          "title": "Skor Balanced Scorecard Korporat",
+          "kpi": "84 poin",
+          "insight": "Skor 84 dari target 85 — perspektif pembelajaran (72) menjadi penahan, sementara proses internal sudah 86.",
+          "cfg": {
+            "value": 84,
+            "target": 85,
+            "min": 0,
+            "max": 100,
+            "unit": "",
+            "label": "Skor BSC"
+          }
+        },
+        {
+          "id": "executive-8",
+          "type": "Radar Chart",
+          "title": "Radar Balanced Scorecard + ESG",
+          "kpi": "Proses: 86",
+          "insight": "Bentuk radar menunjukkan proses internal dan keuangan kuat, sedangkan pembelajaran dan ESG tertinggal dan butuh program khusus.",
+          "cfg": {
+            "labels": [
+              "Keuangan",
+              "Pelanggan",
+              "Proses",
+              "Pembelajaran",
+              "ESG"
+            ],
+            "values": [
+              84,
+              79,
+              86,
+              72,
+              68
+            ],
+            "max": 100
+          }
+        }
+      ]
+    }
+  ],
+  "note": "Pustaka Visualisasi Data 13 Departemen Pertambangan. Chart definitions with sample/illustrative data (Data Sampel) — cfg describes the data shape each chart type expects, not live mining figures.",
+  "chartTypes": [
+    "100% Stacked Bar",
+    "Aging Chart",
+    "Box Plot",
+    "Bullet Chart",
+    "Cohort Chart",
+    "Combo Chart",
+    "Control Chart",
+    "Decomposition Tree",
+    "Donut Chart",
+    "Forecast Chart",
+    "Funnel Chart",
+    "GIS Map",
+    "Gantt Chart",
+    "Gauge Chart",
+    "Heatmap",
+    "Histogram",
+    "Ordered Bar Chart",
+    "Pareto Chart",
+    "Quadrant Chart",
+    "Radar Chart",
+    "Reliability Curve",
+    "Sankey Diagram",
+    "Scatter Plot",
+    "Slope Chart",
+    "Small Multiples",
+    "Stock Projection Chart",
+    "Treemap",
+    "Waterfall Chart"
+  ],
+  "stats": {
+    "departments": 13,
+    "charts": 134,
+    "types": 28,
+    "typeList": [
+      "100% Stacked Bar",
+      "Aging Chart",
+      "Box Plot",
+      "Bullet Chart",
+      "Cohort Chart",
+      "Combo Chart",
+      "Control Chart",
+      "Decomposition Tree",
+      "Donut Chart",
+      "Forecast Chart",
+      "Funnel Chart",
+      "GIS Map",
+      "Gantt Chart",
+      "Gauge Chart",
+      "Heatmap",
+      "Histogram",
+      "Ordered Bar Chart",
+      "Pareto Chart",
+      "Quadrant Chart",
+      "Radar Chart",
+      "Reliability Curve",
+      "Sankey Diagram",
+      "Scatter Plot",
+      "Slope Chart",
+      "Small Multiples",
+      "Stock Projection Chart",
+      "Treemap",
+      "Waterfall Chart"
+    ]
+  }
+}
